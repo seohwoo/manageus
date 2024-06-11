@@ -19,7 +19,7 @@ public class SecurityConfig {
                         "/css/**", "/js/**", "/img/**", "/scss/**", "/vendor/**").permitAll()
                 .requestMatchers("/super/**").hasRole("SUPER")
                 .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
         );
 
         http.formLogin((auth) -> auth.loginPage("/login")
