@@ -45,4 +45,4 @@ out
 gen
 
 # Ignore application.properties file
-src/main/resources/application.properties
+

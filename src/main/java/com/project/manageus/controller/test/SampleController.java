@@ -1,13 +1,13 @@
-package com.project.manageus.controller;
+package com.project.manageus.controller.test;
 
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/sample/*")
 public class SampleController {
-
-
 
     @GetMapping("/index")
     public String index() {
@@ -51,8 +51,8 @@ public class SampleController {
         return url;
     }
 
-    @GetMapping("/logins")
-    public String logins() {
+    @GetMapping("/login")
+    public String login() {
         String url = "/sample/login.html";
         return url;
     }
