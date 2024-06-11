@@ -19,7 +19,9 @@ public class SecurityConfig {
                         "/css/**", "/js/**", "/img/**", "/scss/**", "/vendor/**").permitAll()
                 .requestMatchers("/super/**").hasRole("SUPER")
                 .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
+                // permitAll() 보안 없이 들어갈 수 있는거
+                // authenticated() - 보안 돼있는거
         );
 
         http.formLogin((auth) -> auth.loginPage("/login")
