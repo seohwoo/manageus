@@ -16,7 +16,10 @@ public class ChatDTO {
         this.memberId=memberId;
         this.chatRoomId=chatRoomId;
     }
-    public ChatEntity toChatEntity(){
-        return new ChatEntity(this.memberId,this.chatRoomId);
+    public ChatEntity toChatEntity() {
+        return ChatEntity.builder()
+                .memberId(this.memberId)
+                .chatRoomId(this.chatRoomId)
+                .build();
     }
 }

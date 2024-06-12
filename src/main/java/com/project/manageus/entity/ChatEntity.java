@@ -22,7 +22,7 @@ public class ChatEntity  {
     @Id
     private int chatRoomId;
 
-
+    @Builder
     public ChatEntity(int memberId, int chatRoomId) {
         this.memberId = memberId;
         this.chatRoomId = chatRoomId;
