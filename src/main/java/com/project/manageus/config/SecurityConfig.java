@@ -15,11 +15,13 @@ public class SecurityConfig {
 
 
         http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/", "/login", "/register", "/forgot",
-                        "/css/**", "/js/**", "/img/**", "/scss/**", "/vendor/**").permitAll()
-                .requestMatchers("/super/**").hasRole("SUPER")
-                .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
-                .anyRequest().authenticated()
+                        .requestMatchers("/", "/login", "/register", "/forgot",
+                                "/css/**", "/js/**", "/img/**", "/scss/**", "/vendor/**").permitAll()
+                        .requestMatchers("/super/**").hasRole("SUPER")
+                        .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
+                        .anyRequest().permitAll()
+                // permitAll() 보안 없이 들어갈 수 있는거
+                // authenticated() - 보안 돼있는거
         );
 
         http.formLogin((auth) -> auth.loginPage("/login")
