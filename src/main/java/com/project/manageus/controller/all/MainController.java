@@ -24,6 +24,12 @@ public class MainController {
         return url;
     }
 
+    @GetMapping("/company")
+    public String Company() {
+        String url = "/all/login/company-register.html";
+        return url;
+    }
+
     @GetMapping("/forgot")
     public String forgot() {
         String url = "/all/login/forgot.html";
