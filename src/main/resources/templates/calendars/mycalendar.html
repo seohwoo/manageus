@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>개인 달력</title>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendar');
+          var today = new Date().toISOString().split('T')[0]; // 현재 날짜를 'YYYY-MM-DD' 형식으로 가져옴
+
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+            headerToolbar: {
+              left: 'prevYear,prev,next,nextYear today',
+              center: 'title',
+              right: 'dayGridMonth,dayGridWeek,dayGridDay addEventButton'
+            },
+            initialDate: today, // 현재 날짜로 설정
+            navLinks: true, // can click day/week names to navigate views
+            editable: true,
+            dayMaxEvents: true, // allow "more" link when too many events
+            events: [
+              // Add your events here
+            ],
+            locale: 'ko', // Change locale to Korean
+            titleFormat: { // Custom title format
+              year: 'numeric',
+              month: 'long'
+            },
+            customButtons: {
+              addEventButton: {
+                text: '일정 추가',
+                click: function() {
+                  document.getElementById('eventModal').style.display = 'block';
+                }
+              }
+            }
+          });
+
+          calendar.render();
+
+          document.getElementById('addEvent').addEventListener('click', function() {
+            var title = document.getElementById('eventTitle').value;
+            var startDateStr = document.getElementById('startDate').value;
+            var endDateStr = document.getElementById('endDate').value;
+            var color = document.getElementById('eventColor').value;
+            var startDate = new Date(startDateStr + 'T00:00:00'); // will be in local time
+            var endDate = new Date(endDateStr + 'T00:00:00'); // will be in local time
+
+            if (title && !isNaN(startDate.valueOf()) && !isNaN(endDate.valueOf()) && startDate <= endDate) { // valid?
+              calendar.addEvent({
+                title: title,
+                start: startDate,
+                end: endDate,
+                color: color, // add color to event
+                allDay: true
+              });
+              alert('Event added: ' + title);
+              document.getElementById('eventModal').style.display = 'none';
+              document.getElementById('eventTitle').value = '';
+              document.getElementById('startDate').value = '';
+              document.getElementById('endDate').value = '';
+              document.getElementById('eventColor').value = '#3788d8'; // reset color to default
+            } else {
+              alert('유효하지 않은 날짜입니다.');
+            }
+          });
+
+          document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('eventModal').style.display = 'none';
+          });
+        });
+    </script>
+    <style>
+        body {
+          margin: 40px 10px;
+          padding: 0;
+          font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+          font-size: 14px;
+        }
+
+        #calendar {
+          max-width: 1100px;
+          margin: 0 auto;
+        }
+
+        /* The Modal (background) */
+        .modal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgb(0,0,0); /* Fallback color */
+          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+          padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+          background-color: #fefefe;
+          margin: 5% auto; /* 15% from the top and centered */
+          padding: 20px;
+          border: 1px solid #888;
+          width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+        .close {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+          color: black;
+          text-decoration: none;
+          cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+여기는 개인 달력
+
+<br>
+<div id='calendar'></div>
+
+<!-- The Modal -->
+<div id="eventModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h2>새 일정 추가</h2>
+        <label for="eventTitle">일정 제목:</label>
+        <input type="text" id="eventTitle" name="eventTitle"><br><br>
+        <label for="startDate">시작 날짜 (YYYY-MM-DD):</label>
+        <input type="date" id="startDate" name="startDate"><br><br>
+        <label for="endDate">종료 날짜 (YYYY-MM-DD):</label>
+        <input type="date" id="endDate" name="endDate"><br><br>
+        <label for="eventColor">색상 선택:</label>
+        <input type="color" id="eventColor" name="eventColor" value="#3788d8"><br><br>
+        <button id="addEvent">추가</button>
+    </div>
+</div>
+
+</body>
+</html>
