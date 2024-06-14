@@ -1,21 +1,16 @@
-package com.project.manageus.entity;
+package com.project.manageus.dto;
 
-
-import com.project.manageus.dto.UserDTO;
-import jakarta.persistence.*;
+import com.project.manageus.entity.UserEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-@Entity
 @Data
 @NoArgsConstructor
-@Table(name = "USER")
-public class UserEntity {
+public class UserDTO {
 
-    @Id
     private int id;
     private String password;
     private int positionId;
@@ -25,9 +20,8 @@ public class UserEntity {
     private int departmentId;
     private Date regdate;
 
-
     @Builder
-    public UserEntity( int id,String password,int positionId,int companyId,int statusId,int authId,int departmentId,Date regdate) {
+    public UserDTO( int id,String password,int positionId,int companyId,int statusId,int authId,int departmentId,Date regdate) {
         super();
         this.id = id;
         this.password = password;
@@ -39,8 +33,8 @@ public class UserEntity {
         this.regdate = regdate;
     }
 
-    public UserDTO toUserEntity() {
-        return UserDTO.builder()
+    public UserEntity toUserEntity() {
+        return UserEntity.builder()
                 .id(this.id)
                 .password(this.password)
                 .positionId(this.positionId)
@@ -51,5 +45,6 @@ public class UserEntity {
                 .regdate(this.regdate)
                 .build();
     }
+
 
 }
