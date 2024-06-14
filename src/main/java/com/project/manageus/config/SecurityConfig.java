@@ -26,6 +26,8 @@ public class SecurityConfig {
                         "/css/**", "/js/**", "/img/**", "/scss/**", "/vendor/**").permitAll()
                 .requestMatchers("/super/**").hasRole("SUPER")
                 .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
+
+
                 .anyRequest().permitAll()
         );
 
