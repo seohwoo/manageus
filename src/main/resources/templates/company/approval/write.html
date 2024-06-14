@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>휴가 신청</title>
+    </head>
+
+    <body>
+    <h1>휴가 신청하기</h1>
+
+        <form action="Vacation.jsp" method="post">
+
+            결재 라인 :
+            <select id="approver" name="approver">
+                <option th:each="approver : ${approver}" th:value="${approver}" th:text="${approver}"></option>
+            </select>
+
+            <button type="button" onclick="addApprover()">+</button>
+            <br><br>
+            제목 : <input type="text" id="Content" name="Content" length="100" required>
+            <br><br>
+            휴가 종류 :
+            <select id="VacationID" name="VacationID" required>
+                <option value="1">연차</option>
+                <option value="2">월차</option>
+                <option value="3">반차</option>
+                <option value="4">병가</option>
+            </select>
+            <br><br>
+            휴가 날짜 :
+            <input type="date" id="StartDate" name="StartDate" required>
+            <input type="date" id="FinishDate" name="FinishDate" required>
+            <br><br>
+            <textarea id="Subject" name="Subject" placeholder="휴가 사유" length="500" required></textarea>
+            <br><br>
+            <input type="submit" value="제출하기">
+        </form>
+    </body>
+
+    <script th:inline="javascript">
+        function addApprover() {
+            var selectApprover = document.createElement("select");
+            selectApprover.id = "approver";
+            selectApprover.name = "approver";
+
+            [[${approver}]].forEach(function(approver) {
+                var option = document.createElement("option");
+                option.value = approver;
+                option.text = approver;
+                selectApprover.add(option);
+            });
+            var findSelect = document.getElementById("approver");
+            findSelect.insertAdjacentElement('afterend', selectApprover);
+        }
+    </script>
+</html>
