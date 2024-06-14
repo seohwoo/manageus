@@ -1,14 +1,17 @@
 package com.project.manageus.controller.all;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class MainController {
 
     @GetMapping("/")
     public String main() {
-        String url = "all/main.html";
+        String url = "/all/main.html";
         return url;
     }
 
@@ -18,9 +21,24 @@ public class MainController {
         return url;
     }
 
+
+
     @GetMapping("/register")
     public String register() {
         String url = "/all/login/register.html";
+        return url;
+    }
+
+    @PostMapping("/register")
+    public String registerPro() {
+
+        String url = "redirect:/login";
+        return url;
+    }
+
+    @GetMapping("/company")
+    public String Company() {
+        String url = "/all/login/company-register.html";
         return url;
     }
 
