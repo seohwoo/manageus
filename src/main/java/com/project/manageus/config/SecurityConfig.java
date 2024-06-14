@@ -31,7 +31,6 @@ public class SecurityConfig {
                 .requestMatchers("/chat").permitAll()
                 .requestMatchers("/ws/**").permitAll()
                 .anyRequest().permitAll()
-
         );
 
         http.formLogin((auth) -> auth.loginPage("/login")
