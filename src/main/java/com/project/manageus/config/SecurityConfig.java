@@ -27,6 +27,10 @@ public class SecurityConfig {
                 .requestMatchers("/super/**").hasRole("SUPER")
                 .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
 
+                .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/board/**").permitAll()
+                .requestMatchers("/chat").permitAll()
+                .requestMatchers("/ws/**").permitAll()
 
                 .anyRequest().permitAll()
         );
