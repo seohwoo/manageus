@@ -18,11 +18,17 @@ public class UserEntity {
     @Id
     private int id;
     private String password;
+    @Column(name="position_id")
     private int positionId;
+    @Column(name="company_id")
     private int companyId;
+    @Column(name="status_id")
     private int statusId;
+    @Column(name="auth_id")
     private int authId;
+    @Column(name="department_id")
     private int departmentId;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date regdate;
 
 
