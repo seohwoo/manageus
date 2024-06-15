@@ -1,20 +1,17 @@
-package com.project.manageus.entity;
+package com.project.manageus.dto;
 
-import com.project.manageus.dto.UserInfoDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.project.manageus.entity.MemberInfoEntity;
+import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @NoArgsConstructor
-@Table(name = "USERINFO")
-public class UserInfoEntity {
+public class MemberInfoDTO {
 
-
-    private int id;
+    @Id
+    private Long id;
     private String name;
     private String stamp;
     private String email;
@@ -25,7 +22,7 @@ public class UserInfoEntity {
 
 
     @Builder
-    public UserInfoEntity(int id, String name, String stamp, String phone, String address, String birth, String gender) {
+    public MemberInfoDTO(Long id, String name, String stamp, String phone, String address, String birth, String gender) {
         super();
         this.id = id;
         this.name = name;
@@ -36,8 +33,8 @@ public class UserInfoEntity {
         this.gender = gender;
     }
 
-    public UserInfoDTO toUserInfoEntity() {
-        return UserInfoDTO.builder()
+    public MemberInfoEntity toMemberInfoEntity() {
+        return MemberInfoEntity.builder()
                 .id(this.id)
                 .name(this.name)
                 .stamp(this.stamp)

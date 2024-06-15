@@ -1,6 +1,6 @@
 package com.project.manageus.entity;
 
-import com.project.manageus.dto.AuthDTO;
+import com.project.manageus.dto.PositionDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -8,26 +8,26 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "AUTH")
-public class AuthEntity {
+@Table(name = "POSITION")
+public class PositionEntity {
 
     @Id
     private Long id;
     private String name;
 
-
     @Builder
-    public AuthEntity(Long id, String name) {
+    public PositionEntity(Long id, String name) {
         super();
         this.id = id;
         this.name = name;
     }
 
-    public AuthDTO toAuthDTO() {
-        return AuthDTO.builder()
+    public PositionDTO toPositionDTO() {
+        return PositionDTO.builder()
                 .id(this.id)
                 .name(this.name)
                 .build();

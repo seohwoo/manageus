@@ -1,31 +1,35 @@
 package com.project.manageus.dto;
 
 import com.project.manageus.entity.CompanyEntity;
-import com.project.manageus.entity.UserEntity;
+import jakarta.persistence.JoinColumn;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 public class CompanyDTO {
 
 
-    private int id;
+    private Long id;
     private String pw;
     private String businessNum;
     private String inviteCode;
     private String ceo;
     private String address;
     private String email;
-    private int statusId;
-    private int authId;
+    @JoinColumn(name = "status_id", referencedColumnName = "id")
+    private Long statusId;
+    @JoinColumn(name = "auth_id", referencedColumnName = "id")
+    private Long authId;
     private Date regdate;
 
     @Builder
-    public CompanyDTO(int id, String pw, String businessNum,
+    public CompanyDTO(Long id, String pw, String businessNum,
                       String inviteCode, String ceo, String address,
-                      String email, int statusId, int authId, Date regdate) {
+                      String email, Long statusId, Long authId, Date regdate) {
         super();
         this.id = id;
         this.pw = pw;

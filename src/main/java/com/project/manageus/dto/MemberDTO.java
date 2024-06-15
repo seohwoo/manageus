@@ -1,6 +1,6 @@
 package com.project.manageus.dto;
 
-import com.project.manageus.entity.UserEntity;
+import com.project.manageus.entity.MemberEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,22 +9,22 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-public class UserDTO {
+public class MemberDTO {
 
-    private int id;
-    private String password;
-    private int positionId;
-    private int companyId;
-    private int statusId;
-    private int authId;
-    private int departmentId;
+    private Long id;
+    private String pw;
+    private Long positionId;
+    private Long companyId;
+    private Long statusId;
+    private Long authId;
+    private Long departmentId;
     private Date regdate;
 
     @Builder
-    public UserDTO( int id,String password,int positionId,int companyId,int statusId,int authId,int departmentId,Date regdate) {
+    public MemberDTO(Long id,String pw,Long positionId,Long companyId,Long statusId,Long authId,Long departmentId,Date regdate) {
         super();
         this.id = id;
-        this.password = password;
+        this.pw = pw;
         this.positionId = positionId;
         this.companyId = companyId;
         this.statusId = statusId;
@@ -33,10 +33,10 @@ public class UserDTO {
         this.regdate = regdate;
     }
 
-    public UserEntity toUserEntity() {
-        return UserEntity.builder()
+    public MemberEntity toMemberEntity() {
+        return MemberEntity.builder()
                 .id(this.id)
-                .password(this.password)
+                .pw(this.pw)
                 .positionId(this.positionId)
                 .companyId(this.companyId)
                 .statusId(this.statusId)

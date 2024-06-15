@@ -1,7 +1,7 @@
 package com.project.manageus.entity;
 
 
-import com.project.manageus.dto.UserDTO;
+import com.project.manageus.dto.MemberDTO;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -12,31 +12,31 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "USER")
-public class UserEntity {
+@Table(name = "MEMBER")
+public class MemberEntity {
 
     @Id
-    private int id;
-    private String password;
-    @Column(name="position_id")
-    private int positionId;
-    @Column(name="company_id")
-    private int companyId;
-    @Column(name="status_id")
-    private int statusId;
-    @Column(name="auth_id")
-    private int authId;
-    @Column(name="department_id")
-    private int departmentId;
+    private Long id;
+    private String pw;
+    @JoinColumn(name = "position_id", referencedColumnName = "id")
+    private Long positionId;
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    private Long companyId;
+    @JoinColumn(name = "status_id", referencedColumnName = "id")
+    private Long statusId;
+    @JoinColumn(name = "auth_id", referencedColumnName = "id")
+    private Long authId;
+    @JoinColumn(name = "department_id", referencedColumnName = "id")
+    private Long departmentId;
     @Temporal(TemporalType.TIMESTAMP)
     private Date regdate;
 
 
     @Builder
-    public UserEntity( int id,String password,int positionId,int companyId,int statusId,int authId,int departmentId,Date regdate) {
+    public MemberEntity(Long id,String pw,Long positionId,Long companyId,Long statusId,Long authId,Long departmentId,Date regdate) {
         super();
         this.id = id;
-        this.password = password;
+        this.pw = pw;
         this.positionId = positionId;
         this.companyId = companyId;
         this.statusId = statusId;
@@ -45,10 +45,10 @@ public class UserEntity {
         this.regdate = regdate;
     }
 
-    public UserDTO toUserEntity() {
-        return UserDTO.builder()
+    public MemberDTO toMemberDTO() {
+        return MemberDTO.builder()
                 .id(this.id)
-                .password(this.password)
+                .pw(this.pw)
                 .positionId(this.positionId)
                 .companyId(this.companyId)
                 .statusId(this.statusId)

@@ -17,22 +17,22 @@ import java.util.Date;
 public class CompanyEntity {
 
     @Id
-    private int id;
+    private Long id;
     private String pw;
     private String businessNum;
     private String inviteCode;
     private String ceo;
     private String address;
     private String email;
-    private int statusId;
-    private int authId;
+    private Long statusId;
+    private Long authId;
     private Date regdate;
 
 
     @Builder
-    public CompanyEntity(int id, String pw, String businessNum,
+    public CompanyEntity(Long id, String pw, String businessNum,
                       String inviteCode, String ceo, String address,
-                      String email, int statusId, int authId, Date regdate) {
+                      String email, Long statusId, Long authId, Date regdate) {
         super();
         this.id = id;
         this.pw = pw;

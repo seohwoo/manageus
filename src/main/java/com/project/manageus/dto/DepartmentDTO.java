@@ -1,31 +1,31 @@
 package com.project.manageus.dto;
 
-import com.project.manageus.entity.AuthEntity;
-import jakarta.persistence.Id;
+import com.project.manageus.entity.DepartmentEntity;
+import com.project.manageus.entity.PositionEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class AuthDTO {
+public class DepartmentDTO {
 
-    @Id
     private Long id;
     private String name;
+    private Long companyId;
 
     @Builder
-    public AuthDTO(Long id, String name) {
+    public DepartmentDTO(Long id, String name, Long companyId) {
         super();
         this.id = id;
         this.name = name;
+        this.companyId = companyId;
     }
 
-    public AuthEntity toAuthEntity() {
-        return AuthEntity.builder()
+    public DepartmentEntity toDepartmentEntity() {
+        return DepartmentEntity.builder()
                 .id(this.id)
                 .name(this.name)
                 .build();
     }
-
 }
