@@ -1,6 +1,7 @@
 package com.project.manageus.dto;
 
 import com.project.manageus.entity.CompanyEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +21,7 @@ public class CompanyDTO {
     private String ceo;
     private String address;
     private String email;
-    @JoinColumn(name = "status_id", referencedColumnName = "id")
     private Long statusId;
-    @JoinColumn(name = "auth_id", referencedColumnName = "id")
     private Long authId;
     private Date regdate;
 

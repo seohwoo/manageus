@@ -7,11 +7,13 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "MEMBERINFO")
+@DynamicInsert
 public class MemberInfoEntity {
 
     @Id

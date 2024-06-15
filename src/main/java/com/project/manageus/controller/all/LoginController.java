@@ -1,11 +1,22 @@
 package com.project.manageus.controller.all;
 
+import com.project.manageus.dto.MemberDTO;
+import com.project.manageus.dto.MemberInfoDTO;
+import com.project.manageus.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LoginController {
+
+    private final LoginService loginService;
+
+    @Autowired
+    public LoginController(LoginService loginService) {
+        this.loginService = loginService;
+    }
 
     @GetMapping("/login")
     public String login() {
@@ -20,9 +31,15 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public String registerPro() {
+    public String registerPro(MemberDTO memberDTO, MemberInfoDTO memberInfoDTO, String repeatPassword, String inviteCode) {
+        String url = "redirect:/register";
 
-        String url = "redirect:/login";
+        if(memberDTO.getPw().equals(repeatPassword)) {
+            boolean isCreated = loginService.createMember(memberDTO, memberInfoDTO, inviteCode);
+            if(isCreated) {
+                url = "redirect:/login";
+            }
+        }
         return url;
     }
 
@@ -37,6 +54,5 @@ public class LoginController {
         String url = "/all/login/forgot.html";
         return url;
     }
-
 
 }

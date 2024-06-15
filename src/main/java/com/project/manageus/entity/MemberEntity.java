@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.Date;
 
@@ -13,22 +15,23 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @Table(name = "MEMBER")
+@DynamicInsert
 public class MemberEntity {
 
     @Id
     private Long id;
     private String pw;
-    @JoinColumn(name = "position_id", referencedColumnName = "id")
+    @Column(name = "position_id")
     private Long positionId;
-    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    @Column(name = "company_id")
     private Long companyId;
-    @JoinColumn(name = "status_id", referencedColumnName = "id")
+    @Column(name = "status_id", columnDefinition = "int default 1002")
     private Long statusId;
-    @JoinColumn(name = "auth_id", referencedColumnName = "id")
+    @Column(name = "auth_id", columnDefinition = "int default 3")
     private Long authId;
-    @JoinColumn(name = "department_id", referencedColumnName = "id")
+    @Column(name = "department_id")
     private Long departmentId;
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "regdate", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date regdate;
 
 

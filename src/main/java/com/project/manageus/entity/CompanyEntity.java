@@ -1,6 +1,7 @@
 package com.project.manageus.entity;
 
 import com.project.manageus.dto.CompanyDTO;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -19,12 +20,16 @@ public class CompanyEntity {
     @Id
     private Long id;
     private String pw;
+    @Column(name = "business_num")
     private String businessNum;
+    @Column(name = "invite_code")
     private String inviteCode;
     private String ceo;
     private String address;
     private String email;
+    @Column(name = "status_id")
     private Long statusId;
+    @Column(name = "auth_id")
     private Long authId;
     private Date regdate;
 
@@ -60,6 +65,4 @@ public class CompanyEntity {
                 .regdate(this.regdate)
                 .build();
     }
-
-
 }
