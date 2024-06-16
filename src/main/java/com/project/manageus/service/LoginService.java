@@ -5,6 +5,6 @@ import com.project.manageus.dto.UserInfoDTO;
 
 public interface LoginService {
 
-    boolean createMember(UserDTO userDTO, UserInfoDTO userInfoDTO, String inviteCode);
+    boolean createUser(UserDTO userDTO, UserInfoDTO userInfoDTO, String inviteCode);
 
 }

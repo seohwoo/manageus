@@ -1,7 +1,5 @@
 package com.project.manageus.controller.all;
 
-import com.project.manageus.dto.MemberDTO;
-import com.project.manageus.dto.MemberInfoDTO;
 import com.project.manageus.dto.UserDTO;
 import com.project.manageus.dto.UserInfoDTO;
 import com.project.manageus.service.LoginService;
@@ -37,7 +35,7 @@ public class LoginController {
         String url = "redirect:/register";
 
         if(userDTO.getPassword().equals(repeatPassword)) {
-            boolean isCreated = loginService.createMember(userDTO, userInfoDTO, inviteCode);
+            boolean isCreated = loginService.createUser(userDTO, userInfoDTO, inviteCode);
             if(isCreated) {
                 url = "redirect:/login";
             }
