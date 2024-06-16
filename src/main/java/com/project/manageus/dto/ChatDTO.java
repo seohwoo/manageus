@@ -11,10 +11,12 @@ public class ChatDTO {
     private Long userId;
     private Long chatRoomId;
 
+
     @Builder
     public ChatDTO(Long userId, Long chatRoomId){
         this.userId = userId;
         this.chatRoomId = chatRoomId;
+
     }
     public ChatEntity toChatEntity() {
         return ChatEntity.builder()

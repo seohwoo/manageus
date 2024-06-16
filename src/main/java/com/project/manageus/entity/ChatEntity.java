@@ -22,6 +22,7 @@ public class ChatEntity  {
     public ChatEntity(Long userId,Long chatRoomId){
         this.userId=userId;
         this.chatRoomId =chatRoomId;
+
     }
     public ChatEntity toChatEntity() {
         return ChatEntity.builder()

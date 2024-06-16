@@ -20,26 +20,29 @@ public class ChatController {
     @Autowired
     private ChatServiceImpl service;
 
-    @GetMapping("/chat")
+    @GetMapping("/company/1111/chat")
     public String chatting(Model model, HttpSession session){
         log.info("@ChatController, chat GET()");
         int x = service.count();
         System.out.println("==========" + x);
 
-        session.setAttribute("memberId", "testname1");
-        return "/user/chat/chater";
+
+        return "/company/chat/chater";
     }
 
-    @GetMapping("/chatRoomList")
+    @GetMapping("/company/1111/chatRoomList")
     public String chatRoomList(HttpSession session){
-        String mem = (String)session.getAttribute("memberId");
-        return "/user/chat/chatRoomList";
+        session.setAttribute("memberId", "10010001");
+        return "/company/chat/chatRoomList";
     }
-    @PostMapping("/chat")
-    public String chatRoomCreate(ChatRoomDTO dto){
+    @PostMapping("/company/1111/chat")
+    public String chatRoomCreate(HttpSession session,ChatRoomDTO dto){
         System.out.println("채팅방 생성!!");
-        service.chatNewRoom(dto);
-        return "redirect:/chatRoomList";
+       String id = (String)session.getAttribute("memberId");
+        Long idl = Long.parseLong(id);
+        System.out.println("id===="+idl);
+        service.chatNewRoom(dto,idl);
+        return "redirect:/company/1111/chat";
     }
 
 
