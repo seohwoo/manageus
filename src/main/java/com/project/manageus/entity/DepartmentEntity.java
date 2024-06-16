@@ -2,6 +2,7 @@ package com.project.manageus.entity;
 
 
 import com.project.manageus.dto.DepartmentDTO;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -19,21 +20,22 @@ public class DepartmentEntity {
     @Id
     private Long id;
     private String name;
-    private Long company_id;
+    @Column(name = "company_id")
+    private Long companyId;
 
     @Builder
-    public DepartmentEntity(Long id, String name, Long company_id) {
+    public DepartmentEntity(Long id, String name, Long companyId) {
         super();
         this.id = id;
         this.name = name;
-        this.company_id = company_id;
+        this.companyId = companyId;
     }
 
     public DepartmentDTO toDepartmentDTO() {
         return DepartmentDTO.builder()
                 .id(this.id)
                 .name(this.name)
-                .company_id(this.company_id)
+                .companyId(this.companyId)
                 .build();
     }
 }

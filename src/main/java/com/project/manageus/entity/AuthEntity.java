@@ -18,7 +18,6 @@ public class AuthEntity {
     private Long id;
     private String name;
 
-
     @Builder
     public AuthEntity(Long id, String name) {
         super();

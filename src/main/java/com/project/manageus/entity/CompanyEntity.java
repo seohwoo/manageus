@@ -20,45 +20,50 @@ public class CompanyEntity {
     @Id
     private Long id;
     private String pw;
-    private String business_num;
-    private String invite_code;
+    @Column(name = "business_num")
+    private String businessNum;
+    @Column(name = "invite_code")
+    private String inviteCode;
     private String ceo;
     private String address;
     private String email;
-    private Long status_id;
-    private Long auth_id;
-    private Date reg_date;
+    @Column(name = "status_id")
+    private Long statusId;
+    @Column(name = "auth_id")
+    private Long authId;
+    @Column(name = "reg_date")
+    private Date regDate;
 
 
     @Builder
-    public CompanyEntity(Long id, String pw, String business_num,
-                      String invite_code, String ceo, String address,
-                      String email, Long status_id, Long auth_id, Date reg_date) {
+    public CompanyEntity(Long id, String pw, String businessNum,
+                      String inviteCode, String ceo, String address,
+                      String email, Long statusId, Long authId, Date regDate) {
         super();
         this.id = id;
         this.pw = pw;
-        this.business_num = business_num;
-        this.invite_code = invite_code;
+        this.businessNum = businessNum;
+        this.inviteCode = inviteCode;
         this.ceo = ceo;
         this.address = address;
         this.email = email;
-        this.status_id = status_id;
-        this.auth_id = auth_id;
-        this.reg_date = reg_date;
+        this.statusId = statusId;
+        this.authId = authId;
+        this.regDate = regDate;
     }
 
     public CompanyDTO toCompanyDTO() {
         return CompanyDTO.builder()
                 .id(this.id)
                 .pw(this.pw)
-                .business_num(this.business_num)
-                .invite_code(this.invite_code)
+                .businessNum(this.businessNum)
+                .inviteCode(this.inviteCode)
                 .ceo(this.ceo)
                 .address(this.address)
                 .email(this.email)
-                .status_id(this.status_id)
-                .auth_id(this.auth_id)
-                .reg_date(this.reg_date)
+                .statusId(this.statusId)
+                .authId(this.authId)
+                .regDate(this.regDate)
                 .build();
     }
 }

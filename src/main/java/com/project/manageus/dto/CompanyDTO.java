@@ -1,8 +1,6 @@
 package com.project.manageus.dto;
 
 import com.project.manageus.entity.CompanyEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,47 +11,46 @@ import java.util.Date;
 @NoArgsConstructor
 public class CompanyDTO {
 
-
     private Long id;
     private String pw;
-    private String business_num;
-    private String invite_code;
+    private String businessNum;
+    private String inviteCode;
     private String ceo;
     private String address;
     private String email;
-    private Long status_id;
-    private Long auth_id;
-    private Date reg_date;
+    private Long statusId;
+    private Long authId;
+    private Date regDate;
 
     @Builder
-    public CompanyDTO(Long id, String pw, String business_num,
-                      String invite_code, String ceo, String address,
-                      String email, Long status_id, Long auth_id, Date reg_date) {
+    public CompanyDTO(Long id, String pw, String businessNum,
+                      String inviteCode, String ceo, String address,
+                      String email, Long statusId, Long authId, Date regDate) {
         super();
         this.id = id;
         this.pw = pw;
-        this.business_num = business_num;
-        this.invite_code = invite_code;
+        this.businessNum = businessNum;
+        this.inviteCode = inviteCode;
         this.ceo = ceo;
         this.address = address;
         this.email = email;
-        this.status_id = status_id;
-        this.auth_id = auth_id;
-        this.reg_date = reg_date;
+        this.statusId = statusId;
+        this.authId = authId;
+        this.regDate = regDate;
     }
 
     public CompanyEntity toCompanyEntity() {
         return CompanyEntity.builder()
                 .id(this.id)
                 .pw(this.pw)
-                .business_num(this.business_num)
-                .invite_code(this.invite_code)
+                .businessNum(this.businessNum)
+                .inviteCode(this.inviteCode)
                 .ceo(this.ceo)
                 .address(this.address)
                 .email(this.email)
-                .status_id(this.status_id)
-                .auth_id(this.auth_id)
-                .reg_date(this.reg_date)
+                .statusId(this.statusId)
+                .authId(this.authId)
+                .regDate(this.regDate)
                 .build();
     }
 

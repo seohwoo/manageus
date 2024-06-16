@@ -2,6 +2,8 @@ package com.project.manageus.controller.all;
 
 import com.project.manageus.dto.MemberDTO;
 import com.project.manageus.dto.MemberInfoDTO;
+import com.project.manageus.dto.UserDTO;
+import com.project.manageus.dto.UserInfoDTO;
 import com.project.manageus.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,11 +33,11 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public String registerPro(MemberDTO memberDTO, MemberInfoDTO memberInfoDTO, String repeatPassword, String inviteCode) {
+    public String registerPro(UserDTO userDTO, UserInfoDTO userInfoDTO, String repeatPassword, String inviteCode) {
         String url = "redirect:/register";
 
-        if(memberDTO.getPw().equals(repeatPassword)) {
-            boolean isCreated = loginService.createMember(memberDTO, memberInfoDTO, inviteCode);
+        if(userDTO.getPassword().equals(repeatPassword)) {
+            boolean isCreated = loginService.createMember(userDTO, userInfoDTO, inviteCode);
             if(isCreated) {
                 url = "redirect:/login";
             }

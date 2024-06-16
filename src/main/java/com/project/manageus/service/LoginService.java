@@ -1,10 +1,10 @@
 package com.project.manageus.service;
 
-import com.project.manageus.dto.MemberDTO;
-import com.project.manageus.dto.MemberInfoDTO;
+import com.project.manageus.dto.UserDTO;
+import com.project.manageus.dto.UserInfoDTO;
 
 public interface LoginService {
 
-    boolean createMember(MemberDTO memberDTO, MemberInfoDTO memberInfoDTO, String inviteCode);
+    boolean createMember(UserDTO userDTO, UserInfoDTO userInfoDTO, String inviteCode);
 
 }

@@ -13,36 +13,36 @@ public class UserDTO {
 
     private Long id;
     private String password;
-    private Long position_id;
-    private Long company_id;
-    private Long status_id;
-    private Long auth_id;
-    private Long department_id;
-    private Date reg_date;
+    private Long positionId;
+    private Long companyId;
+    private Long statusId;
+    private Long authId;
+    private Long departmentId;
+    private Date regDate;
 
     @Builder
-    public UserDTO(Long id, String password, Long position_id, Long company_id, Long status_id, Long auth_id, Long department_id, Date reg_date) {
+    public UserDTO(Long id, String password, Long positionId, Long companyId, Long statusId, Long authId, Long departmentId, Date regDate) {
         super();
         this.id = id;
         this.password = password;
-        this.position_id = position_id;
-        this.company_id = company_id;
-        this.status_id = status_id;
-        this.auth_id = auth_id;
-        this.department_id = department_id;
-        this.reg_date = reg_date;
+        this.positionId = positionId;
+        this.companyId = companyId;
+        this.statusId = statusId;
+        this.authId = authId;
+        this.departmentId = departmentId;
+        this.regDate = regDate;
     }
 
     public UserEntity toUserEntity() {
         return UserEntity.builder()
                 .id(this.id)
                 .password(this.password)
-                .position_id(this.position_id)
-                .company_id(this.company_id)
-                .status_id(this.status_id)
-                .auth_id(this.auth_id)
-                .department_id(this.department_id)
-                .reg_date(this.reg_date)
+                .positionId(this.positionId)
+                .companyId(this.companyId)
+                .statusId(this.statusId)
+                .authId(this.authId)
+                .departmentId(this.departmentId)
+                .regDate(this.regDate)
                 .build();
     }
 
