@@ -12,6 +12,7 @@ import java.util.Date;
 @NoArgsConstructor // 기본 생성자 자동 생성 필수.
 public class ApprovalDTO {
     private Long id;
+
     private Long user_id;
     private Long status_id;
     private String title;

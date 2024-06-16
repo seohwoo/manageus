@@ -1,5 +1,6 @@
 package com.project.manageus.entity;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatID implements Serializable {
-    private Long user_id;
-    private Long chat_room_id;
+    @Column(name="user_id")
+    private Long userId;
+    @Column(name="chat_room_id")
+    private Long chatRoomId;
 }

@@ -1,6 +1,5 @@
 package com.project.manageus.entity;
 
-import com.project.manageus.dto.ChatMessageDTO;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -14,31 +13,34 @@ import java.util.Date;
 public class ChatMessageEntity {
     @Id
     private Long id;
-    private Long chat_room_id;
-    private Long member_id;
+    @Column(name = "chat_room_id")
+    private Long chatRoomId;
+    @Column(name = "member_id")
+    private Long memberId;
     private String message;
     @Temporal(TemporalType.TIMESTAMP)
     private Date reg;
-    private Long status_id;
+    @Column(name = "status_id")
+    private Long statusId;
 
     @Builder
-    public ChatMessageEntity(Long id, Long chat_room_id, String message, Long member_id, Date reg, Long status_id){
+    public ChatMessageEntity(Long id, Long chatRoomId, String message, Long memberId, Date reg, Long statusId){
         super();
         this.id=id;
-        this.chat_room_id=chat_room_id;
-        this.member_id=member_id;
+        this.chatRoomId= chatRoomId;
+        this.memberId= memberId;
         this.message = message;
         this.reg=reg;
-        this.status_id=status_id;
+        this.statusId=statusId;
     }
     public ChatMessageEntity toChatMessageEntity(){
         return ChatMessageEntity.builder()
                 .id(this.id)
-                .chat_room_id(this.chat_room_id)
-                .member_id(this.member_id)
+                .chatRoomId(this.chatRoomId)
+                .memberId(this.memberId)
                 .message(this.message)
                 .reg(this.reg)
-                .status_id(this.status_id)
+                .statusId(this.statusId)
                 .build();
     }
 

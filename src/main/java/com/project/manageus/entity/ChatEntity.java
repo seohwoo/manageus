@@ -1,15 +1,9 @@
 package com.project.manageus.entity;
 
-import com.project.manageus.dto.ChatDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
@@ -18,19 +12,21 @@ import java.io.Serializable;
 @IdClass(ChatID.class)
 public class ChatEntity  {
     @Id
-    private Long user_id;
+    @Column(name = "user_id")
+    private Long userId;
     @Id
-    private Long chat_room_id;
+    @Column(name = "chat_room_id")
+    private Long chatRoomId;
 
     @Builder
-    public ChatEntity(Long user_id,Long chat_room_id){
-        this.user_id=user_id;
-        this.chat_room_id=chat_room_id;
+    public ChatEntity(Long userId, Long chatRoomId){
+        this.userId = userId;
+        this.chatRoomId=chatRoomId;
     }
     public ChatEntity toChatEntity() {
         return ChatEntity.builder()
-                .user_id(this.user_id)
-                .chat_room_id(this.chat_room_id)
+                .userId(this.userId)
+                .chatRoomId(this.chatRoomId)
                 .build();
     }
 }

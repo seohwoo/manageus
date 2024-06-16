@@ -13,30 +13,30 @@ import java.util.Date;
 @NoArgsConstructor
 public class ChatMessageDTO {
     private Long id;
-    private Long chat_room_id;
-    private Long member_id;
+    private Long chatRoomId;
+    private Long memberId;
     private String message;
     private Date reg;
-    private Long status_id;
+    private Long statusId;
 
     @Builder
-    public ChatMessageDTO(Long id, Long chat_room_id, String message, Long member_id, Date reg, Long status_id){
+    public ChatMessageDTO(Long id, Long chatRoomId, String message, Long memberId, Date reg, Long statusId){
         super();
         this.id=id;
-        this.chat_room_id=chat_room_id;
-        this.member_id=member_id;
+        this.chatRoomId=chatRoomId;
+        this.memberId=memberId;
         this.message = message;
         this.reg=reg;
-        this.status_id=status_id;
+        this.statusId = statusId;
     }
     public ChatMessageEntity toChatMessageEntity(){
         return ChatMessageEntity.builder()
                 .id(this.id)
-                .chat_room_id(this.chat_room_id)
-                .member_id(this.member_id)
+                .chatRoomId(this.chatRoomId)
+                .memberId(this.memberId)
                 .message(this.message)
                 .reg(this.reg)
-                .status_id(this.status_id)
+                .statusId(this.statusId)
                 .build();
     }
 }

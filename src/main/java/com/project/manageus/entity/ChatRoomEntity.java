@@ -1,11 +1,9 @@
 package com.project.manageus.entity;
 
-import com.project.manageus.dto.ChatRoomDTO;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -21,17 +19,18 @@ public class ChatRoomEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Long status_id;
+    @Column(name="status_id")
+    private Long statusId;
     @CreationTimestamp
     @Column(name="reg")
     private Date reg;
 
     @Builder
-    public ChatRoomEntity(Long id,String name,Long status_id,Date reg){
+    public ChatRoomEntity(Long id, String name, Long statusId, Date reg){
         super();
         this.id=id;
         this.name=name;
-        this.status_id=status_id;
+        this.statusId= statusId;
         this.reg=reg;
 
     }
@@ -39,7 +38,7 @@ public class ChatRoomEntity {
         return ChatRoomEntity.builder()
                 .id(this.id)
                 .name(this.name)
-                .status_id(this.status_id)
+                .statusId(this.statusId)
                 .reg(this.reg)
                 .build();
     }
