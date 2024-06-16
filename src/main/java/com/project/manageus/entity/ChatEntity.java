@@ -18,20 +18,19 @@ import java.io.Serializable;
 @IdClass(ChatID.class)
 public class ChatEntity  {
     @Id
-    private int memberId;
+    private Long user_id;
     @Id
-    private int chatRoomId;
+    private Long chat_room_id;
 
     @Builder
-    public ChatEntity(int memberId, int chatRoomId) {
-        this.memberId = memberId;
-        this.chatRoomId = chatRoomId;
+    public ChatEntity(Long user_id,Long chat_room_id){
+        this.user_id=user_id;
+        this.chat_room_id=chat_room_id;
     }
-
-    public ChatDTO toChatDTO() {
-        return ChatDTO.builder()
-                .memberId(this.memberId)
-                .chatRoomId(this.chatRoomId)
+    public ChatEntity toChatEntity() {
+        return ChatEntity.builder()
+                .user_id(this.user_id)
+                .chat_room_id(this.chat_room_id)
                 .build();
     }
 }

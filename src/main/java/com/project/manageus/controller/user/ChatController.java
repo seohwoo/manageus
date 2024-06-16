@@ -49,7 +49,7 @@ public class ChatController {
     @ResponseBody
     public ResponseEntity<String> sendMessage(ChatMessageDTO message) {
         // 메시지 처리 (예: 다른 사용자에게 방송, 데이터베이스에 저장 등)
-        System.out.println("Received message from " + message.getMemberId() + ": " + message.getMessage());
+        System.out.println("Received message from " + message.getMember_id() + ": " + message.getMessage());
         // 여기에서 메시지를 데이터베이스에 저장하거나, 다른 클라이언트에 방송하는 등의 로직을 추가할 수 있습니다.
         return ResponseEntity.ok("Message received");
 

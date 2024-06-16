@@ -1,28 +1,35 @@
 package com.project.manageus.controller.all;
 
+import com.project.manageus.dto.QaDTO;
+import com.project.manageus.service.QaService;
+import com.project.manageus.service.QaServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class QaController {
 
-    @GetMapping("/board/write")
-    public String qaWrite() {
-        return "all/qa/write.html";
+    private final QaService service;
+
+
+    @Autowired
+    public QaController(QaService service) {
+        this.service = service;
     }
+
 
     @PostMapping("/board")
-    public String qaInsert() {
-        System.out.println("test1`111111");
-        return "all/qa/list.html";
-        // return "redirect:/board/12";
+    public String qaInsert(QaDTO dto, @RequestParam(value="ref",defaultValue = "0")Long ref) {
+        dto.setRef(ref);
+        service.qaWrite(dto);
+        return "all/qa/success.html";
     }
 
-    @GetMapping("/board")
-    public String qaList() {
-        return "qa/list.html";
-    }
+
+
 }
 
