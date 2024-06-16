@@ -16,10 +16,10 @@ public class QaDTO {
     private String contact;
     private String content;
     private Date reg;
-    private Long ref;
+    private int ref;
 
     @Builder
-    public QaDTO(Long id,String writer,String email,String contact,String content,Date reg,Long ref){
+    public QaDTO(Long id,String writer,String email,String contact,String content,Date reg,int ref){
         this.id=id;
         this.writer=writer;
         this.email=email;

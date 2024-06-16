@@ -26,10 +26,10 @@ public class QaEntity {
     @CreationTimestamp
     @Column(name="reg")
     private Date reg;
-    private Long ref;
+    private int ref;
 
     @Builder
-    public QaEntity(Long id,String writer,String email,String contact,String content,Date reg,Long ref){
+    public QaEntity(Long id,String writer,String email,String contact,String content,Date reg,int ref){
         super();
         this.id=id;
         this.writer=writer;

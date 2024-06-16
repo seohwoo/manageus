@@ -27,7 +27,6 @@ public class ApprovalEntity {
     private Date sign_on;
     private Date sign_off;
 
-
     @Builder
     public ApprovalEntity(Long id,Long user_id,Long status_id,String title,Long approval_type_id,Date start_date,Date end_date,String content,Date sign_on,Date sign_off) {
         super();

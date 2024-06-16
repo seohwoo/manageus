@@ -19,9 +19,9 @@ public class ChatEntity  {
     private Long chatRoomId;
 
     @Builder
-    public ChatEntity(Long userId, Long chatRoomId){
-        this.userId = userId;
-        this.chatRoomId=chatRoomId;
+    public ChatEntity(Long userId,Long chatRoomId){
+        this.userId=userId;
+        this.chatRoomId =chatRoomId;
     }
     public ChatEntity toChatEntity() {
         return ChatEntity.builder()
