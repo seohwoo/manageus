@@ -11,38 +11,38 @@ import java.util.Date;
 @NoArgsConstructor
 public class UserDTO {
 
-    private int id;
+    private Long id;
     private String password;
-    private int positionId;
-    private int companyId;
-    private int statusId;
-    private int authId;
-    private int departmentId;
-    private Date regdate;
+    private Long position_id;
+    private Long company_id;
+    private Long status_id;
+    private Long auth_id;
+    private Long department_id;
+    private Date reg_date;
 
     @Builder
-    public UserDTO( int id,String password,int positionId,int companyId,int statusId,int authId,int departmentId,Date regdate) {
+    public UserDTO(Long id, String password, Long position_id, Long company_id, Long status_id, Long auth_id, Long department_id, Date reg_date) {
         super();
         this.id = id;
         this.password = password;
-        this.positionId = positionId;
-        this.companyId = companyId;
-        this.statusId = statusId;
-        this.authId = authId;
-        this.departmentId = departmentId;
-        this.regdate = regdate;
+        this.position_id = position_id;
+        this.company_id = company_id;
+        this.status_id = status_id;
+        this.auth_id = auth_id;
+        this.department_id = department_id;
+        this.reg_date = reg_date;
     }
 
     public UserEntity toUserEntity() {
         return UserEntity.builder()
                 .id(this.id)
                 .password(this.password)
-                .positionId(this.positionId)
-                .companyId(this.companyId)
-                .statusId(this.statusId)
-                .authId(this.authId)
-                .departmentId(this.departmentId)
-                .regdate(this.regdate)
+                .position_id(this.position_id)
+                .company_id(this.company_id)
+                .status_id(this.status_id)
+                .auth_id(this.auth_id)
+                .department_id(this.department_id)
+                .reg_date(this.reg_date)
                 .build();
     }
 

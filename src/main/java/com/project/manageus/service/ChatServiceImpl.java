@@ -26,7 +26,7 @@ public class ChatServiceImpl implements ChatService {
         System.out.println("id=="+dto.getId());
         System.out.println("name=="+dto.getName());
         System.out.println("reg=="+dto.getReg());
-        System.out.println("status=="+dto.getStatus());
+        System.out.println("status=="+dto.getStatusId());
 
         chatRoomJPA.save(dto.toChatRoomEntity());
     }
