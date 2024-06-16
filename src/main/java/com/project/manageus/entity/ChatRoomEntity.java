@@ -14,34 +14,32 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="chatroom")
+@Table(name="chat_room")
 @DynamicInsert
 public class ChatRoomEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String name;
-    private int status;
-
+    private Long status_id;
     @CreationTimestamp
     @Column(name="reg")
     private Date reg;
 
     @Builder
-    public ChatRoomEntity(int id,String name,int status,Date reg){
+    public ChatRoomEntity(Long id,String name,Long status_id,Date reg){
         super();
         this.id=id;
         this.name=name;
-        this.status=status;
+        this.status_id=status_id;
         this.reg=reg;
 
     }
-
-    public ChatRoomDTO toChatRoomDTO(){
-        return ChatRoomDTO.builder()
+    public ChatRoomEntity toChatRoomEntity(){
+        return ChatRoomEntity.builder()
                 .id(this.id)
                 .name(this.name)
-                .status(this.status)
+                .status_id(this.status_id)
                 .reg(this.reg)
                 .build();
     }

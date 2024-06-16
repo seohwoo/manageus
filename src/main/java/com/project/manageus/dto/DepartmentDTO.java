@@ -12,20 +12,21 @@ public class DepartmentDTO {
 
     private Long id;
     private String name;
-    private Long companyId;
+    private Long company_id;
 
     @Builder
-    public DepartmentDTO(Long id, String name, Long companyId) {
+    public DepartmentDTO(Long id, String name, Long company_id) {
         super();
         this.id = id;
         this.name = name;
-        this.companyId = companyId;
+        this.company_id = company_id;
     }
 
     public DepartmentEntity toDepartmentEntity() {
         return DepartmentEntity.builder()
                 .id(this.id)
                 .name(this.name)
+                .company_id(this.company_id)
                 .build();
     }
 }

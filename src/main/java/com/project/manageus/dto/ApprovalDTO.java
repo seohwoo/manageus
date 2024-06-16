@@ -11,39 +11,44 @@ import java.util.Date;
 @Data
 @NoArgsConstructor // 기본 생성자 자동 생성 필수.
 public class ApprovalDTO {
-    private int ID;
-    private int DocumentID;
-    private int StatusID;
-    private int VacationID;
-    private String Content;
-    private String Subject;
-    private Date StartDate;
-    private Date FinishDate;
+    private Long id;
+    private Long user_id;
+    private Long status_id;
+    private String title;
+    private Long approval_type_id;
+    private Date start_date;
+    private Date end_date;
+    private String content;
+    private Date sign_on;
+    private Date sign_off;
 
     @Builder
-    public ApprovalDTO(int ID, int DocumentID, int StatusID, int VacationID, String Content,
-    String Subject, Date StartDate, Date FinishDate) {
+    public ApprovalDTO(Long id,Long user_id,Long status_id,String title,Long approval_type_id,Date start_date,Date end_date,String content,Date sign_on,Date sign_off) {
         super();
-        this.ID = ID;
-        this.DocumentID = DocumentID;
-        this.StatusID = StatusID;
-        this.VacationID = VacationID;
-        this.Content = Content;
-        this.Subject = Subject;
-        this.StartDate = StartDate;
-        this.FinishDate = FinishDate;
+        this.id = id;
+        this.user_id = user_id;
+        this.status_id = status_id;
+        this.title = title;
+        this.approval_type_id = approval_type_id;
+        this.start_date = start_date;
+        this.end_date = end_date;
+        this.content = content;
+        this.sign_on=sign_on;
+        this.sign_off=sign_off;
     }
 
     public ApprovalEntity toApprovalEntity() {
         return ApprovalEntity.builder()
-                .ID(this.ID)
-                .DocumentID(this.DocumentID)
-                .StatusID(this.StatusID)
-                .VacationID(this.VacationID)
-                .Content(this.Content)
-                .Subject(this.Subject)
-                .StartDate(this.StartDate)
-                .FinishDate(this.FinishDate)
+                .id(this.id)
+                .user_id(this.user_id)
+                .status_id(this.status_id)
+                .title(this.title)
+                .approval_type_id(this.approval_type_id)
+                .start_date(this.start_date)
+                .end_date(this.end_date)
+                .content(this.content)
+                .sign_on(this.sign_on)
+                .sign_off(this.sign_off)
                 .build();
     } // 이거는 DTO를 Entity로 만드는 작업이다.
 }     // 값을 받아와서 넘길 때는 DTO에서 Entity로 넘어간다.

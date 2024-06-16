@@ -19,21 +19,21 @@ public class DepartmentEntity {
     @Id
     private Long id;
     private String name;
-    private Long companyId;
+    private Long company_id;
 
     @Builder
-    public DepartmentEntity(Long id, String name, Long companyId) {
+    public DepartmentEntity(Long id, String name, Long company_id) {
         super();
         this.id = id;
         this.name = name;
-        this.companyId = companyId;
+        this.company_id = company_id;
     }
 
     public DepartmentDTO toDepartmentDTO() {
         return DepartmentDTO.builder()
                 .id(this.id)
                 .name(this.name)
-                .companyId(this.companyId)
+                .company_id(this.company_id)
                 .build();
     }
 }

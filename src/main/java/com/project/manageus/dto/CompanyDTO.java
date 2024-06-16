@@ -16,44 +16,44 @@ public class CompanyDTO {
 
     private Long id;
     private String pw;
-    private String businessNum;
-    private String inviteCode;
+    private String business_num;
+    private String invite_code;
     private String ceo;
     private String address;
     private String email;
-    private Long statusId;
-    private Long authId;
-    private Date regdate;
+    private Long status_id;
+    private Long auth_id;
+    private Date reg_date;
 
     @Builder
-    public CompanyDTO(Long id, String pw, String businessNum,
-                      String inviteCode, String ceo, String address,
-                      String email, Long statusId, Long authId, Date regdate) {
+    public CompanyDTO(Long id, String pw, String business_num,
+                      String invite_code, String ceo, String address,
+                      String email, Long status_id, Long auth_id, Date reg_date) {
         super();
         this.id = id;
         this.pw = pw;
-        this.businessNum = businessNum;
-        this.inviteCode = inviteCode;
+        this.business_num = business_num;
+        this.invite_code = invite_code;
         this.ceo = ceo;
         this.address = address;
         this.email = email;
-        this.statusId = statusId;
-        this.authId = authId;
-        this.regdate = regdate;
+        this.status_id = status_id;
+        this.auth_id = auth_id;
+        this.reg_date = reg_date;
     }
 
     public CompanyEntity toCompanyEntity() {
         return CompanyEntity.builder()
                 .id(this.id)
                 .pw(this.pw)
-                .businessNum(this.businessNum)
-                .inviteCode(this.inviteCode)
+                .business_num(this.business_num)
+                .invite_code(this.invite_code)
                 .ceo(this.ceo)
                 .address(this.address)
                 .email(this.email)
-                .statusId(this.statusId)
-                .authId(this.authId)
-                .regdate(this.regdate)
+                .status_id(this.status_id)
+                .auth_id(this.auth_id)
+                .reg_date(this.reg_date)
                 .build();
     }
 

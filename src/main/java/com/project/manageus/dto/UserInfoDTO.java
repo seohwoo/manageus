@@ -1,22 +1,14 @@
-package com.project.manageus.entity;
+package com.project.manageus.dto;
 
-import com.project.manageus.dto.MemberInfoDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.project.manageus.entity.UserInfoEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicInsert;
 
-@Entity
 @Data
 @NoArgsConstructor
-@Table(name = "MEMBERINFO")
-@DynamicInsert
-public class MemberInfoEntity {
+public class UserInfoDTO {
 
-    @Id
     private Long id;
     private String name;
     private String stamp;
@@ -27,23 +19,26 @@ public class MemberInfoEntity {
     private String gender;
 
 
+
     @Builder
-    public MemberInfoEntity(Long id, String name, String stamp, String phone, String address, String birth, String gender) {
+    public UserInfoDTO(Long id, String name, String stamp, String email, String phone, String address, String birth, String gender) {
         super();
         this.id = id;
         this.name = name;
         this.stamp = stamp;
+        this.email = email;
         this.phone = phone;
         this.address = address;
         this.birth = birth;
         this.gender = gender;
     }
 
-    public MemberInfoDTO toMemberInfoDTO() {
-        return MemberInfoDTO.builder()
+    public UserInfoEntity toUserInfoEntity() {
+        return UserInfoEntity.builder()
                 .id(this.id)
                 .name(this.name)
                 .stamp(this.stamp)
+                .email(this.email)
                 .phone(this.phone)
                 .address(this.address)
                 .birth(this.birth)
