@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.Date;
 
@@ -13,45 +14,50 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @Table(name = "USER")
+@DynamicInsert
 public class UserEntity {
 
     @Id
     private Long id;
     private String password;
-    private Long position_id;
-    private Long company_id;
-    private Long status_id;
-    private Long auth_id;
-    private Long department_id;
-    private Date reg_date;
+    @Column(name = "position_id")
+    private Long positionId;
+    @Column(name = "company_id")
+    private Long companyId;
+    @Column(name = "status_id")
+    private Long statusId;
+    @Column(name = "auth_id")
+    private Long authId;
+    @Column(name = "department_id")
+    private Long departmentId;
+    @Column(name = "reg_date")
+    private Date regDate;
 
 
     @Builder
-    public UserEntity(Long id, String password, Long position_id, Long company_id, Long status_id, Long auth_id, Long department_id, Date reg_date) {
+    public UserEntity(Long id, String password, Long positionId, Long companyId, Long statusId, Long authId, Long departmentId, Date regDate) {
         super();
         this.id = id;
         this.password = password;
-        this.position_id = position_id;
-        this.company_id = company_id;
-        this.status_id = status_id;
-        this.auth_id = auth_id;
-        this.department_id = department_id;
-        this.reg_date = reg_date;
+        this.positionId = positionId;
+        this.companyId = companyId;
+        this.statusId = statusId;
+        this.authId = authId;
+        this.departmentId = departmentId;
+        this.regDate = regDate;
     }
 
     public UserDTO toUserDTO() {
         return UserDTO.builder()
                 .id(this.id)
                 .password(this.password)
-                .position_id(this.position_id)
-                .company_id(this.company_id)
-                .status_id(this.status_id)
-                .auth_id(this.auth_id)
-                .department_id(this.department_id)
-                .reg_date(this.reg_date)
+                .positionId(this.positionId)
+                .companyId(this.companyId)
+                .statusId(this.statusId)
+                .authId(this.authId)
+                .departmentId(this.departmentId)
+                .regDate(this.regDate)
                 .build();
     }
 
 }
-
-

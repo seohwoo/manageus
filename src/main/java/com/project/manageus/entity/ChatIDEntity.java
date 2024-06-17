@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatID implements Serializable {
+public class ChatIDEntity implements Serializable {
     @Column(name = "user_id")
     private Long userId;
     @Column(name = "chat_room_id")

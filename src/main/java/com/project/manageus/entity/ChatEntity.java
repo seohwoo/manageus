@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name="chat")
-@IdClass(ChatID.class)
+@IdClass(ChatIDEntity.class)
 public class ChatEntity  {
     @Id
     @Column(name = "user_id")

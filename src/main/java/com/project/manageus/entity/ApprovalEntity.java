@@ -1,6 +1,7 @@
 package com.project.manageus.entity;
 
 import com.project.manageus.dto.ApprovalDTO;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -17,43 +18,51 @@ import java.util.Date;
 public class ApprovalEntity {
     @Id
     private Long id;
-    private Long user_id;
-    private Long status_id;
+    @Column(name = "user_id")
+    private Long userId;
+    @Column(name = "status_id")
+    private Long statusId;
     private String title;
-    private Long approval_type_id;
-    private Date start_date;
-    private Date end_date;
+    @Column(name = "approval_type_id")
+    private Long approvalTypeId;
+    @Column(name = "start_date")
+    private Date startDate;
+    @Column(name = "end_date")
+    private Date endDate;
     private String content;
-    private Date sign_on;
-    private Date sign_off;
+    @Column(name = "sign_on")
+    private Date signOn;
+    @Column(name = "sign_off")
+    private Date signOff;
 
     @Builder
-    public ApprovalEntity(Long id,Long user_id,Long status_id,String title,Long approval_type_id,Date start_date,Date end_date,String content,Date sign_on,Date sign_off) {
+    public ApprovalEntity(Long id, Long userId, Long statusId, String title, Long approvalTypeId,
+                          Date startDate, Date endDate, String content, Date signOn, Date signOff) {
         super();
         this.id = id;
-        this.user_id = user_id;
-        this.status_id = status_id;
+        this.userId = userId;
+        this.statusId = statusId;
         this.title = title;
-        this.approval_type_id = approval_type_id;
-        this.start_date = start_date;
-        this.end_date = end_date;
+        this.approvalTypeId = approvalTypeId;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.content = content;
-        this.sign_on=sign_on;
-        this.sign_off=sign_off;
+        this.signOn = signOn;
+        this.signOff = signOff;
     }
 
     public ApprovalDTO toApprovalDTO() {
         return ApprovalDTO.builder()
                 .id(this.id)
-                .user_id(this.user_id)
-                .status_id(this.status_id)
+                .userId(this.userId)
+                .statusId(this.statusId)
                 .title(this.title)
-                .approval_type_id(this.approval_type_id)
-                .start_date(this.start_date)
-                .end_date(this.end_date)
+                .approvalTypeId(this.approvalTypeId)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
                 .content(this.content)
-                .sign_on(this.sign_on)
-                .sign_off(this.sign_off)
+                .signOn(this.signOn)
+                .signOff(this.signOff)
                 .build();
     } // 이거는 Entity를 DTO로 만드는 작업이다.
 }     // DB에서 넘어올 때는 Entity로 넘어온다.

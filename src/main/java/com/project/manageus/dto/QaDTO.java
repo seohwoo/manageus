@@ -10,16 +10,17 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class QaDTO {
+
     private Long id;
     private String writer;
     private String email;
     private String contact;
     private String content;
     private Date reg;
-    private int ref;
+    private Long ref;
 
     @Builder
-    public QaDTO(Long id,String writer,String email,String contact,String content,Date reg,int ref){
+    public QaDTO(Long id,String writer,String email,String contact,String content,Date reg,Long ref){
         this.id=id;
         this.writer=writer;
         this.email=email;
