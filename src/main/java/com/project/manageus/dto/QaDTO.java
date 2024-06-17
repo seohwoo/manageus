@@ -10,6 +10,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class QaDTO {
+
     private Long id;
     private String writer;
     private String email;

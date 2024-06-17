@@ -38,12 +38,14 @@ public class LoginServiceImpl implements LoginService{
 
         if(companyRepository.existsByInviteCode(inviteCode) &&
                 !userInfoRepository.existsByEmail(userInfoDTO.getEmail())) {
-
             CompanyEntity companyEntity = companyRepository.findByInviteCode(inviteCode);
             userDTO.setCompanyId(companyEntity.getId());
             userDTO.setAuthId((long) 3);
             userDTO.setStatusId((long) 1001);
-            Long newId = Collections.max(userRepository.findAll(), Comparator.comparingLong(UserEntity::getId)).getId() + 1;
+            Long newId = companyEntity.getId() * 1000 + 1;
+            if(!userRepository.existsByCompanyId(companyEntity.getId())) {
+                newId = Collections.max(userRepository.findAll(), Comparator.comparingLong(UserEntity::getId)).getId() + 1;
+            }
             userDTO.setId(newId);
             userInfoDTO.setId(newId);
             userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
