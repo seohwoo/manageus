@@ -33,6 +33,8 @@ public class ChatController {
     @GetMapping("/company/1111/chatRoomList")
     public String chatRoomList(HttpSession session){
         session.setAttribute("memberId", "10010001");
+        String sid = (String)session.getAttribute("memberId");
+        Long id = Long.parseLong(sid);
         return "/company/chat/chatRoomList";
     }
     @PostMapping("/company/1111/chat")
