@@ -11,15 +11,15 @@ import java.util.Date;
 public class ChatRoomDTO {
     private Long id;
     private String name;
-    private Long status_id;
+    private Long statusId;
     private Date reg;
 
     @Builder
-    public ChatRoomDTO(Long id,String name,Long status_id,Date reg){
+    public ChatRoomDTO(Long id,String name,Long statusId,Date reg){
         super();
         this.id=id;
         this.name=name;
-        this.status_id=status_id;
+        this.statusId=statusId;
         this.reg=reg;
 
     }
@@ -27,7 +27,7 @@ public class ChatRoomDTO {
         return ChatRoomEntity.builder()
                 .id(this.id)
                 .name(this.name)
-                .status_id(this.status_id)
+                .statusId(this.statusId)
                 .reg(this.reg)
                 .build();
     }
