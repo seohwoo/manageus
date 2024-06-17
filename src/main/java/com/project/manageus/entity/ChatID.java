@@ -10,6 +10,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatID implements Serializable {
-    private int memberId;
-    private int chatRoomId;
+    private Long user_id;
+    private Long chat_room_id;
 }
