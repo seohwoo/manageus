@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>테스트</title>
+    </head>
+
+    <body>
+    <h1> 테스트 받는 값 </h1>
+        결재자 : <h2 th:each="approvers : ${approvers}" th:value="${approvers}" th:text="${approvers}"></h2>
+        제목 : <h2 th:text="${title}"></h2>
+        휴가 종류 : <h2 th:text="${approvalType}"></h2>
+        내용 : <h2 th:text="${content}"></h2>
+        휴가 날짜 : <h2 th:text="${#dates.format(start_date, 'yy/MM/dd')}"></h2> ~
+        <h2 th:text="${#dates.format(end_date, 'yy/MM/dd')}"></h2>
+    </body>
+</html>

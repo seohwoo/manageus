@@ -3,6 +3,7 @@ package com.project.manageus.entity;
 import com.project.manageus.dto.ProjectMemberDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,8 @@ import org.hibernate.annotations.DynamicInsert;
 @Table(name = "PROJECT_MEMBER")
 @DynamicInsert
 public class ProjectMemberEntity {
+
+    @Id
     private Long id;
     @Column(name = "project_id")
     private Long projectId;
