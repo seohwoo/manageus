@@ -13,16 +13,16 @@ public class CalendarDTO {
     private Long id;
     private Long companyId ;
     private Long departmentId ;
-    private Long memberId ;
+    private Long userId ;
     private Long calendarType  ;
 
     @Builder
-    public CalendarDTO(Long id, Long companyId, Long departmentId, Long memberId, Long calendarType){
+    public CalendarDTO(Long id, Long companyId, Long departmentId, Long userId, Long calendarType){
         super();
         this.id = id;
         this.companyId = companyId;
         this.departmentId = departmentId;
-        this.memberId = memberId;
+        this.userId = userId;
         this.calendarType = calendarType;
     }
 
@@ -31,7 +31,7 @@ public class CalendarDTO {
                 .id(this.id)
                 .companyId(this.companyId)
                 .departmentId(this.departmentId)
-                .memberId(this.memberId)
+                .userId(this.userId)
                 .calendarType(this.calendarType)
                 .build();
 
