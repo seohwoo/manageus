@@ -1,5 +1,6 @@
 package com.project.manageus.controller.all;
 
+import com.project.manageus.dto.CompanyDTO;
 import com.project.manageus.dto.UserDTO;
 import com.project.manageus.dto.UserInfoDTO;
 import com.project.manageus.service.LoginService;
@@ -35,8 +36,8 @@ public class LoginController {
         String url = "redirect:/register";
 
         if(userDTO.getPassword().equals(repeatPassword)) {
-            boolean isCreated = loginService.createUser(userDTO, userInfoDTO, inviteCode);
-            if(isCreated) {
+            boolean isUserCreated = loginService.createUser(userDTO, userInfoDTO, inviteCode);
+            if(isUserCreated) {
                 url = "redirect:/login";
             }
         }
@@ -44,10 +45,24 @@ public class LoginController {
     }
 
     @GetMapping("/company")
-    public String Company() {
+    public String company() {
         String url = "/all/login/company-register.html";
         return url;
     }
+
+    @PostMapping("/company")
+    public String companyPro(CompanyDTO companyDTO, String repeatPassword) {
+        String url = "redirect:/company";
+
+        if(companyDTO.getPw().equals(repeatPassword)) {
+            boolean isCompanyCreated = loginService.createCompany(companyDTO);
+            if(isCompanyCreated) {
+                url = "redirect:/login";
+            }
+        }
+        return url;
+    }
+
 
     @GetMapping("/forgot")
     public String forgot() {
