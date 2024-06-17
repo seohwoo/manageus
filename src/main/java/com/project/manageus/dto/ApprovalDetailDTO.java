@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ApprovalDetailDTO {
-    private int id;
-    private int approvalId;
-    private int userId;
-    private int statusId;
+    private Long id;
+    private Long approvalId;
+    private Long userId;
+    private Long statusId;
 
     @Builder
-    public ApprovalDetailDTO(int id, int approvalId, int userId, int statusId) {
+    public ApprovalDetailDTO(Long id, Long approvalId, Long userId, Long statusId) {
         super();
         this.id = id;
         this.approvalId = approvalId;

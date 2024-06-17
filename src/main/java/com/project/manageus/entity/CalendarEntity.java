@@ -1,6 +1,7 @@
 package com.project.manageus.entity;
 
 import com.project.manageus.dto.CalendarDTO;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -15,20 +16,24 @@ import lombok.NoArgsConstructor;
 public class CalendarEntity {
 
     @Id
-    private int id;
-    private int companyId;
-    private int departmentId ;
-    private int memberId ;
-    private int calendertype  ;
+    private Long id;
+    @Column(name = "company_id")
+    private Long companyId ;
+    @Column(name = "department_id")
+    private Long departmentId ;
+    @Column(name = "member_id")
+    private Long memberId ;
+    @Column(name = "calender_type")
+    private Long calenderType  ;
 
     @Builder
-    public CalendarEntity(int id, int companyId, int departmentId, int memberId, int calendertype){
+    public CalendarEntity(Long id, Long companyId, Long departmentId, Long memberId, Long calenderType){
         super();
         this.id = id;
         this.companyId = companyId;
         this.departmentId = departmentId;
         this.memberId = memberId;
-        this.calendertype = calendertype;
+        this.calenderType = calenderType;
     }
 
     public CalendarDTO toCalendarDTO(){
@@ -37,7 +42,7 @@ public class CalendarEntity {
                 .companyId(this.companyId)
                 .departmentId(this.departmentId)
                 .memberId(this.memberId)
-                .calendertype(this.calendertype)
+                .calenderType(this.calenderType)
                 .build();
 
     } //엔티티를 디티오로 바꾸는 작업

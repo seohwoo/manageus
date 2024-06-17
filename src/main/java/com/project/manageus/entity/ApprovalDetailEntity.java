@@ -1,6 +1,7 @@
 package com.project.manageus.entity;
 
 import com.project.manageus.dto.ApprovalDetailDTO;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -9,16 +10,19 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Entity
-@Table(name="approvaldetail")
+@Table(name="approval_detail")
 public class ApprovalDetailEntity {
     @Id
-    private int id;
-    private int approvalId;
-    private int userId;
-    private int statusId;
+    private Long id;
+    @Column(name = "approval_id")
+    private Long approvalId;
+    @Column(name = "user_id")
+    private Long userId;
+    @Column(name = "status_id")
+    private Long statusId;
 
     @Builder
-    public ApprovalDetailEntity(int id, int approvalId, int userId, int statusId) {
+    public ApprovalDetailEntity(Long id, Long approvalId, Long userId, Long statusId) {
         super();
         this.id = id;
         this.approvalId = approvalId;

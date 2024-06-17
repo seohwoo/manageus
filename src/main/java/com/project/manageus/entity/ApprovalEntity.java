@@ -1,13 +1,13 @@
 package com.project.manageus.entity;
 
 import com.project.manageus.dto.ApprovalDTO;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Primary;
 
 import java.util.Date;
 
@@ -17,31 +17,38 @@ import java.util.Date;
 @Table(name="approval")
 public class ApprovalEntity {
     @Id
-    private int id;
-    private int userId;
-    private int statusId;
+    private Long id;
+    @Column(name = "user_id")
+    private Long userId;
+    @Column(name = "status_id")
+    private Long statusId;
     private String title;
-    private int approvalTypeId;
-    private String content;
+    @Column(name = "approval_type_id")
+    private Long approvalTypeId;
+    @Column(name = "start_date")
     private Date startDate;
+    @Column(name = "end_date")
     private Date endDate;
+    private String content;
+    @Column(name = "sign_on")
     private Date signOn;
-    private Date singOff;
+    @Column(name = "sign_off")
+    private Date signOff;
 
     @Builder
-    public ApprovalEntity(int id, int userId, int statusId, String title, int approvalTypeId,
-                          String content, Date startDate, Date endDate, Date signOn, Date singOff) {
+    public ApprovalEntity(Long id, Long userId, Long statusId, String title, Long approvalTypeId,
+                          Date startDate, Date endDate, String content, Date signOn, Date signOff) {
         super();
         this.id = id;
         this.userId = userId;
         this.statusId = statusId;
         this.title = title;
         this.approvalTypeId = approvalTypeId;
-        this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.content = content;
         this.signOn = signOn;
-        this.singOff = singOff;
+        this.signOff = signOff;
     }
 
     public ApprovalDTO toApprovalDTO() {
@@ -51,11 +58,11 @@ public class ApprovalEntity {
                 .statusId(this.statusId)
                 .title(this.title)
                 .approvalTypeId(this.approvalTypeId)
-                .content(this.content)
                 .startDate(this.startDate)
                 .endDate(this.endDate)
+                .content(this.content)
                 .signOn(this.signOn)
-                .singOff(this.singOff)
+                .signOff(this.signOff)
                 .build();
     } // 이거는 Entity를 DTO로 만드는 작업이다.
 }     // DB에서 넘어올 때는 Entity로 넘어온다.

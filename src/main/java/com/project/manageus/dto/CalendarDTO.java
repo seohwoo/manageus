@@ -1,6 +1,7 @@
 package com.project.manageus.dto;
 
 import com.project.manageus.entity.CalendarEntity;
+import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,20 +10,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CalendarDTO {
 
-    private int id;
-    private int companyId ;
-    private int departmentId ;
-    private int memberId ;
-    private int calendertype  ;
+    private Long id;
+    private Long companyId ;
+    private Long departmentId ;
+    private Long memberId ;
+    private Long calenderType  ;
 
     @Builder
-    public CalendarDTO(int id, int companyId, int departmentId, int memberId, int calendertype){
+    public CalendarDTO(Long id, Long companyId, Long departmentId, Long memberId, Long calenderType){
         super();
         this.id = id;
         this.companyId = companyId;
         this.departmentId = departmentId;
         this.memberId = memberId;
-        this.calendertype = calendertype;
+        this.calenderType = calenderType;
     }
 
     public CalendarEntity toCalendarEntity(){
@@ -31,7 +32,7 @@ public class CalendarDTO {
                 .companyId(this.companyId)
                 .departmentId(this.departmentId)
                 .memberId(this.memberId)
-                .calendertype(this.calendertype)
+                .calenderType(this.calenderType)
                 .build();
 
     } //이거는 dto를 엔터티로 만드는 작업

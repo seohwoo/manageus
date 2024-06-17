@@ -1,6 +1,5 @@
 package com.project.manageus.entity;
 
-import com.project.manageus.dto.ChatMessageDTO;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -10,35 +9,38 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="chatmessage")
+@Table(name="chat_message")
 public class ChatMessageEntity {
     @Id
-    private int id;
-    private int chatRoomId;
-    private int memberId;
+    private Long id;
+    @Column(name = "chat_room_id")
+    private Long chatRoomId;
+    @Column(name = "user_id")
+    private Long userId;
     private String message;
     @Temporal(TemporalType.TIMESTAMP)
     private Date reg;
-    private int chatCheck;
+    @Column(name="status_id")
+    private Long statusId;
 
     @Builder
-    public ChatMessageEntity(int id,int chatRoomId,String message,int memberId,Date reg,int chatCheck){
+    public ChatMessageEntity(Long id, Long chatRoomId, String message, Long userId, Date reg, Long statusId){
         super();
         this.id=id;
         this.chatRoomId=chatRoomId;
-        this.memberId=memberId;
-        this.message=message;
+        this.userId = userId;
+        this.message = message;
         this.reg=reg;
-        this.chatCheck=chatCheck;
+        this.statusId =statusId;
     }
-    public ChatMessageDTO toChatMessageDTO(){
-        return ChatMessageDTO.builder()
+    public ChatMessageEntity toChatMessageEntity(){
+        return ChatMessageEntity.builder()
                 .id(this.id)
                 .chatRoomId(this.chatRoomId)
-                .memberId(this.memberId)
+                .userId(this.userId)
                 .message(this.message)
                 .reg(this.reg)
-                .chatCheck(this.chatCheck)
+                .statusId(this.statusId)
                 .build();
     }
 

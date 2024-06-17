@@ -8,17 +8,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ChatDTO {
-    private int memberId;
-    private int chatRoomId;
+    private Long userId;
+    private Long chatRoomId;
+
 
     @Builder
-    public ChatDTO(int memberId,int chatRoomId){
-        this.memberId=memberId;
-        this.chatRoomId=chatRoomId;
+    public ChatDTO(Long userId, Long chatRoomId){
+        this.userId = userId;
+        this.chatRoomId = chatRoomId;
+
     }
     public ChatEntity toChatEntity() {
         return ChatEntity.builder()
-                .memberId(this.memberId)
+                .userId(this.userId)
                 .chatRoomId(this.chatRoomId)
                 .build();
     }

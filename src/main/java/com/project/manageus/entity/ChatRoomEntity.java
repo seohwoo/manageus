@@ -1,11 +1,9 @@
 package com.project.manageus.entity;
 
-import com.project.manageus.dto.ChatRoomDTO;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -14,34 +12,33 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="chatroom")
+@Table(name="chat_room")
 @DynamicInsert
 public class ChatRoomEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String name;
-    private int status;
-
+    @Column(name = "status_id")
+    private Long statusId;
     @CreationTimestamp
     @Column(name="reg")
     private Date reg;
 
     @Builder
-    public ChatRoomEntity(int id,String name,int status,Date reg){
+    public ChatRoomEntity(Long id,String name,Long statusId,Date reg){
         super();
         this.id=id;
         this.name=name;
-        this.status=status;
+        this.statusId=statusId;
         this.reg=reg;
 
     }
-
-    public ChatRoomDTO toChatRoomDTO(){
-        return ChatRoomDTO.builder()
+    public ChatRoomEntity toChatRoomEntity(){
+        return ChatRoomEntity.builder()
                 .id(this.id)
                 .name(this.name)
-                .status(this.status)
+                .statusId(this.statusId)
                 .reg(this.reg)
                 .build();
     }

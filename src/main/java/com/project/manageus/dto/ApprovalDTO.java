@@ -11,31 +11,31 @@ import java.util.Date;
 @Data
 @NoArgsConstructor // 기본 생성자 자동 생성 필수.
 public class ApprovalDTO {
-    private int id;
-    private int userId;
-    private int statusId;
+    private Long id;
+    private Long userId;
+    private Long statusId;
     private String title;
-    private int approvalTypeId;
-    private String content;
+    private Long approvalTypeId;
     private Date startDate;
     private Date endDate;
+    private String content;
     private Date signOn;
-    private Date singOff;
+    private Date signOff;
 
     @Builder
-    public ApprovalDTO(int id, int userId, int statusId, String title, int approvalTypeId,
-                       String content, Date startDate, Date endDate, Date signOn, Date singOff) {
+    public ApprovalDTO(Long id, Long userId, Long statusId, String title, Long approvalTypeId,
+                       Date startDate, Date endDate, String content, Date signOn, Date signOff) {
         super();
         this.id = id;
         this.userId = userId;
         this.statusId = statusId;
         this.title = title;
         this.approvalTypeId = approvalTypeId;
-        this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.content = content;
         this.signOn = signOn;
-        this.singOff = singOff;
+        this.signOff = signOff;
     }
 
     public ApprovalEntity toApprovalEntity() {
@@ -45,11 +45,11 @@ public class ApprovalDTO {
                 .statusId(this.statusId)
                 .title(this.title)
                 .approvalTypeId(this.approvalTypeId)
-                .content(this.content)
                 .startDate(this.startDate)
                 .endDate(this.endDate)
+                .content(this.content)
                 .signOn(this.signOn)
-                .singOff(this.singOff)
+                .signOff(this.signOff)
                 .build();
     } // 이거는 DTO를 Entity로 만드는 작업이다.
 }     // 값을 받아와서 넘길 때는 DTO에서 Entity로 넘어간다.
