@@ -356,20 +356,26 @@
             </nav>
             <!-- End of Topbar -->
 
+            <!-- Begin Page Content -->
             <div class="container-fluid mt-4 mb-4">
 
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
-
-                        <div th:each="dto : ${list}" class="card shadow mb-4">
+                        <form method="post" th:action="@{/super/1001/answer/{num}(num=${num})}">
+                            <select name="type" required>
+                                <option value="">답글종류를 선택해주세요</option>
+                                <option value="1">직접 연락</option>
+                                <option value="2">온라인</option>
+                            </select>
+                        <div  class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">
-                                    방이름 : <span th:text="${dto.name}"></span> | |
-                                    등록일: <span th:text="${dto.reg}"></span>
+                                    답 변
                                 </h6>
                             </div>
+
                             <div class="card-body">
-                                <p><span th:text="${dto.content}"></span></p>
+                                <textarea name="content"></textarea>
                             </div>
                         </div>
 
@@ -378,12 +384,11 @@
 
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
-                        <form method="post" th:action="@{/company/1111/chat}">
-                            <input type="hidden" name="name" th:value="테스트1방"/>
-                            <input type="hidden" name="statusId" th:value="4001"/>
+                        <div class="text-center mt-4">
                             <button type="submit" class="btn btn-primary">
-                                채팅방 생성
+                                답변 제출
                             </button>
+                        </div>
                         </form>
                     </div>
                 </div>
@@ -391,23 +396,24 @@
             </div>
             <!-- /.container-fluid -->
 
-
-
         </div>
-        <!-- End of Main Content -->
 
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2020</span>
-                </div>
-            </div>
-        </footer>
-        <!-- End of Footer -->
-
+        <!-- /.container-fluid -->
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Copyright &copy; Your Website 2020</span>
+            </div>
+        </div>
+    </footer>
+    <!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
 
 </div>
 <!-- End of Page Wrapper -->

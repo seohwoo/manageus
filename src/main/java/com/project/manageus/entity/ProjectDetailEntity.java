@@ -3,6 +3,7 @@ package com.project.manageus.entity;
 import com.project.manageus.dto.ProjectDetailDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,7 @@ import java.util.Date;
 @DynamicInsert
 public class ProjectDetailEntity {
 
+    @Id
     private Long id;
     private String title;
     private String content;

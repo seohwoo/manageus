@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>게시판</title>
+    </head>
+
+    <body>
+        임시 세션값 : <h1 th:text="${session.user_id}"></h1>
+        <form action="/company/write" method="get">
+            <input type="submit" value="휴가 신청하기">
+        </form>
+    </body>
+</html>
+
+<!--
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+</head>
+<body>
+<div>
+    <p><span th:text="${session.userId}"></span></p>
+</div>
+
+<form action="/company/list" method="post">
+    <table border="1">
+        <tr>
+            <td>id</td>
+            <td><input type="text" name="id"></td>
+        </tr>
+        <tr>
+            <td>pw</td>
+            <td><input type="number" name="pw"></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="제출하기"></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
+-->

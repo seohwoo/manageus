@@ -364,7 +364,8 @@
                         <div th:each="dto : ${list}" class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">
-                                    방이름 : <span th:text="${dto.name}"></span> | |
+                                    작성자: <span th:text="${dto.writer}"></span> |
+                                    Email: <span th:text="${dto.email}"></span> |
                                     등록일: <span th:text="${dto.reg}"></span>
                                 </h6>
                             </div>
@@ -378,13 +379,12 @@
 
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
-                        <form method="post" th:action="@{/company/1111/chat}">
-                            <input type="hidden" name="name" th:value="테스트1방"/>
-                            <input type="hidden" name="statusId" th:value="4001"/>
-                            <button type="submit" class="btn btn-primary">
-                                채팅방 생성
+                        <div th:if="${count == 1}" class="text-center mt-4">
+                            <button type="button" class="btn btn-primary"
+                                    th:attr="onclick='location.href=\'/super/1001/answer/' + ${num} + '\''">
+                                답변 하기
                             </button>
-                        </form>
+                        </div>
                     </div>
                 </div>
 
@@ -393,7 +393,7 @@
 
 
 
-        </div>
+    </div>
         <!-- End of Main Content -->
 
         <!-- Footer -->

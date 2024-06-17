@@ -42,9 +42,10 @@ public class LoginServiceImpl implements LoginService{
             userDTO.setCompanyId(companyEntity.getId());
             userDTO.setAuthId((long) 3);
             userDTO.setStatusId((long) 1001);
-            Long newId = companyEntity.getId() * 1000 + 1;
+            System.out.println(companyEntity.getId());
+            Long newId = companyEntity.getId() * 10000 + 1;
             if(!userRepository.existsByCompanyId(companyEntity.getId())) {
-                newId = Collections.max(userRepository.findAll(), Comparator.comparingLong(UserEntity::getId)).getId() + 1;
+                newId = Collections.max(userRepository.findAllByCompanyId(companyEntity.getId()), Comparator.comparingLong(UserEntity::getId)).getId() + 1;
             }
             userDTO.setId(newId);
             userInfoDTO.setId(newId);
