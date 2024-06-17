@@ -1,6 +1,6 @@
 package com.project.manageus.entity;
 
-public class UserDetailDTO {
+public class UserDetailEntity {
 
 
 }
