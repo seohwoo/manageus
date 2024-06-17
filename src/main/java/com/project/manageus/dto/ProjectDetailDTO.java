@@ -16,18 +16,18 @@ public class ProjectDetailDTO {
     private String title;
     private String content;
     private Long statusId;
-    private String leader;
+    private Long userId;
     private Date startTime;
     private Date endTime;
 
     @Builder
-    public ProjectDetailDTO(Long id, String title, String content, Long statusId, String leader, Date startTime, Date endTime){
+    public ProjectDetailDTO(Long id, String title, String content, Long statusId, Long userId, Date startTime, Date endTime){
         super();
         this.id = id;
         this.title = title;
         this.content = content;
         this.statusId = statusId;
-        this.leader = leader;
+        this.userId = userId;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -38,7 +38,7 @@ public class ProjectDetailDTO {
                 .title(this.title)
                 .content(this.content)
                 .statusId(this.statusId)
-                .leader(this.leader)
+                .userId(this.userId)
                 .startTime(this.startTime)
                 .endTime(this.endTime)
                 .build();

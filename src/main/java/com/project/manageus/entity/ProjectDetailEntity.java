@@ -25,20 +25,21 @@ public class ProjectDetailEntity {
     private String content;
     @Column(name = "status_id")
     private Long statusId;
-    private String leader;
+    @Column(name = "user_id")
+    private Long userId;
     @Column(name = "start_time")
     private Date startTime;
     @Column(name = "end_time")
     private Date endTime;
 
     @Builder
-    public ProjectDetailEntity(Long id, String title, String content, Long statusId, String leader, Date startTime, Date endTime){
+    public ProjectDetailEntity(Long id, String title, String content, Long statusId, Long userId, Date startTime, Date endTime){
         super();
         this.id = id;
         this.title = title;
         this.content = content;
         this.statusId = statusId;
-        this.leader = leader;
+        this.userId = userId;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -49,7 +50,7 @@ public class ProjectDetailEntity {
                 .title(this.title)
                 .content(this.content)
                 .statusId(this.statusId)
-                .leader(this.leader)
+                .userId(this.userId)
                 .startTime(this.startTime)
                 .endTime(this.endTime)
                 .build();
