@@ -21,18 +21,18 @@ public class CalendarEntity {
     private Long companyId ;
     @Column(name = "department_id")
     private Long departmentId ;
-    @Column(name = "member_id")
-    private Long memberId ;
+    @Column(name = "user_id")
+    private Long userId ;
     @Column(name = "calendar_type")
     private Long calendarType  ;
 
     @Builder
-    public CalendarEntity(Long id, Long companyId, Long departmentId, Long memberId, Long calendarType){
+    public CalendarEntity(Long id, Long companyId, Long departmentId, Long userId, Long calendarType){
         super();
         this.id = id;
         this.companyId = companyId;
         this.departmentId = departmentId;
-        this.memberId = memberId;
+        this.userId = userId;
         this.calendarType = calendarType;
     }
 
@@ -41,7 +41,7 @@ public class CalendarEntity {
                 .id(this.id)
                 .companyId(this.companyId)
                 .departmentId(this.departmentId)
-                .memberId(this.memberId)
+                .userId(this.userId)
                 .calendarType(this.calendarType)
                 .build();
 
