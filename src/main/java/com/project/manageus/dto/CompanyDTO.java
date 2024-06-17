@@ -13,6 +13,7 @@ public class CompanyDTO {
 
     private Long id;
     private String pw;
+    private String name;
     private String businessNum;
     private String inviteCode;
     private String ceo;
@@ -23,12 +24,13 @@ public class CompanyDTO {
     private Date regDate;
 
     @Builder
-    public CompanyDTO(Long id, String pw, String businessNum,
+    public CompanyDTO(Long id, String pw, String name, String businessNum,
                       String inviteCode, String ceo, String address,
                       String email, Long statusId, Long authId, Date regDate) {
         super();
         this.id = id;
         this.pw = pw;
+        this.name = name;
         this.businessNum = businessNum;
         this.inviteCode = inviteCode;
         this.ceo = ceo;
@@ -43,6 +45,7 @@ public class CompanyDTO {
         return CompanyEntity.builder()
                 .id(this.id)
                 .pw(this.pw)
+                .name(this.name)
                 .businessNum(this.businessNum)
                 .inviteCode(this.inviteCode)
                 .ceo(this.ceo)

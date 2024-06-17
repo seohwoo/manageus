@@ -1,13 +1,11 @@
 package com.project.manageus.entity;
 
 import com.project.manageus.dto.CompanyDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.Date;
 
@@ -15,11 +13,14 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @Table(name = "COMPANY")
+@DynamicInsert
 public class CompanyEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String pw;
+    private String name;
     @Column(name = "business_num")
     private String businessNum;
     @Column(name = "invite_code")
@@ -36,12 +37,13 @@ public class CompanyEntity {
 
 
     @Builder
-    public CompanyEntity(Long id, String pw, String businessNum,
+    public CompanyEntity(Long id, String pw, String name, String businessNum,
                       String inviteCode, String ceo, String address,
                       String email, Long statusId, Long authId, Date regDate) {
         super();
         this.id = id;
         this.pw = pw;
+        this.name = name;
         this.businessNum = businessNum;
         this.inviteCode = inviteCode;
         this.ceo = ceo;
@@ -56,6 +58,7 @@ public class CompanyEntity {
         return CompanyDTO.builder()
                 .id(this.id)
                 .pw(this.pw)
+                .name(this.name)
                 .businessNum(this.businessNum)
                 .inviteCode(this.inviteCode)
                 .ceo(this.ceo)
