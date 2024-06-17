@@ -23,17 +23,17 @@ public class CalendarEntity {
     private Long departmentId ;
     @Column(name = "member_id")
     private Long memberId ;
-    @Column(name = "calender_type")
-    private Long calenderType  ;
+    @Column(name = "calendar_type")
+    private Long calendarType  ;
 
     @Builder
-    public CalendarEntity(Long id, Long companyId, Long departmentId, Long memberId, Long calenderType){
+    public CalendarEntity(Long id, Long companyId, Long departmentId, Long memberId, Long calendarType){
         super();
         this.id = id;
         this.companyId = companyId;
         this.departmentId = departmentId;
         this.memberId = memberId;
-        this.calenderType = calenderType;
+        this.calendarType = calendarType;
     }
 
     public CalendarDTO toCalendarDTO(){
@@ -42,7 +42,7 @@ public class CalendarEntity {
                 .companyId(this.companyId)
                 .departmentId(this.departmentId)
                 .memberId(this.memberId)
-                .calenderType(this.calenderType)
+                .calendarType(this.calendarType)
                 .build();
 
     } //엔티티를 디티오로 바꾸는 작업
