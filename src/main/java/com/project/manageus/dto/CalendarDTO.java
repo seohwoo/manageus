@@ -14,16 +14,16 @@ public class CalendarDTO {
     private Long companyId ;
     private Long departmentId ;
     private Long memberId ;
-    private Long calenderType  ;
+    private Long calendarType  ;
 
     @Builder
-    public CalendarDTO(Long id, Long companyId, Long departmentId, Long memberId, Long calenderType){
+    public CalendarDTO(Long id, Long companyId, Long departmentId, Long memberId, Long calendarType){
         super();
         this.id = id;
         this.companyId = companyId;
         this.departmentId = departmentId;
         this.memberId = memberId;
-        this.calenderType = calenderType;
+        this.calendarType = calendarType;
     }
 
     public CalendarEntity toCalendarEntity(){
@@ -32,7 +32,7 @@ public class CalendarDTO {
                 .companyId(this.companyId)
                 .departmentId(this.departmentId)
                 .memberId(this.memberId)
-                .calenderType(this.calenderType)
+                .calendarType(this.calendarType)
                 .build();
 
     } //이거는 dto를 엔터티로 만드는 작업
