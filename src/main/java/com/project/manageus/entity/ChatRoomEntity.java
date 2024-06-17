@@ -19,18 +19,18 @@ public class ChatRoomEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @Column(name="status_id")
+    @Column(name = "status_id")
     private Long statusId;
     @CreationTimestamp
     @Column(name="reg")
     private Date reg;
 
     @Builder
-    public ChatRoomEntity(Long id, String name, Long statusId, Date reg){
+    public ChatRoomEntity(Long id,String name,Long statusId,Date reg){
         super();
         this.id=id;
         this.name=name;
-        this.statusId= statusId;
+        this.statusId=statusId;
         this.reg=reg;
 
     }
