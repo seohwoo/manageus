@@ -20,7 +20,7 @@ public class MessageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name="user_id")
-    private Long userID;
+    private Long userId;
     private String subject;
     private Long reader;
     @Column(name="read_type")
@@ -31,10 +31,10 @@ public class MessageEntity {
 
 
     @Builder
-    public MessageEntity(Long id, Long userID, String subject, Long reader, Long readType, Date readDate){
+    public MessageEntity(Long id, Long userId, String subject, Long reader, Long readType, Date readDate){
         super();
         this.id=id;
-        this.userID=userID;
+        this.userId=userId;
         this.subject=subject;
         this.reader=reader;
         this.readType=readType;
@@ -44,7 +44,7 @@ public class MessageEntity {
     public MessageDTO toMessageDTO(){
         return MessageDTO.builder()
                 .id(this.id)
-                .userID(this.userID)
+                .userId(this.userId)
                 .subject(this.subject)
                 .reader(this.reader)
                 .readType(this.readType)

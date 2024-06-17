@@ -19,15 +19,21 @@
         <th>읽음상태</th>
         <th>보낸날짜</th>
     </tr>
-    <tr th:each="message : ${messageJPA}">
+    <tr th:each="message : ${get}">
         <td><span th:text="${message.id}"></span></td>
-        <td><span th:text="${message.user_id}"></span></td>
+        <td><span th:text="${message.userId}"></span></td>
         <td><span th:text="${message.subject}"></span></td>
         <td><span th:text="${message.reader}"></span></td>
-        <td><span th:text="${message.read_type}"></span></td>
-        <td><span th:text="${message.read_date}"></span></td>
+        <td><span th:text="${message.readType}"></span></td>
+        <td><span th:text="${message.readDate}"></span></td>
     </tr>
 </table>
+
+
+<a href="/user/message">쪽지쓰기</a>
+<a href="">홈으로 이동(아직없음)</a>
+<a href="/user/sendMassage">전체 보낸쪽지 전체보기</a>
+
 
 </body>
 </html>
