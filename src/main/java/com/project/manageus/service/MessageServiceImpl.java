@@ -24,16 +24,17 @@ public class MessageServiceImpl implements MessageService{
     public void sendmessage(Long userId, Model model) { //보낸 메시지 전체
 
         Sort sort = Sort.by(Sort.Order.desc("readDate"));
-        List<MessageEntity> get= messageJPA.findByUserId(userId, sort);
+        List<MessageEntity> sendmessage= messageJPA.findByUserId(userId, sort); //김지환이 보낸 메세지를 찾음
 
-        model.addAttribute( "get" ,get);
+        model.addAttribute( "get" ,sendmessage);
     }
 
     @Override
     public void getmessage(Long userId, Model model) { //받은 메세지 전체
         Sort sort = Sort.by(Sort.Order.desc("readDate"));
-        List<MessageEntity> get= messageJPA.findByReader(userId, sort);
-        model.addAttribute( "get" ,get);
+        List<MessageEntity> givemessage = messageJPA.findByReader(userId, sort);
+
+        model.addAttribute( "get" ,givemessage);
     }
 
 

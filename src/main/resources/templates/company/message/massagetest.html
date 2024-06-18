@@ -27,11 +27,11 @@
         <th>읽음상태</th>
         <th>보낸날짜</th>
     </tr>
-    <tr th:each="message : ${get}">
-        <td><span th:text="${message.id}"></span></td>
+    <tr th:each="message, iterStat : ${get}">
+        <td><span th:text="${iterStat.index + 1}"></span></td> <!-- 인덱스 값 + 1 -->
         <td><span th:text="${message.userId}"></span></td>
         <td>
-            <span th:text="${#strings.substring(message.subject, 0, 30)}"></span>
+            <span th:text="${#strings.length(message.subject) > 8 ? #strings.substring(message.subject, 0, 8).concat('....') : message.subject}"></span>
         </td>
         <td><span th:text="${message.reader}"></span></td>
         <td><span th:text="${message.readType}"></span></td>

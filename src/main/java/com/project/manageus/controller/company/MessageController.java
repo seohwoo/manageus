@@ -73,9 +73,8 @@ public class MessageController {
     @GetMapping("/getMassage")   //받은 전체 목록
     public String getMassage(Model model, HttpSession session, MessageDTO messagedto) {
 
-        Long userId = (Long) session.getAttribute("userId");
-
-        messagedto.setUserId(userId);
+        Long userId = (Long) session.getAttribute("userId"); //유저아이디는 지환
+        
         service.getmessage (userId, model);
 
         return "/company/message/getMassage";
@@ -84,7 +83,7 @@ public class MessageController {
 
     //여기는 보낸 쪽지함
     @GetMapping("/sendMassage")   //보낸 전체 목록
-    public String sendMassage(Model model, HttpSession session) {
+    public String sendMassage(Model model, HttpSession session, MessageDTO messagedto) {
 
         Long userId = (Long) session.getAttribute("userId");
         service.sendmessage (userId, model);

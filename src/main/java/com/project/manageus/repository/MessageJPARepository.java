@@ -16,9 +16,9 @@ import java.util.List;
 
 public interface MessageJPARepository extends JpaRepository<MessageEntity, Long> {
 
-    List<MessageEntity> findByUserId(Long userId, Sort sort); //보낸 메세지 전체
+    List<MessageEntity> findByUserId(Long userId, Sort sort); //김지환이 보낸 메세지 전체
 
-    public List<MessageEntity> findByReader(Long userId, Sort sort); //받은메세지 전체
+    List<MessageEntity> findByReader(Long userId, Sort sort); // 김지환이 받은메세지 전체
 
     //@Query(value = "SELECT * FROM alarm WHERE user_id = :userId",nativeQuery = true)
     //List<MessageEntity> sendmessage (@Param("userId") int userId);  //보낸 메세지 전체 가져오기
