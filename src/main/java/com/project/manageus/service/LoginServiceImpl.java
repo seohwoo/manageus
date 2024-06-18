@@ -36,6 +36,17 @@ public class LoginServiceImpl implements LoginService, UserDetailsService {
     }
 
     @Override
+    public String findUserCompanyId(String username) {
+        String result = "";
+        Long id = Long.parseLong(username);
+        Optional<UserEntity> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()) {
+           result = optionalUser.get().getCompanyId().toString();
+        }
+        return result;
+    }
+
+    @Override
     public boolean createUser(UserDTO userDTO, UserInfoDTO userInfoDTO, String inviteCode) {
         boolean result = false;
 
@@ -88,13 +99,15 @@ public class LoginServiceImpl implements LoginService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Long id = Long.parseLong(username);
-        if(userRepository.existsById(id)) {
-            if(id>999 && id<10000) {
+        if(username.length() == 4) {
+            if(companyRepository.existsById(id)) {
                 Optional<CompanyEntity> optionalCompany = companyRepository.findById(id);
                 if (optionalCompany.isPresent()) {
                     return new JoinCompanyDTO(optionalCompany.get(), authRepository);
                 }
-            }else {
+            }
+        }else {
+            if(userRepository.existsById(id)) {
                 Optional<UserEntity> optionalUser = userRepository.findById(id);
                 if (optionalUser.isPresent()) {
                     return new JoinUserDTO(optionalUser.get(), authRepository);
