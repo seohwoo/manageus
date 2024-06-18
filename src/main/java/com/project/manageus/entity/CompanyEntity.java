@@ -27,6 +27,7 @@ public class CompanyEntity {
     private String inviteCode;
     private String ceo;
     private String address;
+    @Column(unique = true)
     private String email;
     @Column(name = "status_id")
     private Long statusId;

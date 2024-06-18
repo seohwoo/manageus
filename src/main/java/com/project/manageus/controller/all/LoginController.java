@@ -34,7 +34,6 @@ public class LoginController {
     @PostMapping("/register")
     public String registerPro(UserDTO userDTO, UserInfoDTO userInfoDTO, String repeatPassword, String inviteCode) {
         String url = "redirect:/register";
-
         if(userDTO.getPassword().equals(repeatPassword)) {
             boolean isUserCreated = loginService.createUser(userDTO, userInfoDTO, inviteCode);
             if(isUserCreated) {
@@ -53,7 +52,6 @@ public class LoginController {
     @PostMapping("/company")
     public String companyPro(CompanyDTO companyDTO, String repeatPassword) {
         String url = "redirect:/company";
-
         if(companyDTO.getPw().equals(repeatPassword)) {
             boolean isCompanyCreated = loginService.createCompany(companyDTO);
             if(isCompanyCreated) {
@@ -62,7 +60,6 @@ public class LoginController {
         }
         return url;
     }
-
 
     @GetMapping("/forgot")
     public String forgot() {

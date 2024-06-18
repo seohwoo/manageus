@@ -1,6 +1,7 @@
 package com.project.manageus.entity;
 
 import com.project.manageus.dto.UserInfoDTO;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -20,6 +21,7 @@ public class UserInfoEntity {
     private Long id;
     private String name;
     private String stamp;
+    @Column(unique = true)
     private String email;
     private String phone;
     private String address;
