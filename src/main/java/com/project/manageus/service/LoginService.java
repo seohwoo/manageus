@@ -6,7 +6,7 @@ import com.project.manageus.dto.UserInfoDTO;
 
 public interface LoginService {
 
-    boolean createUser(UserDTO userDTO, UserInfoDTO userInfoDTO, String inviteCode);
-    boolean createCompany(CompanyDTO companyDTO);
-
+    public String findUserCompanyId(String username);
+    public boolean createUser(UserDTO userDTO, UserInfoDTO userInfoDTO, String inviteCode);
+    public boolean createCompany(CompanyDTO companyDTO);
 }
