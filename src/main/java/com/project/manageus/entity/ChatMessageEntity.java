@@ -4,14 +4,17 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.Date;
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name="chat_message")
+@DynamicInsert
 public class ChatMessageEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "chat_room_id")
     private Long chatRoomId;

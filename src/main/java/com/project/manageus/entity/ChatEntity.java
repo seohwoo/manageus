@@ -1,5 +1,6 @@
 package com.project.manageus.entity;
 
+import com.project.manageus.dto.ChatDTO;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -24,8 +25,8 @@ public class ChatEntity  {
         this.chatRoomId =chatRoomId;
 
     }
-    public ChatEntity toChatEntity() {
-        return ChatEntity.builder()
+    public ChatDTO toChatDTO() {
+        return ChatDTO.builder()
                 .userId(this.userId)
                 .chatRoomId(this.chatRoomId)
                 .build();

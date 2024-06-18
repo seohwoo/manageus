@@ -21,7 +21,6 @@ public class ChatRoomEntity {
     private String name;
     @Column(name = "status_id")
     private Long statusId;
-    @CreationTimestamp
     @Column(name="reg")
     private Date reg;
 
