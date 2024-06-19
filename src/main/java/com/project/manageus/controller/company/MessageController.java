@@ -1,4 +1,4 @@
-package com.project.manageus.controller.user;
+package com.project.manageus.controller.company;
 
 import com.project.manageus.dto.MessageDTO;
 import com.project.manageus.service.MessageService;
