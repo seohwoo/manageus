@@ -1,4 +1,4 @@
-package com.project.manageus.controller.user;
+package com.project.manageus.controller.company;
 
 import jakarta.servlet.http.HttpServlet;
 import org.springframework.stereotype.Controller;
