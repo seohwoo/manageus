@@ -31,6 +31,7 @@ public class SideBarServiceImpl implements SideBarService{
     @Override
     public void findUserInfo(String username, Model model) {
         Long id = Long.parseLong(username);
+        model.addAttribute("id", id);
         Optional<UserEntity> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()) {
             Optional<CompanyEntity> optionalCompany = companyRepository.findById(optionalUser.get().getCompanyId());
