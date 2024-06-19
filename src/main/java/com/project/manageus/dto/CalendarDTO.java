@@ -1,7 +1,6 @@
 package com.project.manageus.dto;
 
 import com.project.manageus.entity.CalendarEntity;
-import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
