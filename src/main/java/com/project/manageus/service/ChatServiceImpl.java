@@ -94,7 +94,13 @@ public class ChatServiceImpl implements ChatService {
     public void enterChatRoom(Model model, Long id, Long roomId) {
         List list = Collections.emptyList();
         list=chatMessageJPA.findByChatRoomId(roomId);
-
+        int count = chatJPA.countByUserIdAndChatRoomId(id,roomId);
+        List<ChatMessageEntity> cmlist= Collections.emptyList();
+        if(count!=0){
+            ChatMessageDTO mdto = new ChatMessageDTO();
+            cmlist = chatMessageJPA.findByChatRoomId(roomId);
+            model.addAttribute("cmlist",cmlist);
+        }
 
     }
 

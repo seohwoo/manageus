@@ -38,7 +38,6 @@ public class QaEntity {
         this.content=content;
         this.reg=reg;
         this.ref=ref;
-
     }
     public QaDTO toQaDTO(){
         return QaDTO.builder()

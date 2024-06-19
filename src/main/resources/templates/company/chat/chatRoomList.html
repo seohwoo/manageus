@@ -369,8 +369,8 @@
                                 </h6>
                             </div>
                             <div class="card-body">
-                                <button th:onclick="'window.location.href = '/company/1111/chat/' + ${dto.id} + '/' + ${id}'" type="button">방이름 수정</button>
-                                <button th:onclick="'window.location.href = '/company/1111/chat/' + ${dto.id} + '/' + ${id}'" type="button">채팅 하기</button>
+                                <a th:href="@{/company/1111/chat/{roomId}/{id}(roomId=${dto.id},id=${id})}">채팅 하기</a>
+
                                 <form method="post" th:action="@{/company/1111/chat}">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <input type="hidden" name="id" value="${id}">
