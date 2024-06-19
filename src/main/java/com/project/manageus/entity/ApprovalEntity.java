@@ -1,13 +1,11 @@
 package com.project.manageus.entity;
 
 import com.project.manageus.dto.ApprovalDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.Date;
 
@@ -15,8 +13,10 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name="approval")
+@DynamicInsert
 public class ApprovalEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "user_id")
     private Long userId;

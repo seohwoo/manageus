@@ -4,6 +4,7 @@ import com.project.manageus.entity.ApprovalEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -16,10 +17,14 @@ public class ApprovalDTO {
     private Long statusId;
     private String title;
     private Long approvalTypeId;
+    @DateTimeFormat(pattern = "yy-MM-dd")
     private Date startDate;
+    @DateTimeFormat(pattern = "yy-MM-dd")
     private Date endDate;
     private String content;
+    @DateTimeFormat(pattern = "yy-MM-dd")
     private Date signOn;
+    @DateTimeFormat(pattern = "yy-MM-dd")
     private Date signOff;
 
     @Builder

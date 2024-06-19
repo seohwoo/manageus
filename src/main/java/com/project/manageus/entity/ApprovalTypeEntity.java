@@ -1,6 +1,7 @@
 package com.project.manageus.entity;
 
 import com.project.manageus.dto.ApprovalTypeDTO;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@Entity
 @Table(name="approval_type")
 public class ApprovalTypeEntity {
     @Id

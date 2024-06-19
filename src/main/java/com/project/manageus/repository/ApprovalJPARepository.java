@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param; // 쿼리문 직접 입�
 import java.util.List;
 
 public interface ApprovalJPARepository extends JpaRepository<ApprovalEntity, Integer> {
+
     // 여기에 SQL 적으면됨
 //    @Transactional //            ʼ
 //    @Modifying //            ʼ

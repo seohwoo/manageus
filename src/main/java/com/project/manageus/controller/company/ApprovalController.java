@@ -1,5 +1,7 @@
-package com.project.manageus.controller.user;
+package com.project.manageus.controller.company;
 
+import com.project.manageus.dto.ApprovalDTO;
+import com.project.manageus.entity.ApprovalTypeEntity;
 import com.project.manageus.service.ApprovalService;
 
 import jakarta.servlet.http.HttpSession;
@@ -12,23 +14,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 
 @Controller
 @RequestMapping("/company/*")
 public class ApprovalController {
 
-    // 배워
-    private final ApprovalService service;
+    private final ApprovalService approvalService;
+
 
     @Autowired
-    public ApprovalController(ApprovalService service) {
-        this.service = service;
+    public ApprovalController(ApprovalService approvalService) {
+        this.approvalService = approvalService;
     }
-    // 배워
 
     // 게시판 페이지
     @GetMapping("/list")
@@ -52,19 +54,47 @@ public class ApprovalController {
         model.addAttribute("approver", approver);
         //
 
-        // 임시 휴가종류값
-        ArrayList<String> approvalType = new ArrayList<>();
-        approvalType.add("연차");
-        approvalType.add("월차");
-        approvalType.add("반차");
-        approvalType.add("병가");
-        model.addAttribute("approvalType", approvalType);
-        //
+        // 휴가 종류 가져오기
+        approvalService.selectApprovalType(model);
+
         return "/company/approval/write";
     }
 
     @PostMapping("write")
-    public String writePro(Model model,
+    public String writePro(Model model, ApprovalDTO Adto) {
+
+
+
+        System.out.println(Adto.getContent());
+        System.out.println(Adto.getEndDate());
+        System.out.println(Adto.getStartDate());
+        System.out.println(Adto.getTitle());
+        System.out.println(Adto.getApprovalTypeId());
+
+        LocalDateTime now = LocalDateTime.now();
+        Date signOff = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+        Long statusId = 1001L;
+        Long Id = 10010003L;
+
+        Adto.setId(Id);
+        Adto.setUserId(Id);
+        Adto.setStatusId(statusId);
+        Adto.setSignOff(signOff);
+
+        approvalService.insertApproval(Adto);
+
+
+
+
+        return "redirect:/company/approval/list";
+    }
+
+    @GetMapping("test")
+    public String test() {
+        return "/company.approval/test";
+    }
+
+    /*
                            @RequestParam(value = "approver") List<String> approvers,
                            @RequestParam(value = "title") String title,
                            @RequestParam(value = "approvalType") String approvalType,
@@ -78,15 +108,7 @@ public class ApprovalController {
         model.addAttribute("start_date", start_date);
         model.addAttribute("end_date", end_date);
         model.addAttribute("content", content);
-
-        return "/company/approval/test";
-    }
-
-    @GetMapping("test")
-    public String test() {
-        return "/company.approval/test";
-    }
-
+     */
 
     /*
     // 결재 리스트

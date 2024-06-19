@@ -62,20 +62,20 @@
                 <option th:each="approver : ${approver}" th:value="${approver}" th:text="${approver}"></option>
             </select>
             <button type="button" onclick="addApprover()">+</button>
-            <br>
+            <br><br>
             제목 : <input type="text" name="title" required>
-            <br>
+            <br><br>
             휴가 종류 :
-            <select name="approvalType" required>
-                <option th:each="approvalType : ${approvalType}" th:value="${approvalType}" th:text="${approvalType}"></option>
+            <select name="approvalTypeId" required>
+                <option th:each="approvalType : ${approvalType}" th:value="${approvalType.id}" th:text="${approvalType.name}"></option>
             </select>
-            <br>
+            <br><br>
             휴가 날짜 :
-            <input type="date" name="start_date" required>
-            <input type="date" name="end_date" required>
-            <br>
+            <input type="date" name="startDate" required>
+            <input type="date" name="endDate" required>
+            <br><br>
             내용 : <input type="text" name="content" required>
-            <br>
+            <br><br>
             <input type="submit" value="제출하기">
         </form>
     </body>
@@ -85,7 +85,7 @@
 
         // JavaScript 함수 정의 시작
         function addApprover() {
-            if (clickCount < 3) { // 최대 2번까지 클릭 가능하도록 제한
+            if (clickCount < 2) { // 최대 2번까지 클릭 가능하도록 제한
                 clickCount++; // 클릭 횟수 증가
 
                 // 기존의 select 요소를 id를 통해 찾아옵니다.
@@ -119,8 +119,8 @@
                 existingSelect.insertAdjacentElement('afterend', newSelect);
             }
 
-            if (clickCount >= 3) {
-                alert("더 이상 추가할 수 없습니다."); // 경고창을 띄웁니다.
+            if (clickCount > 2) {
+                alert("결재 라인은 최대 3명까지 가능합니다."); // 경고창을 띄웁니다.
                 document.getElementById("addButton").disabled = true; // 버튼 비활성화
             }
         }

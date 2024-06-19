@@ -1,22 +1,47 @@
 package com.project.manageus.service;
 
 import com.project.manageus.dto.ApprovalDTO;
+import com.project.manageus.entity.ApprovalTypeEntity;
 import com.project.manageus.repository.ApprovalJPARepository;
+import com.project.manageus.repository.ApprovalTypeJPARepository;
+import com.project.manageus.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.List;
+
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
-    // 배워
 
-    private final ApprovalJPARepository JPA;
+    private final ApprovalJPARepository approvalJPA;
+    private final ApprovalTypeJPARepository approvalTypeJPA;
+
+    private final UserRepository userRepository;
 
     @Autowired
-    public ApprovalServiceImpl(ApprovalJPARepository JPA) {
-        this.JPA = JPA;
+    public ApprovalServiceImpl(ApprovalJPARepository approvalJPA,
+                               ApprovalTypeJPARepository approvalTypeJPA,
+                               UserRepository userRepository) {
+
+        this.approvalJPA = approvalJPA;
+        this.approvalTypeJPA = approvalTypeJPA;
+        this.userRepository = userRepository;
     }
-    // 배워
+
+
+
+    // 휴가 종류 가져오기
+    @Override
+    public void selectApprovalType(Model model) {
+        List<ApprovalTypeEntity> approvalType = approvalTypeJPA.findAll();
+        model.addAttribute("approvalType", approvalType);
+    }
+
+    @Override
+    public void insertApproval(ApprovalDTO Adto) {
+        approvalJPA.save(Adto.toApprovalEntity());
+    }
 
 //    @Autowired
 //    private final ApprovalJPARepository service;
