@@ -36,6 +36,20 @@
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#chatarea"
+               aria-expanded="true" aria-controls="chatarea">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>채팅</span>
+            </a>
+            <div id="chatarea" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Custom Components:</h6>
+                    <a class="collapse-item" th:href="@{/companis/{companyId}/chatRoomList(companyId=${companyId})}">채팅방목록<span th:text="${companyId}"></span></a>
+                    <a class="collapse-item" href="../sample/cards.html"></a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-cog"></i>

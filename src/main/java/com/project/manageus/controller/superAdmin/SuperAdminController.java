@@ -20,23 +20,23 @@ public class SuperAdminController {
         this.service=service;
     }
     //company admincontroller
-    @GetMapping("/super/1001/board")
+    @GetMapping("/super/{companyId}/board")
     public String qaList(Model model, @RequestParam(value="pageNum",defaultValue = "1")int pageNum) {
         service.qaRead(model,pageNum);
         return "super/qa/list.html";
     }
-    @GetMapping("/super/1001/board/{num}")
+    @GetMapping("/super/{companyId}/board/{num}")
     public String qaContent(Model model,@PathVariable(value = "num") Long num){
         System.out.println("num:"+num);
         service.qaContent(model,num);
         return "super/qa/qaContent.html";
     }
-    @GetMapping("/super/1001/answer/{num}")
+    @GetMapping("/super/{companyId}/answer/{num}")
     public String qaReWrite(Model model,@PathVariable(value = "num")Long num){
         model.addAttribute("num",num);
         return "super/qa/qaAnswer.html";
     }
-    @PostMapping("/super/1001/answer/{num}")
+    @PostMapping("/super/{companyId}/answer/{num}")
     public String qaReInsert(@PathVariable(value="num")Long num
                              , @RequestParam(value="type")int type
                              , @RequestParam(value="content")String content

@@ -36,31 +36,27 @@
     </style>
 </head>
 <body>
-<div>
-    <div class="container">
-        <div class="col-6">
-            <label><b>채팅방</b></label>
-        </div>
-        <div>
-            <div id="msgArea" class="col-12">
-                <div th:each="message : ${cmlist}">
-                    <div th:class="${message.userId == session.memberId ? 'message-container own' : 'message-container'}">
-                        <div th:class="${message.userId == session.memberId ? 'own-message' : 'other-message'}">
-                            <b th:text="${message.userId} + ': ' + ${message.message}"></b>
-                        </div>
+<div class="container">
+    <div class="col-6">
+        <label><b>채팅방</b></label>
+    </div>
+    <div>
+        <div id="msgArea" class="col-12">
+            <div th:each="message : ${cmlist}">
+                <div th:class="${message.userId == id ? 'message-container own' : 'message-container'}">
+                    <div th:class="${message.userId == id ? 'own-message' : 'other-message'}">
+                        <b th:text="${message.userId} + ': ' + ${message.message}"></b>
                     </div>
                 </div>
             </div>
-            <div class="col-6">
-                <div class="input-group mb-3">
-                    <input type="text" id="msg" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <input type="hidden" id="memberId" th:value="${session.memberId}">
-                    <input type="hidden" name="id" id="id" th:value="${id}">
-                    <input type="hidden" name="roomId" id="roomId" th:value="${roomId}">
-
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
-                    </div>
+        </div>
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <input type="text" id="msg" name="message" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <input type="hidden" id="userId" th:value="${id}">
+                <input type="hidden" name="chatRoomId" id="roomId" th:value="${roomId}">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
                 </div>
             </div>
         </div>
@@ -69,35 +65,29 @@
 
 <script th:inline="javascript">
     $(document).ready(function(){
-        const username = $("#memberId").val();
+        const id = $("#userId").val();
+        const roomId = $("#roomId").val();
 
-        $("#disconn").on("click", (e) => {
-            disconnect();
-        });
-
-        $("#button-send").on("click", (e) => {
-            send();
-        });
-
-        const websocket = new WebSocket("ws://192.168.0.104:8080/ws/chat");
+        const websocket = new WebSocket("ws://localhost:8080/ws/chat");
 
         websocket.onmessage = onMessage;
         websocket.onopen = onOpen;
         websocket.onclose = onClose;
 
+        $("#button-send").on("click", function() {
+            send();
+        });
+
         function send(){
-            let msg = document.getElementById("msg").value;
-            let memberId = document.getElementById("memberId").value;
-            let id = document.getElementById("id").value;
-            let roomId = document.getElementById("roomId").value;
-            console.log(memberId + ":" + msg);
-            websocket.send(memberId + ":" + msg);
+            let msg = $("#msg").val();
+            let roomId = $("#roomId").val();
+            websocket.send(id + ":" + msg);
 
             $.ajax({
                 url: '/send-message',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({ memberId: memberId, message: msg, id: id, roomId: roomId }),
+                data: JSON.stringify({ userId: id, message: msg, chatRoomId: roomId }),
                 success: function(response) {
                     console.log('메시지 전송 성공');
                 },
@@ -106,38 +96,36 @@
                 }
             });
 
-            document.getElementById("msg").value = '';
+            $("#msg").val('');
         }
 
-        function addMessage(sessionId, message, isOwnMessage) {
+        function addMessage(userId, message, isOwnMessage) {
             var containerClass = isOwnMessage ? 'message-container own' : 'message-container';
             var messageClass = isOwnMessage ? 'own-message' : 'other-message';
             var str = "<div class='" + containerClass + "'>";
             str += "<div class='" + messageClass + "'>";
-            str += "<b>" + sessionId + " : " + message + "</b>";
+            str += "<b>" + userId + " : " + message + "</b>";
             str += "</div></div>";
             $("#msgArea").append(str);
         }
 
-        // 채팅창에서 나갔을 때
-        function onClose(evt) {
-            var str = username + ": 님이 방을 나가셨습니다.";
+        function onClose() {
+            var str = id + ": 님이 방을 나가셨습니다.";
             websocket.send(str);
         }
 
-        // 채팅창에 들어왔을 때
-        function onOpen(evt) {
-            var str = username + ": 님이 입장하셨습니다.";
+        function onOpen() {
+            var str = id + ": 님이 입장하셨습니다.";
             websocket.send(str);
         }
 
         function onMessage(msg) {
             var data = msg.data;
             var arr = data.split(":");
-            var sessionId = arr[0];
+            var userId = arr[0];
             var message = arr[1];
 
-            addMessage(sessionId, message, sessionId == username);
+            addMessage(userId, message, userId == id);
         }
     });
 </script>

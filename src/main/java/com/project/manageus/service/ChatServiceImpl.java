@@ -67,7 +67,7 @@ public class ChatServiceImpl implements ChatService {
         System.out.println("======dto"+mdto.getUserId());
         System.out.println("======dto"+mdto.getMessage());
         System.out.println("======dto"+mdto.getStatusId());
-        //chatMessageJPA.save(mdto.toChatMessageEntity());
+        chatMessageJPA.save(mdto.toChatMessageEntity());
 
 
         return nextid;
@@ -100,6 +100,7 @@ public class ChatServiceImpl implements ChatService {
             ChatMessageDTO mdto = new ChatMessageDTO();
             cmlist = chatMessageJPA.findByChatRoomId(roomId);
             model.addAttribute("cmlist",cmlist);
+            model.addAttribute("roomId",roomId);
         }
 
     }
