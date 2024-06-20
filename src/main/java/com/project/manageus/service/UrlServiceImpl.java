@@ -39,7 +39,6 @@ public class UrlServiceImpl implements UrlService{
             Optional<CompanyEntity> optionalCompany = companyRepository.findById(optionalUser.get().getCompanyId());
             if(optionalCompany.isPresent()) {
                 if(Objects.equals(optionalUser.get().getCompanyId(), compnayId)) {
-                    System.out.println(Objects.equals(optionalUser.get().getCompanyId(), compnayId));
                     result = true;
                 }
                 model.addAttribute("company", optionalCompany.get().getName());
