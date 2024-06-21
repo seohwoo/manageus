@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
-@RequestMapping("/company/*")
+@RequestMapping("/companis/{companyId}/*")
 public class ApprovalController {
 
     private final ApprovalService approvalService;
@@ -34,9 +35,22 @@ public class ApprovalController {
 
     // 게시판 페이지
     @GetMapping("/list")
-    public String ApprovalList(HttpSession session) {
+    public String ApprovalList(Principal principal, Long companyId, Model model) {
+        /*
+        if(!urlService.findUserInfo(principal.getName(), companyId, model)
+                || id!=Long.parseLong(principal.getName())) {
+            url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+            return url;
+        }
+        */
+
+
         // 임시 세션값
-        session.setAttribute("user_id", 11111111);
+
+
+
+
+        //session.setAttribute("user_id", 11111111);
         //
         return "/company/approval/list";
     }
@@ -64,12 +78,13 @@ public class ApprovalController {
     public String writePro(Model model, ApprovalDTO Adto) {
 
 
-
+        /*
         System.out.println(Adto.getContent());
         System.out.println(Adto.getEndDate());
         System.out.println(Adto.getStartDate());
         System.out.println(Adto.getTitle());
         System.out.println(Adto.getApprovalTypeId());
+
 
         LocalDateTime now = LocalDateTime.now();
         Date signOff = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
@@ -80,13 +95,14 @@ public class ApprovalController {
         Adto.setUserId(Id);
         Adto.setStatusId(statusId);
         Adto.setSignOff(signOff);
+        */
 
         approvalService.insertApproval(Adto);
 
 
 
 
-        return "redirect:/company/approval/list";
+        return "redirect:/company/list";
     }
 
     @GetMapping("test")

@@ -71,7 +71,7 @@
             </select>
             <br><br>
             휴가 날짜 :
-            <input type="date" name="startDate" required>
+            <input type="date" name="startDate" id="startDate" required>
             <input type="date" name="endDate" required>
             <br><br>
             내용 : <input type="text" name="content" required>
@@ -124,5 +124,17 @@
                 document.getElementById("addButton").disabled = true; // 버튼 비활성화
             }
         }
+
+
+        var today = new Date();
+        var nextWeek = new Date();
+
+        nextWeek.setDate(today.getDate() + 7);
+
+        var minDate = nextWeek.toISOString().split('T')[0];
+
+        var startDateInput = document.getElementById("startDate");
+        startDateInput.setAttribute("min", minDate);
     </script>
+
 </html>

@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -40,6 +44,32 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     @Override
     public void insertApproval(ApprovalDTO Adto) {
+
+        // 오늘 날짜 구해오는 코드
+        //LocalDateTime now = LocalDateTime.now();
+        //Date signOff = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+        Long statusId = 1001L;
+        Long Id = 10010003L;
+
+
+        Date startDateUtil = Adto.getStartDate();
+
+        // java.util.Date를 java.time.LocalDate로 변환
+        LocalDate startDate = startDateUtil.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        // startDate에서 2일을 뺀 LocalDate 계산
+        LocalDate signOffLocalDate = startDate.minusDays(2);
+
+        // LocalDate를 java.util.Date로 변환
+        Date signOff = Date.from(signOffLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+
+
+        Adto.setId(Id);
+        Adto.setUserId(Id);
+        Adto.setStatusId(statusId);
+        Adto.setSignOff(signOff);
+
         approvalJPA.save(Adto.toApprovalEntity());
     }
 
