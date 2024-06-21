@@ -2,6 +2,7 @@ package com.project.manageus.controller.company;
 
 import com.project.manageus.dto.MessageDTO;
 import com.project.manageus.service.MessageService;
+import com.project.manageus.service.UrlService;
 import jakarta.servlet.http.HttpSession;
 import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,32 +11,41 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.project.manageus.entity.MessageEntity;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
-@RequestMapping("/user/*")
+@RequestMapping("/companies/{companyId}/*")
 public class MessageController {
 
 
-
     private final MessageService service;
+    private final UrlService urlService;
 
     @Autowired
-    public MessageController(MessageService service) {
+    public MessageController(MessageService service, UrlService urlService) {
         this.service = service;
+        this.urlService = urlService;
     }
 
+    //@PathVariable Long companyId,    @PathVariable Long id,   //url 속 세션을 받아올 때
+    
 
+    @GetMapping("/messages/{id}/form")  //쪽지 쓰는곳
+    public String message(Model model, Principal principal, Long companyId, Long id) {
 
-    @GetMapping("/message")  //쪽지 쓰는곳
-    public String message(Model model, HttpSession session) {
+        Long userId = Long.parseLong( principal.getName()); // 세션받아오기
 
-        session.setAttribute("userId", 10010001L); // Long 타입으로 설정
+        if(!urlService.findUserInfo(principal.getName(), companyId, model)
+                || id!=Long.parseLong(principal.getName())) {
+
+            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+        }
 
         return "/company/message/messages.html";
     }
 
-    @PostMapping("/message") //쪽지 쓰는곳
+    @PostMapping("/messages/{id}") //쪽지 쓰는곳
     public String postMessage(Model model, HttpSession session,
                               @RequestParam("reader") String reader,
                               @RequestParam("subject") String subject, MessageDTO messagedto) {
@@ -70,19 +80,23 @@ public class MessageController {
 
     //여기는 받은 쪽지함
 
-    @GetMapping("/getMassage")   //받은 전체 목록
+    @GetMapping("/massages/{id}/받음")   //받은 전체 목록
     public String getMassage(Model model, HttpSession session, MessageDTO messagedto) {
 
         Long userId = (Long) session.getAttribute("userId"); //유저아이디는 지환
-        
+
+
         service.getmessage (userId, model);
 
         return "/company/message/getMassage";
     }
 
 
+
+
+
     //여기는 보낸 쪽지함
-    @GetMapping("/sendMassage")   //보낸 전체 목록
+    @GetMapping("/massages/{id}/보냄")   //보낸 전체 목록
     public String sendMassage(Model model, HttpSession session, MessageDTO messagedto) {
 
         Long userId = (Long) session.getAttribute("userId");
