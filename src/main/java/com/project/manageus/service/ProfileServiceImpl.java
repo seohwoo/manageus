@@ -37,25 +37,16 @@ public class ProfileServiceImpl implements ProfileService{
         Optional<UserEntity> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()) {
             model.addAttribute("isLoginUser", id == Long.parseLong(principal.getName()));
-            Optional<UserInfoEntity> optionalUserInfo = userInfoRepository.findById(id);
-            if(optionalUserInfo.isPresent()) {
-                model.addAttribute("userId", optionalUserInfo.get().getId());
-                model.addAttribute("username", optionalUserInfo.get().getName());
-                model.addAttribute("email", optionalUserInfo.get().getEmail());
-                model.addAttribute("phone", optionalUserInfo.get().getPhone());
-                model.addAttribute("address", optionalUserInfo.get().getAddress());
-                model.addAttribute("birth", optionalUserInfo.get().getBirth());
-                model.addAttribute("gender", optionalUserInfo.get().getGender());
-                model.addAttribute("stamp", optionalUserInfo.get().getStamp() == null ? "직인없음" : optionalUserInfo.get().getStamp());
-            }
-            Optional<PositionEntity> optionalPosition = positionRepository.findById(optionalUser.get().getPositionId());
-            if(optionalPosition.isPresent()) {
-                model.addAttribute("position", optionalPosition.get().getName());
-            }
-            Optional<DepartmentEntity> optionalDepartment = departmentRepository.findById(optionalUser.get().getDepartmentId());
-            if(optionalDepartment.isPresent()) {
-                model.addAttribute("department", optionalDepartment.get().getName());
-            }
+            model.addAttribute("userId", optionalUser.get().getUserInfo().getId());
+            model.addAttribute("username", optionalUser.get().getUserInfo().getName());
+            model.addAttribute("email", optionalUser.get().getUserInfo().getEmail());
+            model.addAttribute("phone", optionalUser.get().getUserInfo().getPhone());
+            model.addAttribute("address", optionalUser.get().getUserInfo().getAddress());
+            model.addAttribute("birth", optionalUser.get().getUserInfo().getBirth());
+            model.addAttribute("gender", optionalUser.get().getUserInfo().getGender());
+            model.addAttribute("stamp", optionalUser.get().getUserInfo().getStamp() == null ? "직인없음" : optionalUser.get().getUserInfo().getStamp());
+            model.addAttribute("position", optionalUser.get().getPositionEntity().getName());
+            model.addAttribute("department", optionalUser.get().getDepartmentEntity().getName());
         }
     }
 }
