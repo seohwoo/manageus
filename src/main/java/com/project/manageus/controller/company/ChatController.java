@@ -39,8 +39,6 @@ public class ChatController {
         model.addAttribute("id",id);
         return "/company/chat/chater";
     }
-
-
     @GetMapping("/{companyId}/chatRoomList")
     public String chatRoomList(Principal principal,@PathVariable(value="companyId")Long companyId,Model model){
         String url ;
@@ -82,7 +80,6 @@ public class ChatController {
         service.chatExit(dto);
         return "redirect:/companis/chat/chatRoomList";
     }
-
     @PostMapping("/send-message")
     @ResponseBody
     public ResponseEntity<String> sendMessage(@RequestBody ChatMessageDTO message) {
@@ -93,11 +90,9 @@ public class ChatController {
         // 여기에서 메시지를 데이터베이스에 저장하거나, 다른 클라이언트에 방송하는 등의 로직을 추가할 수 있습니다.
         return ResponseEntity.ok("Message received");
     }
-    @GetMapping("/invitaions")
-    public String invitations(){
+    @GetMapping("/invitations")
+    public @ResponseBody String invitations(){
 
         return "company/chat/chatInvite";
     }
-
-
 }

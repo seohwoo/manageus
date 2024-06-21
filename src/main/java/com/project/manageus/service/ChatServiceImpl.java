@@ -122,4 +122,5 @@ public class ChatServiceImpl implements ChatService {
         chatMessageJPA.save(dto.toChatMessageEntity());
     }
 
+
 }
