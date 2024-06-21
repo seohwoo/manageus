@@ -63,6 +63,13 @@ public class LoginServiceImpl implements LoginService, UserDetailsService {
             userDTO.setId(newId);
             userInfoDTO.setId(newId);
             userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+            if(userInfoDTO.getGender().equals("1") || userInfoDTO.getGender().equals("3")) {
+                userInfoDTO.setGender("남자");
+            }else if(userInfoDTO.getGender().equals("2") || userInfoDTO.getGender().equals("4")) {
+                userInfoDTO.setGender("여자");
+            }else {
+                userInfoDTO.setGender(null);
+            }
             userRepository.save(userDTO.toUserEntity());
             userInfoRepository.save(userInfoDTO.toUserInfoEntity());
             result = true;

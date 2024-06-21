@@ -4,6 +4,7 @@ import com.project.manageus.dto.CompanyDTO;
 import com.project.manageus.dto.UserDTO;
 import com.project.manageus.dto.UserInfoDTO;
 import com.project.manageus.service.LoginService;
+import com.project.manageus.service.UrlService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,13 @@ import java.security.Principal;
 public class LoginController {
 
     private final LoginService loginService;
+    private final UrlService urlService;
 
     @Autowired
-    public LoginController(LoginService loginService) {
+    public LoginController(LoginService loginService,
+                           UrlService urlService) {
         this.loginService = loginService;
+        this.urlService = urlService;
     }
 
     @GetMapping("/")
@@ -34,7 +38,7 @@ public class LoginController {
         if(principal != null) {
             isLogin = true;
             if(principal.getName().length()==8) {
-                url = "redirect:/company/" + loginService.findUserCompanyId(principal.getName());
+                url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
             }
         }
         model.addAttribute("isLogin", isLogin);
