@@ -33,6 +33,17 @@ public class UserEntity {
     @Column(name = "reg_date")
     private Date regDate;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
+    private UserInfoEntity userInfo;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "position_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private PositionEntity positionEntity;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private DepartmentEntity departmentEntity;
 
     @Builder
     public UserEntity(Long id, String password, Long positionId, Long companyId, Long statusId, Long authId, Long departmentId, Date regDate) {
