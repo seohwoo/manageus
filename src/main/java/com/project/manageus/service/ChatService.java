@@ -1,6 +1,7 @@
 package com.project.manageus.service;
 
 import com.project.manageus.dto.ChatDTO;
+import com.project.manageus.dto.ChatMessageDTO;
 import com.project.manageus.dto.ChatRoomDTO;
 import org.springframework.ui.Model;
 
@@ -9,4 +10,5 @@ public interface ChatService {
     public void chatList(Model model,Long id);
     public void enterChatRoom(Model model,Long id,Long roomId);
     public void chatExit(ChatDTO dto);
+    public void sendMessage(ChatMessageDTO dto);
 }

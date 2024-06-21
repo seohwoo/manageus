@@ -102,7 +102,6 @@ public class LoginServiceImpl implements LoginService, UserDetailsService {
         }
         return result;
     }
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Long id = Long.parseLong(username);

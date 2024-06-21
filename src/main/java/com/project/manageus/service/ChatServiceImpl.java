@@ -117,4 +117,9 @@ public class ChatServiceImpl implements ChatService {
         }
     }
 
+    @Override
+    public void sendMessage(ChatMessageDTO dto) {
+        chatMessageJPA.save(dto.toChatMessageEntity());
+    }
+
 }

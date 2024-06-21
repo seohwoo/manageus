@@ -79,7 +79,6 @@ public class ChatController {
             return url;
         }
         service.chatExit(dto);
-
         return "redirect:/companis/chat/chatRoomList";
     }
 
@@ -89,6 +88,7 @@ public class ChatController {
         // 메시지 처리 (예: 다른 사용자에게 방송, 데이터베이스에 저장 등)
         System.out.println("Received message from " + message.getUserId() + ": " + message.getMessage());
         System.out.println("ChatRoom ID: " + message.getChatRoomId());
+        service.sendMessage(message);
         // 여기에서 메시지를 데이터베이스에 저장하거나, 다른 클라이언트에 방송하는 등의 로직을 추가할 수 있습니다.
         return ResponseEntity.ok("Message received");
     }
