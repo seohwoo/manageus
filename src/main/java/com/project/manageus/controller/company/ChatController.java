@@ -16,6 +16,7 @@ import java.security.Principal;
 
 @Controller
 @Log4j2
+@RequestMapping("/companis/*")
 public class ChatController {
 
     private final ChatService service;
@@ -26,7 +27,7 @@ public class ChatController {
         this.service=service;
         this.urlService=urlService;
     }
-    @GetMapping("/companis/{companyId}/chat/{roomId}/{id}")
+    @GetMapping("/{companyId}/chat/{roomId}/{id}")
     public String chatting(Model model, Principal principal,@PathVariable(value = "id") Long id,@PathVariable(value = "roomId")Long roomId,@PathVariable(value="companyId")Long companyId){
         String url ;
         if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
@@ -40,7 +41,7 @@ public class ChatController {
     }
 
 
-    @GetMapping("/companis/{companyId}/chatRoomList")
+    @GetMapping("/{companyId}/chatRoomList")
     public String chatRoomList(Principal principal,@PathVariable(value="companyId")Long companyId,Model model){
         String url ;
         if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
@@ -54,7 +55,7 @@ public class ChatController {
         model.addAttribute("id",id);
         return "/company/chat/chatRoomList";
     }
-    @PostMapping("/companis/{companyId}/chat")
+    @PostMapping("/{companyId}/chat")
     public String chatRoomCreate(Principal principal,@PathVariable(value="companyId")Long companyId,ChatRoomDTO dto,Model model){
         String url ;
         if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
@@ -71,7 +72,7 @@ public class ChatController {
         model.addAttribute("id",id);
         return url;
     }
-    @DeleteMapping("/companis/{companyId}/chat")
+    @DeleteMapping("/{companyId}/chat")
     public String chatRoomExit(Principal principal,@PathVariable(value="companyId")Long companyId,ChatDTO dto,Model model){
         String url ;
         if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
@@ -91,6 +92,11 @@ public class ChatController {
         service.sendMessage(message);
         // 여기에서 메시지를 데이터베이스에 저장하거나, 다른 클라이언트에 방송하는 등의 로직을 추가할 수 있습니다.
         return ResponseEntity.ok("Message received");
+    }
+    @GetMapping("/invitaions")
+    public String invitations(){
+
+        return "company/chat/chatInvite";
     }
 
 
