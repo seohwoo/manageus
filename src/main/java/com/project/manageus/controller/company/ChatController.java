@@ -90,9 +90,15 @@ public class ChatController {
         // 여기에서 메시지를 데이터베이스에 저장하거나, 다른 클라이언트에 방송하는 등의 로직을 추가할 수 있습니다.
         return ResponseEntity.ok("Message received");
     }
-    @GetMapping("/invitations")
-    public @ResponseBody String invitations(){
+    @GetMapping("{companyId}/invitations")
+    public @ResponseBody String invitations(Model model,@PathVariable(value="companyId")Long companyId){
 
-        return "company/chat/chatInvite";
+        return "company/chat/chatInvitation";
+    }
+    @PostMapping("{companyId}/invitations")
+    public String insertInvitations(@PathVariable(value="companyId")Long companyId
+                                    ,@RequestParam(value = "userId")Long userId){
+        String url="redirect:/"+companyId+"/chatRoomList";
+        return url;
     }
 }

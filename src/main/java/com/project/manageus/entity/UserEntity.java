@@ -39,11 +39,11 @@ public class UserEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private PositionEntity positionEntity;
+    private PositionEntity position;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private DepartmentEntity departmentEntity;
+    private DepartmentEntity department;
 
     @Builder
     public UserEntity(Long id, String password, Long positionId, Long companyId, Long statusId, Long authId, Long departmentId, Date regDate) {
