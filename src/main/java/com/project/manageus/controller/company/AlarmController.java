@@ -42,9 +42,10 @@ public class AlarmController {
                            @PathVariable Long id,@RequestParam("reader") String reader,
                            @RequestParam("subject") String subject){
 
-        Long userId = Long.parseLong(principal.getName());
-        Long readers = Long.parseLong(reader);
+
         Long readtype = 2000L;
+        Long userId = Long.parseLong(principal.getName());
+         Long readers = Long.parseLong(reader);
 
 
         alarmDTO.setUserId(userId);
