@@ -400,10 +400,17 @@
                                         <td><span th:text="${iterStat.index + 1}"></span></td>
                                         <td><span th:text="${receive.reader}"></span></td>
                                         <td>
-                                            <span th:text="${#strings.length(receive.subject) > 8 ? #strings.substring(receive.subject, 0, 8).concat('....') : receive.subject}"></span>
+                                            <a th:href="@{/companies/{companyId}/alarm/{id}/readreceive/{messageId}(companyId=${companyId}, id=${id}, messageId=${receive.id})}">
+                                                <span th:text="${#strings.length(receive.subject) > 8 ? #strings.substring(receive.subject, 0, 8).concat('....') : receive.subject}"></span>
+                                            </a>
                                         </td>
                                         <td><span th:text="${receive.readDate}"></span></td>
-                                        <td><span th:text="${receive.readType}"></span></td>
+                                        <td>
+                                            <span th:switch="${receive.readType}">
+                                                <span th:case="2000">안읽음</span>
+                                                <span th:case="2001">읽음</span>
+                                            </span>
+                                        </td>
                                     </tr>
                                 </tr>
 

@@ -80,6 +80,21 @@ public class AlarmController {
         return "/company/alarm/receive";
     }
 
+    //받은내용 읽기
+
+    @GetMapping("/alarm/{id}/readreceive/{messageId}") //받은쪽지 읽기
+    public String readreceive(Model model, Principal principal, @PathVariable Long companyId,
+                              @PathVariable Long id, @PathVariable Long messageId){
+        System.out.println("waerasfasfasdf"+messageId);
+        if (!urlService.findUserInfo(principal.getName(), companyId, model)
+                || id != Long.parseLong(principal.getName())) {
+
+            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+        }
+
+
+        return "/company/alarm/readreceive";
+    }
 
 
     // 아래는 내가 보낸 쪽지 내역
