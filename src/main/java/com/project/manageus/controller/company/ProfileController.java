@@ -52,6 +52,15 @@ public class ProfileController {
         return url;
     }
 
+    @PutMapping("/{id}")
+    public String updateProfile(@PathVariable Long companyId, @PathVariable Long id) {
+        String url = "redirect:/companies/" + companyId + "/profiles/" + id;
+
+
+
+        return url;
+    }
+
 
 
 }
