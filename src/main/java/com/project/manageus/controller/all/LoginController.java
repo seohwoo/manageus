@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
 
@@ -38,7 +39,7 @@ public class LoginController {
         if(principal != null) {
             isLogin = true;
             if(principal.getName().length()==8) {
-                url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+                url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
             }
         }
         model.addAttribute("isLogin", isLogin);
