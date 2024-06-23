@@ -14,4 +14,6 @@ public interface AlarmService {
     public void readreceive(Long messageId, Model model); //받은내역 상세보기
 
     public void readspend(Long messageId, Model model); //보낸내역 상세보기
+
+    public void readcount(Long messageId); //글읽음 처리하기
 }

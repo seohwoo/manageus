@@ -43,6 +43,8 @@ public class AlarmController {
                            @RequestParam("subject") String subject){
 
 
+
+
         Long readtype = 2000L;
         Long userId = Long.parseLong(principal.getName());
          Long readers = Long.parseLong(reader);
@@ -85,13 +87,14 @@ public class AlarmController {
     @GetMapping("/alarm/{id}/readreceive/{messageId}") //받은쪽지 읽기
     public String readreceive(Model model, Principal principal, @PathVariable Long companyId,
                               @PathVariable Long id, @PathVariable Long messageId){
-        System.out.println("waerasfasfasdf"+messageId);
+
         if (!urlService.findUserInfo(principal.getName(), companyId, model)
                 || id != Long.parseLong(principal.getName())) {
 
             return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
         }
 
+        alarmService.readcount(messageId);
         alarmService.readreceive(messageId, model);
 
         return "/company/alarm/readreceive";

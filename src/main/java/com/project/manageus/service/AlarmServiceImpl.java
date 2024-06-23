@@ -7,6 +7,9 @@ import com.project.manageus.entity.AlarmEntity;
 import com.project.manageus.entity.UserInfoEntity;
 import com.project.manageus.repository.AlarmJPARepository;
 import com.project.manageus.repository.UserInfoRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -27,6 +30,9 @@ public class AlarmServiceImpl implements AlarmService{
         this.alarmJPARepository = alarmJPARepository;
         this.userInfoRepository = userInfoRepository;
     }
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
     @Override
@@ -52,8 +58,6 @@ public class AlarmServiceImpl implements AlarmService{
         Sort sort = Sort.by(Sort.Order.desc("readDate"));
         List<AlarmEntity> receive = alarmJPARepository.findByReader(userId, sort);
 
-
-
         model.addAttribute("receive", receive);
 
     }
@@ -69,7 +73,7 @@ public class AlarmServiceImpl implements AlarmService{
             model.addAttribute("alarm", alarm);
 
 
-            Long userId = alarm.getReader();
+            Long userId = alarm.getUserId();
             Optional<UserInfoEntity> optionalUserInfo = userInfoRepository.findById(userId);
             UserInfoEntity userInfo = optionalUserInfo.get();  // 해당 회원번호에 맞는 회원 이름 가져오기위해 작업
             model.addAttribute("userName", userInfo.getName());  //번호에 맞는 이름 가져오기
@@ -89,12 +93,12 @@ public class AlarmServiceImpl implements AlarmService{
             model.addAttribute("alarm", alarm);
 
 
-            Long receiveId = alarm.getUserId();    //보낸 쪽지함에서 받은사람의 이름을 가져올때
+            Long receiveId = alarm.getReader();    //보낸 쪽지함에서 받은사람의 이름을 가져올때
             Optional<UserInfoEntity> optionalUserInfo = userInfoRepository.findById(receiveId);
             UserInfoEntity userInfo = optionalUserInfo.get();  // 해당 회원번호에 맞는 회원 이름 가져오기위해 작업
             model.addAttribute("userName", userInfo.getName());  //번호에 맞는 이름 가져오기
 
-            Long spendId = alarm.getReader(); //보낸 쪽지함에서 보낸사람의 이름을 가져올때
+            Long spendId = alarm.getUserId(); //보낸 쪽지함에서 보낸사람의 이름을 가져올때
             Optional<UserInfoEntity> spendoptionalUserInfo = userInfoRepository.findById(spendId);
             UserInfoEntity spenduserInfo = spendoptionalUserInfo.get();  // 해당 회원번호에 맞는 회원 이름 가져오기위해 작업
             model.addAttribute("spendName", spenduserInfo.getName());  //번호에 맞는 이름 가져오기
@@ -104,7 +108,15 @@ public class AlarmServiceImpl implements AlarmService{
             System.out.println("No alarm found with ID: " + messageId);
             model.addAttribute("error", "Message not found");
         }
+    }
 
+    @Override
+    @Transactional
+    public void readcount(Long messageId) { // 글 읽음처리하기
+
+        AlarmEntity alarm = entityManager.find(AlarmEntity.class, messageId);  //메니저.find는 테이블이있는지 찾고,내부는 해당테이블의 @id와 messageId를 맞춰주는과정
+        alarm.setReadType(2001L); // read_type 업데이트
+        entityManager.merge(alarm); // merge - >  + Transactional 필요 !! 업데이트된 엔티티를 다시 저장
 
     }
 

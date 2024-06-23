@@ -366,12 +366,12 @@
                 <a th:href="@{/companies/{companyId}/alarm/{id}/form(companyId=${companyId}, id=${id})}"  class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                         class="fas fa-download fa-sm text-white-50"></i> 쪽지 쓰기</a>
                 <a th:href="@{/companies/{companyId}/alarm/{id}/spend(companyId=${companyId}, id=${id})}"  class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                        class="fas fa-download fa-sm text-white-50"></i> 보낸 쪽지 전체보기</a>
+                        class="fas fa-download fa-sm text-white-50"></i>내가 보낸 쪽지 전체보기</a>
 
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">받은 내역</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">내가 받은 내역</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -398,7 +398,7 @@
                                 <tbody>
                                     <tr th:each="receive, iterStat : ${receive}">
                                         <td><span th:text="${iterStat.index + 1}"></span></td>
-                                        <td><span th:text="${receive.userId}"></span></td>
+                                        <td><span th:text="${receive.getUserInfo.getName}"></span></td>
                                         <td>
                                             <a th:href="@{/companies/{companyId}/alarm/{id}/readreceive/{messageId}(companyId=${companyId}, id=${id}, messageId=${receive.id})}">
                                                 <span th:text="${#strings.length(receive.subject) > 8 ? #strings.substring(receive.subject, 0, 8).concat('....') : receive.subject}"></span>
