@@ -18,4 +18,6 @@ public interface ChatJPARepository extends JpaRepository<ChatEntity, ChatIDEntit
     public int countByUserIdAndChatRoomId(Long userId, Long chatRoomId);
 
 
+
+
 }

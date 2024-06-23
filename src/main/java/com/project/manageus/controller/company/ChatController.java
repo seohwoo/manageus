@@ -1,22 +1,27 @@
 package com.project.manageus.controller.company;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.project.manageus.dto.ChatDTO;
 import com.project.manageus.dto.ChatMessageDTO;
 import com.project.manageus.dto.ChatRoomDTO;
+import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.service.ChatService;
 import com.project.manageus.service.UrlService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @Log4j2
-@RequestMapping("/companis/*")
+@RequestMapping("/companies/*")
 public class ChatController {
 
     private final ChatService service;
@@ -31,19 +36,19 @@ public class ChatController {
     public String chatting(Model model, Principal principal,@PathVariable(value = "id") Long id,@PathVariable(value = "roomId")Long roomId,@PathVariable(value="companyId")Long companyId){
         String url ;
         if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-             url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+             url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
-        service.enterChatRoom(model,id,roomId);
-        model.addAttribute("companyId",companyId);
-        model.addAttribute("id",id);
+       // service.enterChatRoom(model,id,roomId);
+      //  model.addAttribute("companyId",companyId);
+      //  model.addAttribute("id",id);
         return "/company/chat/chater";
     }
     @GetMapping("/{companyId}/chatRoomList")
     public String chatRoomList(Principal principal,@PathVariable(value="companyId")Long companyId,Model model){
         String url ;
         if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/companis/" + urlService.findCompanyUrl(principal.getName());
+            url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
         String sid = (String)principal.getName();
@@ -57,7 +62,7 @@ public class ChatController {
     public String chatRoomCreate(Principal principal,@PathVariable(value="companyId")Long companyId,ChatRoomDTO dto,Model model){
         String url ;
         if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/companis/" + urlService.findCompanyUrl(principal.getName());
+            url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
         System.out.println("채팅방 생성!!");
@@ -65,7 +70,7 @@ public class ChatController {
         Long idl = Long.parseLong(id);
         System.out.println("id===="+idl);
         Long roomId=service.chatNewRoom(dto,idl);
-        url="redirect:/companis/{companyId}/chat/"+idl+"/"+roomId;
+        url="redirect:/companies/"+companyId+"/chat/"+idl+"/"+roomId;
         model.addAttribute("companyId",companyId);
         model.addAttribute("id",id);
         return url;
@@ -74,11 +79,11 @@ public class ChatController {
     public String chatRoomExit(Principal principal,@PathVariable(value="companyId")Long companyId,ChatDTO dto,Model model){
         String url ;
         if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/companis/" + urlService.findCompanyUrl(principal.getName());
+            url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
         service.chatExit(dto);
-        return "redirect:/companis/chat/chatRoomList";
+        return "redirect:/companies/chat/chatRoomList";
     }
     @PostMapping("/send-message")
     @ResponseBody
@@ -91,14 +96,28 @@ public class ChatController {
         return ResponseEntity.ok("Message received");
     }
     @GetMapping("{companyId}/invitations")
-    public @ResponseBody String invitations(Model model,@PathVariable(value="companyId")Long companyId){
-
+    public String invitations(Model model,@PathVariable(value="companyId")Long companyId){
+            service.chatInvitations(model,companyId);
         return "company/chat/chatInvitation";
     }
     @PostMapping("{companyId}/invitations")
-    public String insertInvitations(@PathVariable(value="companyId")Long companyId
-                                    ,@RequestParam(value = "userId")Long userId){
-        String url="redirect:/"+companyId+"/chatRoomList";
+    public String insertInvitations(@PathVariable(value="companyId")Long companyId){
+        String url="redirect:/companies/"+companyId+"/chatRoomList";
         return url;
     }
+    @PostMapping("/invitations/names")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getInvitationsNames(@RequestBody DepartmentDTO departmentDTO) {
+        System.out.println("=============did: " + departmentDTO.getId());
+        System.out.println("=============cid: " + departmentDTO.getCompanyId());
+
+        JsonObject names = service.getNamesfromDepartment(departmentDTO.getCompanyId(), departmentDTO.getId());
+
+        // JsonObject를 Map으로 변환
+        Map<String, Object> result = new Gson().fromJson(names, Map.class);
+
+        return ResponseEntity.ok(result);
+    }
+
+
 }

@@ -19,7 +19,7 @@
             websocket.send(id + ":" + msg);
 
             $.ajax({
-                url: '/send-message',
+                url: '/companies/send-message',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ userId: id, message: msg, chatRoomId: roomId }),

@@ -2,10 +2,7 @@ package com.project.manageus.entity;
 
 
 import com.project.manageus.dto.DepartmentDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +19,7 @@ public class DepartmentEntity {
     private String name;
     @Column(name = "company_id")
     private Long companyId;
+
 
     @Builder
     public DepartmentEntity(Long id, String name, Long companyId) {

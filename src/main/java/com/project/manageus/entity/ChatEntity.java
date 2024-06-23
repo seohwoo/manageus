@@ -19,11 +19,11 @@ public class ChatEntity  {
     @Column(name = "chat_room_id")
     private Long chatRoomId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private UserEntity user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ChatRoomEntity chatRoom;
 

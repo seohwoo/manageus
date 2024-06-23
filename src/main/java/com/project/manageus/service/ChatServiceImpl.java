@@ -1,23 +1,17 @@
 package com.project.manageus.service;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.project.manageus.dto.ChatDTO;
 import com.project.manageus.dto.ChatMessageDTO;
 import com.project.manageus.dto.ChatRoomDTO;
-import com.project.manageus.entity.ChatEntity;
-import com.project.manageus.entity.ChatMessageEntity;
-import com.project.manageus.entity.ChatRoomEntity;
-import com.project.manageus.repository.ChatJPARepository;
-import com.project.manageus.repository.ChatMessageJPARepository;
-import com.project.manageus.repository.ChatRoomJPARepository;
+import com.project.manageus.entity.*;
+import com.project.manageus.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ChatServiceImpl implements ChatService {
@@ -26,21 +20,23 @@ public class ChatServiceImpl implements ChatService {
     private final ChatJPARepository chatJPA;
     private final ChatRoomJPARepository chatRoomJPA;
     private final ChatMessageJPARepository chatMessageJPA;
+    private final DepartmentRepository departmentJPA;
+    private final UserRepository userJPA;
 
 
 
     @Autowired
-    public ChatServiceImpl(ChatJPARepository chatJPA,ChatRoomJPARepository chatRoomJPA,ChatMessageJPARepository chatMessageJPA){
+    public ChatServiceImpl(ChatJPARepository chatJPA,ChatRoomJPARepository chatRoomJPA,ChatMessageJPARepository chatMessageJPA,DepartmentRepository departmentJPA,UserRepository userJPA){
         this.chatJPA=chatJPA;
         this.chatRoomJPA=chatRoomJPA;
         this.chatMessageJPA=chatMessageJPA;
+        this.departmentJPA = departmentJPA;
+        this.userJPA=userJPA;
 
     }
 
     public int count(){
-
         return (int)chatJPA.count();
-
     }
     @Override
     public Long chatNewRoom(ChatRoomDTO dto,Long id){
@@ -48,6 +44,13 @@ public class ChatServiceImpl implements ChatService {
         System.out.println("name=="+dto.getName());
         System.out.println("reg=="+dto.getReg());
         System.out.println("status=="+dto.getStatusId());
+        Optional<UserEntity> optional = userJPA.findById(id);
+        String username=null;
+        if(optional.isPresent()){
+            UserEntity userEntity=optional.get();
+            dto.setName(userEntity.getUserInfo().getName());
+            username=userEntity.getUserInfo().getName();
+        }
         ChatDTO cdto = new ChatDTO();
         ChatMessageDTO mdto = new ChatMessageDTO();
         chatRoomJPA.save(dto.toChatRoomEntity());
@@ -61,15 +64,13 @@ public class ChatServiceImpl implements ChatService {
         cdto.setUserId(id);
         mdto.setUserId(id);
         chatJPA.save(cdto.toChatEntity());
-        mdto.setMessage(id+"님 입장하셧습니다.");
+        mdto.setMessage(username+"님 입장하셧습니다.");
         System.out.println("cdto.setUserId(id)"+id);
         System.out.println("======dto"+mdto.getChatRoomId());
         System.out.println("======dto"+mdto.getUserId());
         System.out.println("======dto"+mdto.getMessage());
         System.out.println("======dto"+mdto.getStatusId());
         chatMessageJPA.save(mdto.toChatMessageEntity());
-
-
         return nextid;
 
     }
@@ -78,7 +79,6 @@ public class ChatServiceImpl implements ChatService {
     public void chatList(Model model, Long id) {
         System.out.println("id===="+id);
         List<ChatEntity> roomIdList = chatJPA.findByUserId(id);
-        System.out.println("roomIdList===="+roomIdList);
         ArrayList<Long> roomIds = new ArrayList<>();
         for(ChatEntity ce:roomIdList){
            ChatDTO dto = ce.toChatDTO();
@@ -121,6 +121,34 @@ public class ChatServiceImpl implements ChatService {
     public void sendMessage(ChatMessageDTO dto) {
         chatMessageJPA.save(dto.toChatMessageEntity());
     }
+
+    @Override
+    public void chatInvitations(Model model, Long companyId) {
+        List<DepartmentEntity> departments = departmentJPA.findByCompanyId(companyId);
+        model.addAttribute("departments",departments);
+    }
+
+    @Override
+    public JsonObject getNamesfromDepartment(Long companyId, Long departmentId) {
+        JsonObject jsonObject = new JsonObject();
+        List<UserEntity> users = userJPA.findAllByCompanyIdAndDepartmentId(companyId, departmentId);
+        JsonArray jsonArray = new JsonArray();
+        for (UserEntity ue : users) {
+            JsonObject jsonObj = new JsonObject();
+            String user = ue.getUserInfo().getName() + " " + ue.getPosition().getName();
+            Long id = ue.getId();
+            System.out.println("=======fullName"+user);
+            System.out.println("=======id"+id);
+
+            jsonObj.addProperty("userId", id);
+            jsonObj.addProperty("fullName", user);
+            jsonArray.add(jsonObj);
+        }
+        jsonObject.add("DepartmentMember", jsonArray);
+        return jsonObject;
+    }
+
+
 
 
 }
