@@ -1,6 +1,7 @@
 package com.project.manageus.controller.company;
 
 import com.project.manageus.dto.AlarmDTO;
+import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.service.AlarmService;
 import com.project.manageus.service.UrlService;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ public class AlarmController {
     private final AlarmService alarmService;
     private final UrlService urlService;
 
+
     public AlarmController(AlarmService alarmService, UrlService urlService) {
         this.alarmService = alarmService;
         this.urlService = urlService;
@@ -23,7 +25,7 @@ public class AlarmController {
 
     @GetMapping("/alarm/{id}/form")  // 쪽지 작성하는 곳
     public String write(Model model, Principal principal, @PathVariable Long companyId,
-                        @PathVariable Long id) {
+                        @PathVariable Long id ) {
 
 
         if (!urlService.findUserInfo(principal.getName(), companyId, model)
@@ -31,6 +33,13 @@ public class AlarmController {
 
             return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
         }
+
+        alarmService.getdepartment(companyId, model);  // 회사아이디로 부서 찾기
+
+        model.addAttribute("companyId",companyId);
+        model.addAttribute("id",id);
+
+
 
         return "/company/alarm/write";
     }
@@ -41,9 +50,6 @@ public class AlarmController {
     public String writepro(Principal principal, AlarmDTO alarmDTO,@PathVariable Long companyId,
                            @PathVariable Long id,@RequestParam("reader") String reader,
                            @RequestParam("subject") String subject){
-
-
-
 
         Long readtype = 2000L;
         Long userId = Long.parseLong(principal.getName());

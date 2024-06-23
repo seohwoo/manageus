@@ -64,8 +64,31 @@
 
                                     <div class="form-group">
                                         <label for="recipient">받는 사람</label>
-                                        <input type="number" id="recipient" name="reader" required>
+                                        <select id="recipient" name="readers" required onchange="showAdditionalOptions()">
+                                            <option value="" disabled selected>부서 선택</option>
+                                            <!-- getcomname 리스트를 반복하여 옵션 추가 -->
+                                            <option th:each="department : ${getcomname}"
+                                                    th:value="${department.id}"
+                                                    th:text="${department.name}">
+                                            </option>
+                                        </select>
                                     </div>
+
+
+                                    <div id="additional-options" class="form-group" style="display: none;">
+                                        <label for="additional">인원선택</label>
+                                        <select id="additional" name="reader">
+                                            <option value="" disabled selected>인원 선택</option>
+                                            <option th:each="user : ${getperson}"
+                                                    th:value="${user.id}"
+                                                    th:text="${user.getUserInfo.getName}+${user.getPosition.getName}">
+                                            </option>
+                                            <!-- 더 많은 옵션을 추가할 수 있습니다 -->
+                                        </select>
+                                    </div>
+
+
+
 
                                     <div class="form-group">
                                         <label for="content">내용</label>
@@ -117,6 +140,52 @@
 <!-- Page level custom scripts -->
 <script src="/js/demo/chart-area-demo.js"></script>
 <script src="/js/demo/chart-pie-demo.js"></script>
+
+
+<script>
+    function showAdditionalOptions() {
+        var recipient = document.getElementById('recipient').value;
+        var additionalOptions = document.getElementById('additional-options');
+          console.log([[${companyId}]])
+        let companyId =  [[${companyId}]];
+        let id =  [[${id}]];
+
+        console.log('companyId',companyId)
+        console.log('id',id)
+
+        let text = "companies/"+companyId+"/alarm/"+id+"/form";
+
+        console.log('url',text)
+
+        if (recipient) {
+            additionalOptions.style.display = 'block';
+        } else {
+            additionalOptions.style.display = 'none';
+        }
+
+        const formData = new FormData();
+         formData.append('department', recipient);
+
+            // ajax 통신
+            $.ajax({
+                type : "POST",            // HTTP method type(GET, POST) 형식이다.
+                url : "companies/"+companyId+"/alarm/"+id+"/form",      // 컨트롤러에서 대기중인 URL 주소이다.
+                data : formData,            // Json 형식의 데이터이다.
+                success : function(res){ // 비동기통신의 성공일경우 success콜백으로 들어옵니다. 'res'는 응답받은 데이터이다.
+                    // 응답코드 > 0000
+                    alert(res.code);
+                    console.log("이거다")
+                },
+                error : function(XMLHttpRequest, textStatus, errorThrown){ // 비동기 통신이 실패할경우 error 콜백으로 들어옵니다.
+                    alert("통신 실패.")
+                    console.log("이거다2222")
+                }
+            });
+
+
+    }
+</script>
+
 
 </body>
 

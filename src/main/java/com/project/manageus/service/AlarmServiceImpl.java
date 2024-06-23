@@ -2,11 +2,16 @@ package com.project.manageus.service;
 
 
 import com.project.manageus.dto.AlarmDTO;
+import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.entity.AlarmEntity;
 
+import com.project.manageus.entity.DepartmentEntity;
+import com.project.manageus.entity.UserEntity;
 import com.project.manageus.entity.UserInfoEntity;
 import com.project.manageus.repository.AlarmJPARepository;
+import com.project.manageus.repository.DepartmentRepository;
 import com.project.manageus.repository.UserInfoRepository;
+import com.project.manageus.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -25,10 +30,15 @@ public class AlarmServiceImpl implements AlarmService{
     private final AlarmJPARepository alarmJPARepository;
 
     private final UserInfoRepository userInfoRepository;
+    private final UserRepository userRepository;
 
-    public AlarmServiceImpl(AlarmJPARepository alarmJPARepository, UserInfoRepository userInfoRepository) {
+    private final DepartmentRepository departmentRepository ;
+
+    public AlarmServiceImpl(AlarmJPARepository alarmJPARepository, UserInfoRepository userInfoRepository, UserRepository userRepository, DepartmentRepository departmentRepository) {
         this.alarmJPARepository = alarmJPARepository;
         this.userInfoRepository = userInfoRepository;
+        this.userRepository = userRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     @PersistenceContext
@@ -117,6 +127,23 @@ public class AlarmServiceImpl implements AlarmService{
         AlarmEntity alarm = entityManager.find(AlarmEntity.class, messageId);  //메니저.find는 테이블이있는지 찾고,내부는 해당테이블의 @id와 messageId를 맞춰주는과정
         alarm.setReadType(2001L); // read_type 업데이트
         entityManager.merge(alarm); // merge - >  + Transactional 필요 !! 업데이트된 엔티티를 다시 저장
+
+    }
+
+    @Override
+    public void getdepartment(Long companyId, Model model) {  // 회사아이디로 부서찾기
+
+
+        List<DepartmentEntity> getcomname = departmentRepository.findByCompanyId(companyId);//회사 부서명
+
+        Long str = 100302L;   // 임이의 값
+        List<UserEntity> getperson = userRepository.findByDepartmentId(str); //부서속 사람(임이의값)
+
+
+        model.addAttribute("getcomname",getcomname); //회사 부서명 뽑기
+
+        model.addAttribute("getperson",getperson); // 회사 사용자 뽑기 (임이의값)
+
 
     }
 
