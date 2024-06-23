@@ -9,12 +9,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "USER_INFO")
 @DynamicInsert
+@DynamicUpdate
 public class UserInfoEntity {
 
     @Id
@@ -27,8 +29,6 @@ public class UserInfoEntity {
     private String address;
     private String birth;
     private String gender;
-
-
 
     @Builder
     public UserInfoEntity(Long id, String name, String stamp, String email, String phone, String address, String birth, String gender) {
