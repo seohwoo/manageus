@@ -134,7 +134,7 @@
         <li class="nav-item active">
             <a class="nav-link" href="tables.html">
                 <i class="fas fa-fw fa-table"></i>
-                <span>받은쪽지함</span></a>
+                <span>보낸 쪽지함</span></a>
         </li>
 
         <!-- Divider -->
@@ -375,11 +375,12 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
+
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
                                     <th>번호</th>
-                                    <th>받은사람</th>
+                                    <th>보낸사람</th>
                                     <th>내용</th>
                                     <th>보낸 날짜</th>
                                     <th>확인결과</th>
@@ -388,17 +389,16 @@
                                 <tfoot>
                                 <tr>
                                     <th>번호</th>
-                                    <th>받은사람</th>
+                                    <th>보낸사람</th>
                                     <th>내용</th>
                                     <th>보낸 날짜</th>
                                     <th>확인결과</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr>
                                     <tr th:each="receive, iterStat : ${receive}">
                                         <td><span th:text="${iterStat.index + 1}"></span></td>
-                                        <td><span th:text="${receive.reader}"></span></td>
+                                        <td><span th:text="${receive.userId}"></span></td>
                                         <td>
                                             <a th:href="@{/companies/{companyId}/alarm/{id}/readreceive/{messageId}(companyId=${companyId}, id=${id}, messageId=${receive.id})}">
                                                 <span th:text="${#strings.length(receive.subject) > 8 ? #strings.substring(receive.subject, 0, 8).concat('....') : receive.subject}"></span>
@@ -412,7 +412,6 @@
                                             </span>
                                         </td>
                                     </tr>
-                                </tr>
 
                                 </tbody>
                             </table>

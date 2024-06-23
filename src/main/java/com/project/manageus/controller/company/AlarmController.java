@@ -92,6 +92,7 @@ public class AlarmController {
             return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
         }
 
+        alarmService.readreceive(messageId, model);
 
         return "/company/alarm/readreceive";
     }
@@ -110,8 +111,25 @@ public class AlarmController {
             return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
         }
 
-        alarmService.spendalarm(userId, model); // 받은 내역 전체 가져오기
+        alarmService.spendalarm(userId, model); // 보낸 내역 전체 가져오기
 
         return "/company/alarm/spend";
+    }
+
+    @GetMapping("/alarm/{id}/readspend/{messageId}")  // 보낸내역 상세 보기
+    public String readspend(Model model, Principal principal, @PathVariable Long companyId,
+                            @PathVariable Long id, @PathVariable Long messageId){
+        
+        Long userId = Long.parseLong(principal.getName());
+
+        if (!urlService.findUserInfo(principal.getName(), companyId, model)
+                || id != Long.parseLong(principal.getName())) {
+
+            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+        }
+
+        alarmService.readspend(messageId, model);
+
+        return "/company/alarm/readspend";
     }
 }

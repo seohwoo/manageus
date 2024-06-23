@@ -397,7 +397,9 @@
                                         <td><span th:text="${iterStat.index + 1}"></span></td>
                                         <td><span th:text="${spend.reader}"></span></td>
                                         <td>
+                                            <a th:href="@{/companies/{companyId}/alarm/{id}/readspend/{messageId}(companyId=${companyId}, id=${id}, messageId=${spend.id})}">
                                             <span th:text="${#strings.length(spend.subject) > 8 ? #strings.substring(spend.subject, 0, 8).concat('....') : spend.subject}"></span>
+                                            </a>
                                         </td>
                                         <td><span th:text="${spend.readDate}"></span></td>
                                     </tr>

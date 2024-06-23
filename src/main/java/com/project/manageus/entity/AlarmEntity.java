@@ -28,6 +28,10 @@ public class AlarmEntity {
     @Column(name="read_date")
     private Date readDate;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private UserEntity user;
+
     @Builder
     public AlarmEntity(Long id, Long userId, String subject, Long reader, Long readType, Date readDate){
         super();
