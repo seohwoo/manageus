@@ -1,17 +1,44 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>테스트</title>
-    </head>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<select name="selectCompanyId" id="selectCompanyId" required>
+    <option th:each="selectCompanyId : ${selectCompanyId}"
+            th:value="${selectCompanyId.departmentId}"
+            th:text="${selectCompanyId.departmentId}">
+    </option>
+</select>
 
-    <body>
-    <h1> 테스트 받는 값 </h1>
-        결재자 : <h2 th:each="approvers : ${approvers}" th:value="${approvers}" th:text="${approvers}"></h2>
-        제목 : <h2 th:text="${title}"></h2>
-        휴가 종류 : <h2 th:text="${approvalType}"></h2>
-        내용 : <h2 th:text="${content}"></h2>
-        휴가 날짜 : <h2 th:text="${#dates.format(start_date, 'yy/MM/dd')}"></h2> ~
-        <h2 th:text="${#dates.format(end_date, 'yy/MM/dd')}"></h2>
-    </body>
+
+
+<!--
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function() {
+        $("#selectDepartment").on("change", function() {
+            var departmentId = $(this).val();
+            var companyId = /*[[${companyId}]]*/ '0'; // Replace with actual value
+            var id = /*[[${id}]]*/ '0'; // Replace with actual value
+
+            $.ajax({
+                url: "/approval/" + companyId + "/" + id + "/selectPeople",
+                data: { departmentId: departmentId },
+                success: function(data) {
+                    var $selectPeople = $("#selectPeople");
+                    $selectPeople.empty();
+                    $.each(data, function(index, person) {
+                        $selectPeople.append($("<option></option>")
+                            .attr("value", person.id)
+                            .text(person.name));
+                    });
+                }
+            });
+        });
+    });
+    /*]]>*/
+</script>
+-->
+</body>
 </html>

@@ -34,10 +34,12 @@ public class ApprovalEntity {
     private Date signOn;
     @Column(name = "sign_off")
     private Date signOff;
+    @Column(name = "company_id")
+    private Long companyId;
 
     @Builder
     public ApprovalEntity(Long id, Long userId, Long statusId, String title, Long approvalTypeId,
-                          Date startDate, Date endDate, String content, Date signOn, Date signOff) {
+                          Date startDate, Date endDate, String content, Date signOn, Date signOff, Long companyId) {
         super();
         this.id = id;
         this.userId = userId;
@@ -49,6 +51,7 @@ public class ApprovalEntity {
         this.content = content;
         this.signOn = signOn;
         this.signOff = signOff;
+        this.companyId = companyId;
     }
 
     public ApprovalDTO toApprovalDTO() {
@@ -63,6 +66,7 @@ public class ApprovalEntity {
                 .content(this.content)
                 .signOn(this.signOn)
                 .signOff(this.signOff)
+                .companyId(this.companyId)
                 .build();
     } // 이거는 Entity를 DTO로 만드는 작업이다.
 }     // DB에서 넘어올 때는 Entity로 넘어온다.

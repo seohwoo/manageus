@@ -1,83 +1,126 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
     <head>
-        <meta charset="UTF-8">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
         <title>휴가 신청</title>
+
+        <!-- Custom fonts for this template-->
+        <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+        <!-- Custom styles for this template-->
+        <link href="/css/sb-admin-2.min.css" rel="stylesheet">
     </head>
-<!--
-    <body>
-    <h1>휴가 신청하기</h1>
 
-        <form action="Vacation.jsp" method="post">
+    <body id="page-top">
 
-            결재 라인 :
-            <select id="approver" name="approver">
-                <option th:each="approver : ${approver}" th:value="${approver}" th:text="${approver}"></option>
-            </select>
+        <!-- Page Wrapper -->
+        <div id="wrapper">
 
-            <button type="button" onclick="addApprover()">+</button>
-            <br><br>
-            제목 : <input type="text" id="title" name="title" length="100" required>
-            <br><br>
-            휴가 종류 :
-            <select id="ApprovalTypeID" name="ApprovalTypeID" required>
-                <option value="1">연차</option>
-                <option value="2">월차</option>
-                <option value="3">반차</option>
-                <option value="4">병가</option>
-            </select>
-            <br><br>
-            휴가 날짜 :
-            <input type="date" id="StartDate" name="StartDate" required>
-            <input type="date" id="FinishDate" name="FinishDate" required>
-            <br><br>
-            <textarea id="Subject" name="Subject" placeholder="휴가 사유" length="500" required></textarea>
-            <br><br>
-            <input type="submit" value="제출하기">
-        </form>
-    </body>
+            <div th:include="~{content/side-bar :: side}"></div>
 
-    <script th:inline="javascript">
-        function addApprover() {
-            var selectApprover = document.createElement("select");
-            selectApprover.id = "approver";
-            selectApprover.name = "approver";
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
 
-            [[${approver}]].forEach(function(approver) {
-                var option = document.createElement("option");
-                option.value = approver;
-                option.text = approver;
-                selectApprover.add(option);
-            });
-            var findSelect = document.getElementById("approver");
-            findSelect.insertAdjacentElement('afterend', selectApprover);
-        }
-    </script>
--->
-    <body>
-        <form action="/company/write" method="post">
-            결재 라인 :
-            <select name="approver" id="approver" required>
-                <option th:each="approver : ${approver}" th:value="${approver}" th:text="${approver}"></option>
-            </select>
-            <button type="button" onclick="addApprover()">+</button>
-            <br><br>
-            제목 : <input type="text" name="title" required>
-            <br><br>
-            휴가 종류 :
-            <select name="approvalTypeId" required>
-                <option th:each="approvalType : ${approvalType}" th:value="${approvalType.id}" th:text="${approvalType.name}"></option>
-            </select>
-            <br><br>
-            휴가 날짜 :
-            <input type="date" name="startDate" id="startDate" required>
-            <input type="date" name="endDate" required>
-            <br><br>
-            내용 : <input type="text" name="content" required>
-            <br><br>
-            <input type="submit" value="제출하기">
-        </form>
+                <!-- Main Content -->
+                <div id="content">
+
+                    <div th:include="~{content/top-bar :: top}"></div>
+
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid">
+
+                        <!-- Page Heading -->
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                            <h1 class="h3 mb-0 text-gray-800">Approval Application</h1>
+                        </div>
+
+                        <!-- Content Row -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <form th:action="@{/companies/{companyId}/approval/{id}/write(id=${id},companyId=${companyId})}" method="post">
+                                    <!-- 결재 라인 -->
+                                    <div class="form-group">
+                                        <label for="approver">결재 라인</label>
+                                        <select name="approver" id="approver" class="form-control" required>
+                                            <option th:each="approver : ${approver}" th:value="${approver}" th:text="${approver}"></option>
+                                        </select>
+                                        <button type="button" class="btn btn-secondary" onclick="addApprover()">+</button>
+                                    </div>
+
+                                    <!-- 제목 -->
+                                    <div class="form-group">
+                                        <label for="title">제목</label>
+                                        <input type="text" name="title" class="form-control" id="title" placeholder="제목을 입력하세요" required>
+                                    </div>
+
+                                    <!-- 휴가 종류 -->
+                                    <div class="form-group">
+                                        <label for="approvalTypeId">휴가 종류</label>
+                                        <select name="approvalTypeId" id="approvalTypeId" class="form-control" required>
+                                            <option th:each="approvalType : ${approvalType}" th:value="${approvalType.id}" th:text="${approvalType.name}"></option>
+                                        </select>
+                                    </div>
+
+                                    <!-- 휴가 날짜 -->
+                                    <div class="form-group">
+                                        <label for="startDate">휴가 시작 날짜</label>
+                                        <input type="date" name="startDate" id="startDate" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="endDate">휴가 종료 날짜</label>
+                                        <input type="date" name="endDate" id="endDate" class="form-control" required>
+                                    </div>
+
+                                    <!-- 내용 -->
+                                    <div class="form-group">
+                                        <label for="contents">내용</label>
+                                        <textarea name="content" id="contents" class="form-control" rows="3" placeholder="휴가 내용을 입력하세요" required></textarea>
+                                    </div>
+
+                                    <!-- 제출하기 버튼 -->
+                                    <button type="submit" class="btn btn-primary">제출하기</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.container-fluid -->
+                </div>
+                <!-- End of Main Content -->
+
+                <div th:include="~{content/footer :: footer}"></div>
+            </div>
+            <!-- End of Content Wrapper -->
+        </div>
+        <!-- End of Page Wrapper -->
+
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="/vendor/jquery/jquery.min.js"></script>
+        <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="/js/sb-admin-2.min.js"></script>
+
+        <!-- Page level plugins -->
+        <script src="/vendor/chart.js/Chart.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="/js/demo/chart-area-demo.js"></script>
+        <script src="/js/demo/chart-pie-demo.js"></script>
     </body>
 
     <script th:inline="javascript">
@@ -126,15 +169,18 @@
         }
 
 
-        var today = new Date();
-        var nextWeek = new Date();
+    var today = new Date();
+    var nextWeek = new Date();
 
-        nextWeek.setDate(today.getDate() + 7);
+    nextWeek.setDate(today.getDate() + 7);
 
-        var minDate = nextWeek.toISOString().split('T')[0];
+    var minDate = nextWeek.toISOString().split('T')[0];
 
-        var startDateInput = document.getElementById("startDate");
-        startDateInput.setAttribute("min", minDate);
+    var startDateInput = document.getElementById("startDate");
+    var endDateInput = document.getElementById("endDate");
+
+    startDateInput.setAttribute("min", minDate);
+    endDateInput.setAttribute("min", minDate);
     </script>
 
 </html>

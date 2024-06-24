@@ -12,6 +12,9 @@ import java.util.List;
 
 public interface ApprovalJPARepository extends JpaRepository<ApprovalEntity, Integer> {
 
+    // 결재 리스트 가져오기
+    List<ApprovalEntity> findByCompanyId(Long companyId);
+
     // 여기에 SQL 적으면됨
 //    @Transactional //            ʼ
 //    @Modifying //            ʼ

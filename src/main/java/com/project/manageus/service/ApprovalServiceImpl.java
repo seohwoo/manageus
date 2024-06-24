@@ -1,13 +1,16 @@
 package com.project.manageus.service;
 
 import com.project.manageus.dto.ApprovalDTO;
+import com.project.manageus.entity.ApprovalEntity;
 import com.project.manageus.entity.ApprovalTypeEntity;
+import com.project.manageus.entity.UserEntity;
 import com.project.manageus.repository.ApprovalJPARepository;
 import com.project.manageus.repository.ApprovalTypeJPARepository;
 import com.project.manageus.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,44 +36,68 @@ public class ApprovalServiceImpl implements ApprovalService {
         this.userRepository = userRepository;
     }
 
+    // 결재 리스트 가져오기
+    @Override
+    public void selectApprovalList(Model model, Long companyId) {
+        List<ApprovalEntity> approvalList = approvalJPA.findByCompanyId(companyId);
+        model.addAttribute("approvalList", approvalList);
+    }
 
-
-    // 휴가 종류 가져오기
+    // 결재 종류 가져오기
     @Override
     public void selectApprovalType(Model model) {
         List<ApprovalTypeEntity> approvalType = approvalTypeJPA.findAll();
         model.addAttribute("approvalType", approvalType);
     }
 
+    // 결재 테이블 인서트
     @Override
-    public void insertApproval(ApprovalDTO Adto) {
+    public void insertApproval(@PathVariable Long companyId,
+                               @PathVariable Long id,
+                               ApprovalDTO Adto) {
 
-        // 오늘 날짜 구해오는 코드
-        //LocalDateTime now = LocalDateTime.now();
-        //Date signOff = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+
         Long statusId = 1001L;
-        Long Id = 10010003L;
 
-
+        // 휴가 마감 날짜
         Date startDateUtil = Adto.getStartDate();
-
-        // java.util.Date를 java.time.LocalDate로 변환
         LocalDate startDate = startDateUtil.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-        // startDate에서 2일을 뺀 LocalDate 계산
         LocalDate signOffLocalDate = startDate.minusDays(2);
-
-        // LocalDate를 java.util.Date로 변환
         Date signOff = Date.from(signOffLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 
 
-        Adto.setId(Id);
-        Adto.setUserId(Id);
+        Adto.setUserId(id);
         Adto.setStatusId(statusId);
         Adto.setSignOff(signOff);
+        Adto.setCompanyId(companyId);
 
         approvalJPA.save(Adto.toApprovalEntity());
+    }
+
+    // 회사 번호가 같은 정보 다 가져오기
+    @Override
+    public void selectCompanyId(Long companyId, Model model) {
+        List<UserEntity> selectCompanyId = userRepository.findAllByCompanyId(companyId);
+        model.addAttribute("selectCompanyId",selectCompanyId);
+    }
+
+
+
+
+
+
+    // ajax 연습
+    @Override
+    public void selectDepartment(Model model) {
+        List<UserEntity> selectDepartment = userRepository.findAll();
+        model.addAttribute("selectDepartment", selectDepartment);
+    }
+
+    @Override
+    public void selectPeople(Long departmentId, Model model) {
+        List<UserEntity> selectPeople = userRepository.findAllByDepartmentId(departmentId);
+        model.addAttribute("selectPeople", selectPeople);
     }
 
 //    @Autowired

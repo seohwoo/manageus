@@ -4,16 +4,36 @@ import com.project.manageus.dto.ApprovalDTO;
 import com.project.manageus.entity.ApprovalTypeEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
 public interface ApprovalService {
 
-    // 휴가 종류 가져오기
+    // 결재 리스트 가져오기
+    public void selectApprovalList(Model model, Long companyId);
+
+    // 결재 종류 가져오기
     public void selectApprovalType(Model model);
 
-    // 휴가 테이블 인서트
-    public void insertApproval(ApprovalDTO Adto);
+    // 결재 테이블 인서트
+    public void insertApproval(@PathVariable Long companyId,
+                               @PathVariable Long id,
+                               ApprovalDTO Adto);
+
+    // 회사 번호가 같은 정보 다 가져오기
+    public void selectCompanyId(Long companyId, Model model);
+
+
+
+
+
+
+
+    // ajax 연습
+    public void selectDepartment(Model model);
+
+    public void selectPeople(Long departmentId, Model model);
 
     /*
     public void write();
