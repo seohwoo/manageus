@@ -1,6 +1,8 @@
 package com.project.manageus.service;
 
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.project.manageus.dto.AlarmDTO;
 import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.entity.AlarmEntity;
@@ -131,20 +133,37 @@ public class AlarmServiceImpl implements AlarmService{
     }
 
     @Override
-    public void getdepartment(Long companyId, Model model) {  // 회사아이디로 부서찾기
-
+    public void getdepartment(Long companyId, Model model  ) {  // 회사아이디로 부서찾기
 
         List<DepartmentEntity> getcomname = departmentRepository.findByCompanyId(companyId);//회사 부서명
 
         Long str = 100302L;   // 임이의 값
-        List<UserEntity> getperson = userRepository.findByDepartmentId(str); //부서속 사람(임이의값)
 
+        List<UserEntity> getperson = userRepository.findByDepartmentId(str); //부서속 사람을 찾는과정
 
         model.addAttribute("getcomname",getcomname); //회사 부서명 뽑기
-
         model.addAttribute("getperson",getperson); // 회사 사용자 뽑기 (임이의값)
 
+    }
 
+    @Override
+    public JsonObject getAlarmNameDepartment(Long companyId, Long departmentId) {  //안되면 이거지움
+        JsonObject jsonObject = new JsonObject();
+        List<UserEntity> users = userRepository.findAllByCompanyIdAndDepartmentId(companyId, departmentId);
+        JsonArray jsonArray = new JsonArray();
+        for (UserEntity ue : users) {
+            JsonObject jsonObj = new JsonObject();
+            String user = ue.getUserInfo().getName() + " " + ue.getPosition().getName();
+            Long id = ue.getId();
+            System.out.println("=======fullName"+user);
+            System.out.println("=======id"+id);
+
+            jsonObj.addProperty("userId", id);
+            jsonObj.addProperty("fullName", user);
+            jsonArray.add(jsonObj);
+        }
+        jsonObject.add("DepartmentMember", jsonArray);
+        return jsonObject;
     }
 
 

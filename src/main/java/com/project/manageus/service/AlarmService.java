@@ -1,5 +1,6 @@
 package com.project.manageus.service;
 
+import com.google.gson.JsonObject;
 import com.project.manageus.dto.AlarmDTO;
 import com.project.manageus.dto.DepartmentDTO;
 import org.springframework.ui.Model;
@@ -19,4 +20,7 @@ public interface AlarmService {
     public void readcount(Long messageId); //글읽음 처리하기
 
     public void getdepartment(Long companyId, Model model);
+
+
+    JsonObject getAlarmNameDepartment(Long companyId, Long departmentId);  //안되면이거지움
 }

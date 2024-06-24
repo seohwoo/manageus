@@ -1,14 +1,18 @@
 package com.project.manageus.controller.company;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.project.manageus.dto.AlarmDTO;
 import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.service.AlarmService;
 import com.project.manageus.service.UrlService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/companies/{companyId}/*")
@@ -34,15 +38,29 @@ public class AlarmController {
             return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
         }
 
-        alarmService.getdepartment(companyId, model);  // 회사아이디로 부서 찾기
+        alarmService.getdepartment(companyId, model );  // 회사아이디로 부서 찾기
 
         model.addAttribute("companyId",companyId);
         model.addAttribute("id",id);
 
-
-
         return "/company/alarm/write";
     }
+
+
+    @PostMapping("/invitations/names")  //안되면 이거지움
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getAlarmName(@RequestBody DepartmentDTO departmentDTO){
+        System.out.println("=============did: " + departmentDTO.getId());
+        System.out.println("=============cid: " + departmentDTO.getCompanyId());
+
+       JsonObject names = alarmService.getAlarmNameDepartment(departmentDTO.getCompanyId(), departmentDTO.getId());
+
+        Map<String, Object> result = new Gson().fromJson(names, Map.class);
+        return  ResponseEntity.ok(result);
+    }
+
+
+
 
     // 포스트 매핑 처리해야됨
 
@@ -51,7 +69,8 @@ public class AlarmController {
                            @PathVariable Long id,@RequestParam("reader") String reader,
                            @RequestParam("subject") String subject){
 
-        Long readtype = 2000L;
+        Long readtype = Long.valueOf(reader);   //append로  스크립트 처리 < -- 여려명을 리스트로 받아라
+
         Long userId = Long.parseLong(principal.getName());
          Long readers = Long.parseLong(reader);
 
