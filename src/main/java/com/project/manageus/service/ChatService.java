@@ -13,5 +13,6 @@ public interface ChatService {
     public void chatExit(ChatDTO dto);
     public void sendMessage(ChatMessageDTO dto);
     public void chatInvitations(Model model,Long companyId);
-    public JsonObject getNamesfromDepartment(Long companyId,Long departmentId);
+    public JsonObject getNamesfromDepartment(ChatRoomDTO dto);
+    public void userInvitation(ChatDTO dto);
 }

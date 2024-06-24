@@ -95,24 +95,32 @@ public class ChatController {
         // 여기에서 메시지를 데이터베이스에 저장하거나, 다른 클라이언트에 방송하는 등의 로직을 추가할 수 있습니다.
         return ResponseEntity.ok("Message received");
     }
-    @GetMapping("{companyId}/invitations")
-    public String invitations(Model model,@PathVariable(value="companyId")Long companyId){
+    @GetMapping("{companyId}/invitations/{roomId}")
+    public String invitations(Model model,@PathVariable(value="companyId")Long companyId,@PathVariable Long roomId){
             service.chatInvitations(model,companyId);
+            model.addAttribute("roomId",roomId);
         return "company/chat/chatInvitation";
     }
     @PostMapping("{companyId}/invitations")
-    public String insertInvitations(@PathVariable(value="companyId")Long companyId){
+    public String insertInvitations(@PathVariable(value="companyId")Long companyId,@RequestParam(value = "personId")Long personId,@RequestParam(value = "roomId")Long roomId){
+        System.out.println("======person"+personId);
+        System.out.println("======person"+roomId);
+        ChatDTO dto = new ChatDTO();
+        dto.setUserId(personId);
+        dto.setChatRoomId(roomId);
+        service.userInvitation(dto);
         String url="redirect:/companies/"+companyId+"/chatRoomList";
+
+
+
         return url;
     }
     @PostMapping("/invitations/names")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> getInvitationsNames(@RequestBody DepartmentDTO departmentDTO) {
-        System.out.println("=============did: " + departmentDTO.getId());
-        System.out.println("=============cid: " + departmentDTO.getCompanyId());
-
-        JsonObject names = service.getNamesfromDepartment(departmentDTO.getCompanyId(), departmentDTO.getId());
-
+    public ResponseEntity<Map<String, Object>> getInvitationsNames(@RequestBody ChatRoomDTO dto) {
+        System.out.println("=============did: " + dto.getId());
+        System.out.println("=============cid: " + dto.getDepartmentId());
+        JsonObject names = service.getNamesfromDepartment(dto);
         // JsonObject를 Map으로 변환
         Map<String, Object> result = new Gson().fromJson(names, Map.class);
 

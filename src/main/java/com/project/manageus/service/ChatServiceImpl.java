@@ -129,9 +129,14 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public JsonObject getNamesfromDepartment(Long companyId, Long departmentId) {
+    public JsonObject getNamesfromDepartment(ChatRoomDTO dto ) {
         JsonObject jsonObject = new JsonObject();
-        List<UserEntity> users = userJPA.findAllByCompanyIdAndDepartmentId(companyId, departmentId);
+        List<ChatEntity> chatlist = chatJPA.findByChatRoomId(dto.getId());
+        List<Long> list = new ArrayList<>();
+        for(ChatEntity ce:chatlist){
+            list.add(ce.getUserId());
+        }
+        List<UserEntity> users = userJPA.findAllByDepartmentIdAndIdNotIn(dto.getDepartmentId(),list);
         JsonArray jsonArray = new JsonArray();
         for (UserEntity ue : users) {
             JsonObject jsonObj = new JsonObject();
@@ -148,7 +153,15 @@ public class ChatServiceImpl implements ChatService {
         return jsonObject;
     }
 
+    @Override
+    public void userInvitation(ChatDTO dto) {
+        ChatIDEntity chatId= new ChatIDEntity(dto.getUserId(),dto.getChatRoomId());
+        Optional<ChatEntity> room =chatJPA.findById(chatId);
+        if(room.isEmpty()){
+            chatJPA.save(dto.toChatEntity());
+        }
 
+    }
 
 
 }

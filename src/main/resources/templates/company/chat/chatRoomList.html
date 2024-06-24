@@ -47,7 +47,7 @@
                                 </div>
                                 <div class="card-body d-flex justify-content-between">
                                     <a class="btn btn-info" th:href="@{/companies/{companyId}/chat/{roomId}/{id}(roomId=${dto.id},id=${id},companyId=${companyId})}">채팅 하기</a>
-                                    <a class="btn btn-info" th:href="@{/companies/{companyId}/invitations(companyId=${companyId})}">초대하기</a>
+                                    <a class="btn btn-info" th:href="@{/companies/{companyId}/invitations/{roomId}(companyId=${companyId},roomId=${dto.id})}">초대하기</a>
                                     <form method="post" th:action="@{/companies/{companyId}/chat(companyId=${companyId})}">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="id" value="${id}">
