@@ -21,6 +21,10 @@ public interface ApprovalService {
                                @PathVariable Long id,
                                ApprovalDTO Adto);
 
+    // 회사 부서 가져오기
+    public void selectDepartment(Long companyId, Model model);
+
+
     // 회사 번호가 같은 정보 다 가져오기
     public void selectCompanyId(Long companyId, Model model);
 

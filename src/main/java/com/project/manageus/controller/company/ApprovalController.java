@@ -103,7 +103,7 @@ public class ApprovalController {
                            @PathVariable Long id,
                            Principal principal, Model model) {
 
-        approvalService.selectCompanyId(companyId, model);
+        approvalService.selectDepartment(companyId, model);
 
         return "/company/approval/test";
     }

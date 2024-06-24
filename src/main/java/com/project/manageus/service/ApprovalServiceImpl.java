@@ -3,9 +3,11 @@ package com.project.manageus.service;
 import com.project.manageus.dto.ApprovalDTO;
 import com.project.manageus.entity.ApprovalEntity;
 import com.project.manageus.entity.ApprovalTypeEntity;
+import com.project.manageus.entity.DepartmentEntity;
 import com.project.manageus.entity.UserEntity;
 import com.project.manageus.repository.ApprovalJPARepository;
 import com.project.manageus.repository.ApprovalTypeJPARepository;
+import com.project.manageus.repository.DepartmentRepository;
 import com.project.manageus.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,15 +27,18 @@ public class ApprovalServiceImpl implements ApprovalService {
     private final ApprovalTypeJPARepository approvalTypeJPA;
 
     private final UserRepository userRepository;
+    private final DepartmentRepository departmentRepository;
 
     @Autowired
     public ApprovalServiceImpl(ApprovalJPARepository approvalJPA,
                                ApprovalTypeJPARepository approvalTypeJPA,
-                               UserRepository userRepository) {
+                               UserRepository userRepository,
+                               DepartmentRepository departmentRepository) {
 
         this.approvalJPA = approvalJPA;
         this.approvalTypeJPA = approvalTypeJPA;
         this.userRepository = userRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     // 결재 리스트 가져오기
@@ -73,6 +78,13 @@ public class ApprovalServiceImpl implements ApprovalService {
         Adto.setCompanyId(companyId);
 
         approvalJPA.save(Adto.toApprovalEntity());
+    }
+
+    // 회사 부서 가져오기
+    @Override
+    public void selectDepartment(Long companyId, Model model) {
+        List<DepartmentEntity> selectDepartment = departmentRepository.findAllByCompanyId(companyId);
+        model.addAttribute("selectDepartment", selectDepartment);
     }
 
     // 회사 번호가 같은 정보 다 가져오기

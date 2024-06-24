@@ -4,10 +4,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<select name="selectCompanyId" id="selectCompanyId" required>
-    <option th:each="selectCompanyId : ${selectCompanyId}"
-            th:value="${selectCompanyId.departmentId}"
-            th:text="${selectCompanyId.departmentId}">
+<select name="selectDepartment" id="selectDepartment" required>
+    <option th:each="selectDepartment : ${selectDepartment}"
+            th:value="${selectDepartment.id}"
+            th:text="${selectDepartment.name}">
     </option>
 </select>
 
