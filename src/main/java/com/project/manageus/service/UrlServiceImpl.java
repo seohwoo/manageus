@@ -3,13 +3,12 @@ package com.project.manageus.service;
 import com.project.manageus.entity.CompanyEntity;
 import com.project.manageus.entity.UserEntity;
 import com.project.manageus.entity.UserInfoEntity;
-import com.project.manageus.repository.CompanyRepository;
-import com.project.manageus.repository.UserInfoRepository;
-import com.project.manageus.repository.UserRepository;
+import com.project.manageus.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -19,18 +18,24 @@ public class UrlServiceImpl implements UrlService{
     private final UserRepository userRepository;
     private final UserInfoRepository userInfoRepository;
     private final CompanyRepository companyRepository;
+    private final DepartmentRepository departmentRepository;
+    private final PositionRepository positionRepository;
 
     @Autowired
     public UrlServiceImpl(UserRepository userRepository,
-                              UserInfoRepository userInfoRepository,
-                              CompanyRepository companyRepository) {
+                          UserInfoRepository userInfoRepository,
+                          CompanyRepository companyRepository,
+                          DepartmentRepository departmentRepository,
+                          PositionRepository positionRepository) {
         this.userRepository = userRepository;
         this.userInfoRepository = userInfoRepository;
         this.companyRepository = companyRepository;
+        this.departmentRepository = departmentRepository;
+        this.positionRepository = positionRepository;
     }
 
     @Override
-    public boolean findUserInfo(String username,Long compnayId, Model model) {
+    public boolean findUserInfo(String username,Long companyId, Model model) {
         boolean result = false;
         Long id = Long.parseLong(username);
         model.addAttribute("id", id);
@@ -38,17 +43,13 @@ public class UrlServiceImpl implements UrlService{
         if(optionalUser.isPresent()) {
             Optional<CompanyEntity> optionalCompany = companyRepository.findById(optionalUser.get().getCompanyId());
             if(optionalCompany.isPresent()) {
-                if(Objects.equals(optionalUser.get().getCompanyId(), compnayId)) {
+                if(Objects.equals(optionalUser.get().getCompanyId(), companyId)) {
                     result = true;
                 }
                 model.addAttribute("company", optionalCompany.get().getName());
             }
-        }
-
-        Optional<UserInfoEntity> optionalUserInfo = userInfoRepository.findById(id);
-        if(optionalUserInfo.isPresent()) {
-            model.addAttribute("name", optionalUserInfo.get().getName());
-            if(optionalUserInfo.get().getGender().equals("남자")) {
+            model.addAttribute("name", optionalUser.get().getUserInfo().getName());
+            if(optionalUser.get().getUserInfo().getGender().equals("남자")) {
                 model.addAttribute("profileImage", "/img/undraw_profile_2.svg");
             }else {
                 model.addAttribute("profileImage", "/img/undraw_profile_3.svg");
@@ -67,6 +68,5 @@ public class UrlServiceImpl implements UrlService{
         }
         return companyUrl;
     }
-
 
 }
