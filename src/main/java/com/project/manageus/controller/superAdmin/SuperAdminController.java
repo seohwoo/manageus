@@ -1,6 +1,7 @@
 package com.project.manageus.controller.superAdmin;
 
 import com.project.manageus.service.QaService;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,7 +41,7 @@ public class SuperAdminController {
     public String qaReInsert(@PathVariable(value="num")Long num
                              , @RequestParam(value="type")int type
                              , @RequestParam(value="content")String content
-                             , HttpSession session){
+                             , HttpSession session) throws MessagingException {
         service.qaAnswer("admin",num,content,type);
         return "redirect:/super/1001/board";
     }
