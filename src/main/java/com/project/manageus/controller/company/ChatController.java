@@ -5,12 +5,10 @@ import com.google.gson.JsonObject;
 import com.project.manageus.dto.ChatDTO;
 import com.project.manageus.dto.ChatMessageDTO;
 import com.project.manageus.dto.ChatRoomDTO;
-import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.service.ChatService;
 import com.project.manageus.service.UrlService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,9 +37,9 @@ public class ChatController {
              url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
-       // service.enterChatRoom(model,id,roomId);
-      //  model.addAttribute("companyId",companyId);
-      //  model.addAttribute("id",id);
+        service.enterChatRoom(model,id,roomId);
+        model.addAttribute("companyId",companyId);
+        model.addAttribute("id",id);
         return "/company/chat/chater";
     }
     @GetMapping("/{companyId}/chatRoomList")
