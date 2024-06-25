@@ -90,16 +90,19 @@ public class ChatServiceImpl implements ChatService {
         model.addAttribute("id",id);
     }
 
+
+
     @Override
     public void enterChatRoom(Model model, Long id, Long roomId) {
         List list = Collections.emptyList();
-        list=chatMessageJPA.findByChatRoomId(roomId);
+        Long minId=chatMessageJPA.findFirstByUserIdAndChatRoomIdOrderByIdAsc(id,roomId).getId();
+        list=chatMessageJPA.findByChatRoomIdAndIdGreaterThanEqual(roomId,minId);
         int count = chatJPA.countByUserIdAndChatRoomId(id,roomId);
         List<ChatMessageEntity> cmlist= Collections.emptyList();
         if(count!=0){
             ChatMessageDTO mdto = new ChatMessageDTO();
-            cmlist = chatMessageJPA.findByChatRoomId(roomId);
-            model.addAttribute("cmlist",cmlist);
+           // cmlist = chatMessageJPA.findByChatRoomId(roomId);
+            model.addAttribute("cmlist",list);
             model.addAttribute("roomId",roomId);
         }
 
