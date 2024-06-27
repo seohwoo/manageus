@@ -9,19 +9,16 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>SB Admin 2 - Blank</title>
 
-    <!-- Custom fonts for this template -->
+    <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
 
-    <!-- Custom styles for this template -->
+    <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this page -->
-    <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
@@ -30,55 +27,40 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    <div th:include="~{content/side-bar :: side}"></div>
-
+    <div th:insert="~{content/side-bar :: side}"></div>
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
         <!-- Main Content -->
         <div id="content">
 
-            <div th:include="~{content/top-bar :: top}"></div>
-
+            <div th:insert="~{content/top-bar :: top}"></div>
             <!-- Begin Page Content -->
             <div class="container-fluid">
-
-                <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-                <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                    For more information about DataTables, please visit the <a target="_blank"
-                                                                               href="https://datatables.net">official DataTables documentation</a>.</p>
-
-                <!-- DataTales Example -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th>순번</th>
-                                    <th>프로젝트명</th>
-                                    <th>시작일</th>
-                                    <th>마감일</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each = "myProject, iterStat : ${myProjectList}">
-                                    <td th:text = "${iterStat.index + 1}"></td>
-                                    <td th:text = "${myProject.name}"></td>
-                                    <input type = "hidden" th:value = "${myProject.id}" id = "projectId">
-                                    <td th:text = "${myProject.startDate}"></td>
-                                    <td th:text = "${myProject.endDate}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
+                <p><span th:text = "${projectMemberCount} + '명'"></span>이 프로젝트에 참여중입니다.</p>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>순번</th>
+                        <th>제목</th>
+                        <th>상태</th>
+                        <th>담당자</th>
+                        <th>시작일</th>
+                        <th>마감일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each = "projectDetailList, iterStat : ${projectDetailList}">
+                        <td th:text = "${iterStat.index + 1}"></td>
+                        <td th:text = "${projectDetailList.title}"></td>
+                        <td th:text = "${projectDetailList.statusId}"></td>
+                        <td th:text = "${projectDetailList.userId}"></td>
+                        <td th:text="${#dates.format(projectDetailList.startTime, 'yyyy-MM-dd')}"></td>
+                        <td th:text="${#dates.format(projectDetailList.endTime, 'yyyy-MM-dd')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button th:if = "${leaderId == userId}" th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}/addContent(companyId=${companyId}, userId=${userId}, projectId=${projectId})}'|">업무 추가</button>
             </div>
             <!-- /.container-fluid -->
 
@@ -135,13 +117,6 @@
 
 <!-- Custom scripts for all pages-->
 <script src="/js/sb-admin-2.min.js"></script>
-
-<!-- Page level plugins -->
-<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="/js/demo/datatables-demo.js"></script>
 
 </body>
 
