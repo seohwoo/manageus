@@ -42,7 +42,7 @@ public class ChatController {
         model.addAttribute("id",id);
         return "/company/chat/chater";
     }
-    @GetMapping("/{companyId}/chatRoomList")
+    @GetMapping("/{companyId}/chat")
     public String chatRoomList(Principal principal,@PathVariable(value="companyId")Long companyId,Model model){
         String url ;
         if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
@@ -63,32 +63,28 @@ public class ChatController {
             url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
-        System.out.println("채팅방 생성!!");
        String id =(String)principal.getName();
         Long idl = Long.parseLong(id);
-        System.out.println("id===="+idl);
         Long roomId=service.chatNewRoom(dto,idl);
-        url="redirect:/companies/"+companyId+"/chat/"+idl+"/"+roomId;
+        url="redirect:/companies/"+companyId+"/chat/"+roomId+"/"+idl;
         model.addAttribute("companyId",companyId);
         model.addAttribute("id",id);
         return url;
     }
     @DeleteMapping("/{companyId}/chat")
-    public String chatRoomExit(Principal principal,@PathVariable(value="companyId")Long companyId,ChatDTO dto,Model model){
-        String url ;
+    public String chatRoomExit(Principal principal,@PathVariable(value="companyId")Long companyId,ChatDTO dto, Model model){
+        String url ="redirect:/companies/"+companyId+"/chat";
         if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
             url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
         service.chatExit(dto);
-        return "redirect:/companies/chat/chatRoomList";
+        return url;
     }
     @PostMapping("/send-message")
     @ResponseBody
     public ResponseEntity<String> sendMessage(@RequestBody ChatMessageDTO message) {
         // 메시지 처리 (예: 다른 사용자에게 방송, 데이터베이스에 저장 등)
-        System.out.println("Received message from " + message.getUserId() + ": " + message.getMessage());
-        System.out.println("ChatRoom ID: " + message.getChatRoomId());
         service.sendMessage(message);
         // 여기에서 메시지를 데이터베이스에 저장하거나, 다른 클라이언트에 방송하는 등의 로직을 추가할 수 있습니다.
         return ResponseEntity.ok("Message received");
@@ -101,8 +97,6 @@ public class ChatController {
     }
     @PostMapping("{companyId}/invitations")
     public String insertInvitations(@PathVariable(value="companyId")Long companyId,@RequestParam(value = "personId")Long personId,@RequestParam(value = "roomId")Long roomId){
-        System.out.println("======person"+personId);
-        System.out.println("======person"+roomId);
         ChatDTO dto = new ChatDTO();
         dto.setUserId(personId);
         dto.setChatRoomId(roomId);
@@ -116,8 +110,6 @@ public class ChatController {
     @PostMapping("/invitations/names")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getInvitationsNames(@RequestBody ChatRoomDTO dto) {
-        System.out.println("=============did: " + dto.getId());
-        System.out.println("=============cid: " + dto.getDepartmentId());
         JsonObject names = service.getNamesfromDepartment(dto);
         // JsonObject를 Map으로 변환
         Map<String, Object> result = new Gson().fromJson(names, Map.class);

@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,17 +12,45 @@
 
     <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
 
+    <style>
+        .header-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .delete-button {
+            background-color: red;
+            color: white;
+        }
+
+        .delete-button:hover {
+            background-color: darkred;
+            color: white;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h6 {
+            flex-grow: 1;
+        }
+
+        .card-header form {
+            margin-bottom: 0;
+        }
+    </style>
 </head>
 
 <body id="page-top">
-
 <!-- Page Wrapper -->
 <div id="wrapper">
     <div th:include="~{content/side-bar :: side}"></div>
@@ -39,31 +66,31 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
                             <div th:each="dto : ${list}" class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">
-                                        <span th:text="${dto.name}"></span> | |
-                                        <span th:text="${dto.reg}"></span>
-                                    </h6>
-                                </div>
-                                <div class="card-body d-flex justify-content-between">
-                                    <a class="btn btn-info" th:href="@{/companies/{companyId}/chat/{roomId}/{id}(roomId=${dto.id},id=${id},companyId=${companyId})}">채팅 하기</a>
-                                    <a class="btn btn-info" th:href="@{/companies/{companyId}/invitations/{roomId}(companyId=${companyId},roomId=${dto.id})}">초대하기</a>
-                                    <form method="post" th:action="@{/companies/{companyId}/chat(companyId=${companyId})}">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="id" value="${id}">
-                                        <input type="hidden" name="chatRoomId" value="${dto.id}">
-                                        <button class="btn btn-info" type="submit">방 나가기</button>
-                                    </form>
-                                </div>
-                            </div>
 
+                                <div class="card-header py-3">
+                                    <a th:href="@{/companies/{companyId}/chat/{roomId}/{id}(roomId=${dto.id},id=${id},companyId=${companyId})}">
+                                    <h6 class="m-0 font-weight-bold text-primary">
+                                        <span th:text="${dto.name}"></span>
+                                    </h6>
+
+                                    <div class="header-buttons">
+                                        <a class="btn btn-info" th:href="@{/companies/{companyId}/invitations/{roomId}(companyId=${companyId},roomId=${dto.id})}">+</a>
+                                        <form th:method="delete" th:action="@{/companies/{companyId}/chat(companyId=${companyId})}" >
+                                            <input type="hidden" name="userId" th:value="${id}">
+                                            <input type="hidden" name="chatRoomId" th:value="${dto.id}">
+                                            <button class="btn delete-button" type="submit">x</button>
+                                        </form>
+                                    </div>
+
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
                             <form method="post" th:action="@{/companies/{companyId}/chat(companyId=${companyId})}">
                                 <input type="hidden" name="id" th:value="${id}"/>
-                                <input type="hidden" name="statusId" th:value="4001"/>
                                 <button type="submit" class="btn btn-primary">
                                     채팅방 생성
                                 </button>
@@ -74,33 +101,32 @@
             </div>
             <div th:include="~{content/footer :: footer}"></div>
         </div>
-      </div> <!-- End of Content Wrapper -->
-
     </div>
-    <!-- End of Page Wrapper -->
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="/vendor/jquery/jquery.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap core JavaScript-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="/js/sb-admin-2.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="/js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="/vendor/chart.js/Chart.min.js"></script>
+<!-- Page level plugins -->
+<script src="/vendor/chart.js/Chart.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="/js/demo/chart-area-demo.js"></script>
-    <script src="/js/demo/chart-pie-demo.js"></script>
-
+<!-- Page level custom scripts -->
+<script src="/js/demo/chart-area-demo.js"></script>
+<script src="/js/demo/chart-pie-demo.js"></script>
 </body>
 
 </html>

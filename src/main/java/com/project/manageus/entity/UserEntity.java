@@ -35,6 +35,11 @@ public class UserEntity {
     private Date regDate;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auth_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private AuthEntity auth;
+
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     private UserInfoEntity userInfo;
 

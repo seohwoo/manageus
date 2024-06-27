@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,9 +12,7 @@
 
     <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
@@ -48,6 +45,16 @@
         .message-container.own {
             justify-content: flex-start;
         }
+
+        #msgArea {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        #messageInputSection {
+            margin-top: 10px;
+        }
     </style>
 </head>
 
@@ -70,9 +77,6 @@
             <div class="container-fluid">
 
                 <div class="container">
-                    <div class="col-6">
-                        <label><b>채팅방</b></label>
-                    </div>
                     <div>
                         <div id="msgArea" class="col-12">
                             <div th:each="message : ${cmlist}">
@@ -83,10 +87,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div id="messageInputSection" class="col-12">
                             <div class="input-group mb-3">
                                 <input type="text" id="msg" name="message" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
                                 <input type="hidden" id="userId" th:value="${id}">
+                                <input type="hidden" id="nickName" th:value="${nickname}">
                                 <input type="hidden" name="chatRoomId" id="roomId" th:value="${roomId}">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
@@ -99,7 +104,6 @@
         </div>
 
         <!-- Load jQuery before custom scripts -->
-        <!-- Bootstrap core JavaScript-->
         <script src="/vendor/jquery/jquery.min.js"></script>
         <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -117,10 +121,10 @@
         <script src="/js/demo/chart-pie-demo.js"></script>
 
         <script th:inline="javascript">
-            $(document).ready(function(){
+            $(document).ready(function() {
                 const id = $("#userId").val();
                 const roomId = $("#roomId").val();
-
+                const nickname = $("#nickName").val();
                 const websocket = new WebSocket("ws://localhost:8080/ws/chat");
 
                 websocket.onmessage = onMessage;
@@ -131,7 +135,7 @@
                     send();
                 });
 
-                function send(){
+                function send() {
                     let msg = $("#msg").val();
                     let roomId = $("#roomId").val();
                     websocket.send(id + ":" + msg);
@@ -152,25 +156,19 @@
                     $("#msg").val('');
                 }
 
-                function addMessage(userId, message, isOwnMessage) {
+                function addMessage(nickname, message, isOwnMessage) {
                     var containerClass = isOwnMessage ? 'message-container own' : 'message-container';
                     var messageClass = isOwnMessage ? 'own-message' : 'other-message';
                     var str = "<div class='" + containerClass + "'>";
                     str += "<div class='" + messageClass + "'>";
-                    str += "<b>" + userId + " : " + message + "</b>";
+                    str += "<b>" + nickname + " : " + message + "</b>";
                     str += "</div></div>";
                     $("#msgArea").append(str);
                 }
 
-                function onClose() {
-                    var str = id + ": 님이 방을 나가셨습니다.";
-                    websocket.send(str);
-                }
+                function onClose() {}
 
-                function onOpen() {
-                    var str = id + ": 님이 입장하셨습니다.";
-                    websocket.send(str);
-                }
+                function onOpen() {}
 
                 function onMessage(msg) {
                     var data = msg.data;
@@ -178,7 +176,7 @@
                     var userId = arr[0];
                     var message = arr[1];
 
-                    addMessage(userId, message, userId == id);
+                    addMessage(nickname, message, userId == id);
                 }
             });
         </script>

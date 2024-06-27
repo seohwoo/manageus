@@ -40,10 +40,6 @@ public class ChatServiceImpl implements ChatService {
     }
     @Override
     public Long chatNewRoom(ChatRoomDTO dto,Long id){
-        System.out.println("id=="+dto.getId());
-        System.out.println("name=="+dto.getName());
-        System.out.println("reg=="+dto.getReg());
-        System.out.println("status=="+dto.getStatusId());
         Optional<UserEntity> optional = userJPA.findById(id);
         String username=null;
         if(optional.isPresent()){
@@ -57,19 +53,12 @@ public class ChatServiceImpl implements ChatService {
         List<ChatRoomEntity> list= chatRoomJPA.findAll();
         ChatRoomEntity max = Collections.max(list, Comparator.comparingLong(ChatRoomEntity::getId));
         Long nextid=max.getId();
-        System.out.println("nextid"+nextid);
         mdto.setChatRoomId(nextid);
         cdto.setChatRoomId(nextid);
-        System.out.println("cdto.setChatRoomId(nextid)"+nextid);
         cdto.setUserId(id);
         mdto.setUserId(id);
         chatJPA.save(cdto.toChatEntity());
         mdto.setMessage(username+"님 입장하셧습니다.");
-        System.out.println("cdto.setUserId(id)"+id);
-        System.out.println("======dto"+mdto.getChatRoomId());
-        System.out.println("======dto"+mdto.getUserId());
-        System.out.println("======dto"+mdto.getMessage());
-        System.out.println("======dto"+mdto.getStatusId());
         chatMessageJPA.save(mdto.toChatMessageEntity());
         return nextid;
 
@@ -77,12 +66,10 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public void chatList(Model model, Long id) {
-        System.out.println("id===="+id);
         List<ChatEntity> roomIdList = chatJPA.findByUserId(id);
         ArrayList<Long> roomIds = new ArrayList<>();
         for(ChatEntity ce:roomIdList){
            ChatDTO dto = ce.toChatDTO();
-            System.out.println("Roomid===="+dto.getChatRoomId());
             roomIds.add(dto.getChatRoomId());
         }
         List<ChatRoomEntity> list = chatRoomJPA.findByIdInOrderByRegDesc(roomIds);
@@ -95,17 +82,24 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void enterChatRoom(Model model, Long id, Long roomId) {
         List list = Collections.emptyList();
-        Long minId=chatMessageJPA.findFirstByUserIdAndChatRoomIdOrderByIdAsc(id,roomId).getId();
-        list=chatMessageJPA.findByChatRoomIdAndIdGreaterThanEqual(roomId,minId);
-        int count = chatJPA.countByUserIdAndChatRoomId(id,roomId);
-        List<ChatMessageEntity> cmlist= Collections.emptyList();
-        if(count!=0){
-            ChatMessageDTO mdto = new ChatMessageDTO();
-           // cmlist = chatMessageJPA.findByChatRoomId(roomId);
-            model.addAttribute("cmlist",list);
-            model.addAttribute("roomId",roomId);
+        Optional<UserEntity> ous = userJPA.findById(id);
+        String nickname = null;
+        if (ous.isPresent()) {
+            nickname = ous.get().getUserInfo().getName() + " " + ous.get().getPosition().getName();
+            model.addAttribute("nickname", nickname);
         }
 
+        Long minId = 0l;
+        minId=chatMessageJPA.findFirstByUserIdAndChatRoomIdOrderByIdAsc(id, roomId).getId();
+        list = chatMessageJPA.findByChatRoomIdAndIdGreaterThanEqual(roomId, minId);
+        int count = chatJPA.countByUserIdAndChatRoomId(id, roomId);
+        List<ChatMessageEntity> cmlist = Collections.emptyList();
+        if (count != 0) {
+            ChatMessageDTO mdto = new ChatMessageDTO();
+            // cmlist = chatMessageJPA.findByChatRoomId(roomId);
+            model.addAttribute("cmlist", list);
+            model.addAttribute("roomId", roomId);
+        }
     }
 
     @Override
@@ -113,10 +107,12 @@ public class ChatServiceImpl implements ChatService {
         int count = chatJPA.countByChatRoomId(dto.getChatRoomId());
         if(count>1){
         chatJPA.deleteByUserIdAndChatRoomId(dto.getUserId(),dto.getChatRoomId());
-        } else if (count<=1) {
-            chatJPA.deleteByUserIdAndChatRoomId(dto.getUserId(),dto.getChatRoomId());
-            chatRoomJPA.deleteById(dto.getChatRoomId());
+        } else if (count==1) {
             chatMessageJPA.deleteByChatRoomId(dto.getChatRoomId());
+            chatRoomJPA.deleteById(dto.getChatRoomId());
+            chatJPA.deleteByUserIdAndChatRoomId(dto.getUserId(),dto.getChatRoomId());
+
+
         }
     }
 
@@ -145,8 +141,6 @@ public class ChatServiceImpl implements ChatService {
             JsonObject jsonObj = new JsonObject();
             String user = ue.getUserInfo().getName() + " " + ue.getPosition().getName();
             Long id = ue.getId();
-            System.out.println("=======fullName"+user);
-            System.out.println("=======id"+id);
 
             jsonObj.addProperty("userId", id);
             jsonObj.addProperty("fullName", user);
