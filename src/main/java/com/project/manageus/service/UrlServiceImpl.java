@@ -16,22 +16,13 @@ import java.util.Optional;
 public class UrlServiceImpl implements UrlService{
 
     private final UserRepository userRepository;
-    private final UserInfoRepository userInfoRepository;
     private final CompanyRepository companyRepository;
-    private final DepartmentRepository departmentRepository;
-    private final PositionRepository positionRepository;
 
     @Autowired
     public UrlServiceImpl(UserRepository userRepository,
-                          UserInfoRepository userInfoRepository,
-                          CompanyRepository companyRepository,
-                          DepartmentRepository departmentRepository,
-                          PositionRepository positionRepository) {
+                          CompanyRepository companyRepository) {
         this.userRepository = userRepository;
-        this.userInfoRepository = userInfoRepository;
         this.companyRepository = companyRepository;
-        this.departmentRepository = departmentRepository;
-        this.positionRepository = positionRepository;
     }
 
     @Override
@@ -54,6 +45,21 @@ public class UrlServiceImpl implements UrlService{
             }else {
                 model.addAttribute("profileImage", "/img/undraw_profile_3.svg");
             }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean findCompanyInfo(String username, Long companyId, Model model) {
+        boolean result = false;
+        if(Long.parseLong(username) == companyId) {
+            Optional<CompanyEntity> optionalCompany = companyRepository.findById(companyId);
+            if(optionalCompany.isPresent()) {
+                model.addAttribute("companyId", companyId);
+                model.addAttribute("company", optionalCompany.get().getName());
+                model.addAttribute("ceo", optionalCompany.get().getCeo());
+            }
+            result = true;
         }
         return result;
     }
