@@ -77,8 +77,8 @@
                                 <tr th:each="user : ${userEntityList}">
                                     <td th:text="${user.id}"></td>
                                     <td th:text="${user.userInfo.name}"></td>
-                                    <td th:text="${user.position?.name ?: '직급없음'}"></td>
-                                    <td th:text="${user.department?.name ?: '부서없음'}"></td>
+                                    <td th:text="${user.position?.name ?: '직급미정'}"></td>
+                                    <td th:text="${user.department?.name ?: '부서미정'}"></td>
                                     <td th:text="${user.userInfo.email}"></td>
                                     <td th:text="${user.userInfo.phone}"></td>
                                     <td th:text="${#dates.format(user.regDate, 'yyyy/MM/dd')}"></td>
@@ -91,11 +91,11 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <form id="form_${user.id}" th:action="@{~/admin/{companyId}/employee(companyId=${companyId})}" method="post">
+                                        <form id="form_${user.id}" th:action="@{~/admin/{companyId}/employee/pending(companyId=${companyId})}" method="post" onsubmit="handleSubmit(event, '${user.id}')">
                                             <input type="hidden" name="_method" value="patch" />
                                             <input type="hidden" name="userId" th:value="${user.id}"/>
                                             <input id="statusId_${user.id}" type="hidden" name="statusId"/>
-                                            <button type="submit" class="btn btn-success btn-icon-split" onclick="submitForm('${user.id}')">
+                                            <button type="submit" class="btn btn-success btn-icon-split">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-check"></i>
                                             </span>
@@ -131,14 +131,18 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    function submitForm(userId) {
-        var statusId = document.getElementById('statusSelect_' + userId).value;
-        document.getElementById('statusId_' + userId).value = statusId;
+    function handleSubmit(event, userId) {
+        event.preventDefault();
+
+        const statusSelect = document.getElementById('statusSelect_' + userId);
+        const statusIdInput = document.getElementById('statusId_' + userId);
+
+        statusIdInput.value = statusSelect.value || null;
+
         document.getElementById('form_' + userId).submit();
     }
     /*]]>*/
 </script>
-
 <!-- Bootstrap core JavaScript-->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

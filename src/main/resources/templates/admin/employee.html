@@ -76,19 +76,39 @@
                                 <tr th:each="user : ${userEntityList}">
                                     <td th:text="${user.id}"></td>
                                     <td th:text="${user.userInfo.name}"></td>
-                                    <td th:text="${user.position.name}"></td>
-                                    <td th:text="${user.department.name}"></td>
+                                    <td>
+                                        <select id="positionSelect_${user.id}" class="custom-select">
+                                            <option th:if="${user.position == null}" value="">직급미정</option>
+                                            <option th:each="position : ${positionEntityList}"
+                                                    th:value="${position.id}"
+                                                    th:text="${position.name}"
+                                                    th:selected="${position.id == user.position.id}">
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select id="departmentSelect_${user.id}" class="custom-select">
+                                            <option th:if="${user.department == null}" value="">부서미정</option>
+                                            <option th:each="department : ${departmentEntityList}"
+                                                    th:value="${department.id}"
+                                                    th:text="${department.name}"
+                                                    th:selected="${department.id == user.department.id}">
+                                            </option>
+                                        </select>
+                                    </td>
                                     <td th:text="${user.userInfo.email}"></td>
                                     <td th:text="${user.userInfo.phone}"></td>
                                     <td th:text="${#dates.format(user.regDate, 'yyyy/MM/dd')}"></td>
                                     <td>
-                                        <form id="form_${user.id}" th:action="@{~/admin/{companyId}/employee(companyId=${companyId})}" method="post">
-                                            <input type="hidden" name="_method" value="put" />
+                                        <form id="form_${user.id}" th:action="@{~/admin/{companyId}/employee(companyId=${companyId})}" method="post" onsubmit="handleSubmit(event, '${user.id}')">
+                                            <input type="hidden" name="_method" value="patch" />
                                             <input type="hidden" name="userId" th:value="${user.id}"/>
-                                            <button type="submit" class="btn btn-success btn-icon-split" onclick="submitForm('${user.id}')">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-check"></i>
-                                            </span>
+                                            <input type="hidden" id="positionId_${user.id}" name="positionId"/>
+                                            <input type="hidden" id="departmentId_${user.id}" name="departmentId"/>
+                                            <button type="submit" class="btn btn-success btn-icon-split">
+                                                <span class="icon text-white-50">
+                                                    <i class="fas fa-check"></i>
+                                                </span>
                                                 <span class="text">Submit</span>
                                             </button>
                                         </form>
@@ -118,6 +138,23 @@
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
+
+<script>
+    function handleSubmit(event, userId) {
+        event.preventDefault();
+
+        const positionSelect = document.getElementById('positionSelect_' + userId);
+        const departmentSelect = document.getElementById('departmentSelect_' + userId);
+
+        const positionIdInput = document.getElementById('positionId_' + userId);
+        const departmentIdInput = document.getElementById('departmentId_' + userId);
+
+        positionIdInput.value = positionSelect.value || null;
+        departmentIdInput.value = departmentSelect.value || null;
+
+        document.getElementById('form_' + userId).submit();
+    }
+</script>
 
 <!-- Bootstrap core JavaScript-->
 <script src="/vendor/jquery/jquery.min.js"></script>

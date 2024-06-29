@@ -47,6 +47,16 @@ public class AdminContorller {
         return url;
     }
 
+    @PatchMapping("{companyId}/employee")
+    public String updateUserInfo(@PathVariable Long companyId,
+                                 Long userId,
+                                 Long positionId,
+                                 Long departmentId) {
+        String url = "redirect:/admin/" + companyId + "/employee";
+        adminService.updateUserInfo(userId, positionId, departmentId);
+        return url;
+    }
+
     @GetMapping("{companyId}/employee/pending")
     public String showAllPendingEmployee(@PathVariable Long companyId, Principal principal, Model model) {
         String url = "admin/pending-employee";
@@ -58,11 +68,11 @@ public class AdminContorller {
         return url;
     }
 
-    @PatchMapping("{companyId}/employee")
+    @PatchMapping("{companyId}/employee/pending")
     public String updateStatusUser(@PathVariable Long companyId,
-                                   Long userId, Long statusId) {
+                                   Long userId,
+                                   Long statusId) {
         String url = "redirect:/admin/" + companyId + "/employee";
-        System.out.println(userId);
         System.out.println(statusId);
         if(!adminService.updateUserStatus(userId, statusId)) {
             url = "redirect:/admin/" + companyId + "/employee/pending";

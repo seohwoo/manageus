@@ -7,5 +7,7 @@ public interface AdminService {
 
     public boolean findAllEmployee(Long companyId, Model model);
     public boolean findAllPendingEmployee(Long companyId, Model model);
+    public boolean updateUserInfo(Long userId, Long positionId, Long departmentId);
     public boolean updateUserStatus(Long userId, Long statusId);
+
 }
