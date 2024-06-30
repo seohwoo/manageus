@@ -3,6 +3,7 @@ package com.project.manageus.service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.project.manageus.dto.AlarmDTO;
 import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.entity.AlarmEntity;
@@ -147,7 +148,7 @@ public class AlarmServiceImpl implements AlarmService{
     }
 
     @Override
-    public JsonObject getAlarmNameDepartment(Long companyId, Long departmentId) {  //안되면 이거지움
+    public JsonObject getAlarmNameDepartment(Long companyId, Long departmentId) {  //회원 이름 가져오기 에이젝스
         JsonObject jsonObject = new JsonObject();
         List<UserEntity> users = userRepository.findAllByCompanyIdAndDepartmentId(companyId, departmentId);
         JsonArray jsonArray = new JsonArray();
@@ -166,5 +167,18 @@ public class AlarmServiceImpl implements AlarmService{
         return jsonObject;
     }
 
+    @Override
+    public JsonObject getAlarmCount(Long id) {
+        JsonObject jsonObject = new JsonObject();
+
+        int read = 2000;
+
+        int alarmcount = alarmJPARepository.countByReadTypeAndReader(read, id);
+        jsonObject.addProperty("alarmcount", alarmcount);
+
+        System.out.println("=======fullName"+alarmcount);
+
+        return jsonObject;
+    }
 
 }

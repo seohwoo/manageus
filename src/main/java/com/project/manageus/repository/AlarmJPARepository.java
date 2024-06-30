@@ -15,6 +15,6 @@ public interface AlarmJPARepository extends JpaRepository<AlarmEntity, Long> {
 
     List<AlarmEntity> findByReader(Long userId, Sort sort); //받은 전체메세지
 
-
+    int countByReadTypeAndReader(int read, Long id);
 
 }

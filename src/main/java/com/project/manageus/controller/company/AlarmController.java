@@ -45,9 +45,10 @@ public class AlarmController {
 
         return "/company/alarm/write";
     }
+    
 
 
-    @PostMapping("/invitations/names")  //안되면 이거지움
+    @PostMapping("/invitations/names")  //소속원 에이젝스용
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getAlarmName(@RequestBody DepartmentDTO departmentDTO){
         System.out.println("=============did: " + departmentDTO.getId());
@@ -59,6 +60,19 @@ public class AlarmController {
         return  ResponseEntity.ok(result);
     }
 
+    @PostMapping("/alarmnumber/number")  // 알림 에이젝스
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getAlertCount(@RequestBody DepartmentDTO departmentDTO) { // 알림 카운트 로직
+
+        System.out.println("=============didsdf: " + departmentDTO.getId());
+        System.out.println("=============cidsdf: " + departmentDTO.getCompanyId());
+
+        JsonObject names = alarmService.getAlarmCount(departmentDTO.getId());
+
+        Map<String, Object> response = new Gson().fromJson(names, Map.class);
+
+        return ResponseEntity.ok(response);
+    }
 
 
 
@@ -104,8 +118,16 @@ public class AlarmController {
 
         alarmService.receive(userId, model);
 
+        model.addAttribute("companyId",companyId);
+        model.addAttribute("id",id);
+
         return "/company/alarm/receive";
     }
+
+
+
+
+
 
     //받은내용 읽기
 
