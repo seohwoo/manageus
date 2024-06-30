@@ -73,6 +73,7 @@ public class AdminContorller {
                                    Long userId,
                                    Long statusId) {
         String url = "redirect:/admin/" + companyId + "/employee";
+        System.out.println(userId);
         System.out.println(statusId);
         if(!adminService.updateUserStatus(userId, statusId)) {
             url = "redirect:/admin/" + companyId + "/employee/pending";
