@@ -19,30 +19,40 @@
 
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            var projectId = $('#projectId').val();
+            var projectDetails = [];
+            var rows = document.querySelectorAll('tbody tr');
+
+            rows.forEach(function(row, index) {
+                var userIdElement = row.querySelector('input[type="hidden"][id^="userId_"]');
+                var statusIdElement = row.querySelector('input[type="hidden"][id^="statusId_"]');
+
+                if (userIdElement && statusIdElement) {
+                    projectDetails.push({
+                        userId: userIdElement.value,
+                        statusId: statusIdElement.value,
+                        rowIndex: index + 1
+                    });
+                }
+            });
+
+            console.log(projectDetails);
+
             $.ajax({
-                type: "GET",
-                url: '/ajax/project/getProjectMember',
+                type: "POST",
+                url: '/ajax/project/getProjectDetailNames',
                 contentType: "application/json; charset=utf-8",
-                data: { projectId: projectId },
+                data: JSON.stringify(projectDetails),
                 success: function(data) {
                     console.log("Received data:", data);
 
-                    var assigneeSelect = $('#assignee');
-                    data.projectMemberList.forEach(function(member) {
-                        var userId = Object.keys(member)[0];
-                        var userName = member[userId];
-                        var option = $('<option></option>')
-                            .attr('value', userId)
-                            .text(userName);
-                        assigneeSelect.append(option);
+                    data.forEach(function(detail) {
+                        $('#user_' + detail.rowIndex).text(detail.userName);
+                        $('#status_' + detail.rowIndex).text(detail.statusName);
                     });
-                },
-                error: function(error) {
-                    console.error("Error occurred:", error);
                 }
             });
         });
@@ -66,21 +76,32 @@
             <div th:insert="~{content/top-bar :: top}"></div>
             <!-- Begin Page Content -->
             <div class="container-fluid">
-            <form th:action="@{/companies/{companyId}/users/{userId}/project/{projectId}(companyId=${companyId}, userId=${userId}, projectId=${projectId})}" method="post">
-                <input type="hidden" id="projectId" name="projectId" th:value="${projectId}">
-                <input type="hidden" name="statusId" value="3000">
-                제목 : <input type="text" name="title"><br/>
-                내용 : <textarea name="content"></textarea><br/>
-                담당자 : <select id="assignee" name="userId">
-                        </select><br/>
-                업무 시작일 : <input type="date" name="startTime" th:value="${#dates.format(startTime, 'yyyy-MM-dd')}"><br/>
-                업무 마감일 : <input type="date" name="endTime" th:value="${#dates.format(endTime, 'yyyy-MM-dd')}"><br/>
-                <button type="submit" class="btn btn-success btn-icon-split">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-check"></i>
-                                        </span>
-                    <span class="text">등록</span>
-            </form>
+                <p><span th:text = "${projectMemberCount} + '명'"></span>이 프로젝트에 참여중입니다.</p>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>순번</th>
+                        <th>제목</th>
+                        <th>상태</th>
+                        <th>담당자</th>
+                        <th>시작일</th>
+                        <th>마감일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each = "projectDetail, iterStat : ${projectDetailList}">
+                        <input type="hidden" th:id="'userId_' + ${iterStat.index + 1}" th:value="${projectDetail.userId}">
+                        <input type="hidden" th:id="'statusId_' + ${iterStat.index + 1}" th:value="${projectDetail.statusId}">
+                        <td th:text = "${iterStat.index + 1}"></td>
+                        <td> <a th:href = "@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}(companyId = ${companyId}, userId = ${userId}, projectId = ${projectId}, projectDetailId = ${projectDetail.id})}" th:text = "${projectDetail.title}"></a></td>
+                        <td th:id="'status_' + ${iterStat.index + 1}" th:text = "${projectDetail.statusId}"></td>
+                        <td th:id="'user_' + ${iterStat.index + 1}" th:text = "${projectDetail.userId}"></td>
+                        <td th:text="${#dates.format(projectDetail.startTime, 'yyyy-MM-dd')}"></td>
+                        <td th:text="${#dates.format(projectDetail.endTime, 'yyyy-MM-dd')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button th:if = "${leaderId == userId}" th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}/form(companyId=${companyId}, userId=${userId}, projectId=${projectId})}'|">업무 추가</button>
             </div>
             <!-- /.container-fluid -->
 

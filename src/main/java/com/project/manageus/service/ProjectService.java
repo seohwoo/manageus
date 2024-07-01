@@ -3,10 +3,8 @@ package com.project.manageus.service;
 
 import com.project.manageus.dto.ProjectDTO;
 import com.project.manageus.dto.ProjectDetailDTO;
-import com.project.manageus.entity.ProjectDetailEntity;
-import com.project.manageus.entity.ProjectEntity;
-import com.project.manageus.entity.ProjectMemberEntity;
-import com.project.manageus.entity.UserInfoEntity;
+import com.project.manageus.dto.ProjectMemberDTO;
+import com.project.manageus.entity.*;
 
 import java.util.List;
 
@@ -19,4 +17,8 @@ public interface ProjectService {
     public UserInfoEntity getUserInfo(Long userId);
     public int insertProjectDetail(ProjectDetailDTO projectDetailDTO);
     public List<ProjectDetailEntity> projectDetailList(Long projectId);
+    public List<UserEntity> getCompanyUser(Long companyId);
+    public ProjectEntity insertProject(ProjectDTO projectDTO);
+    public void insertProjectMember(ProjectMemberDTO projectMemberDTO);
+    public StatusEntity getStatus(Long statusId);
 }
