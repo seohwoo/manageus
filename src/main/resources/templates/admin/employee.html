@@ -79,21 +79,21 @@
                                     <td th:text="${user.userInfo.name}"></td>
                                     <td>
                                         <select th:id="'positionSelect__' + ${user.id}" class="custom-select">
-                                            <option th:if="${user.position == null}" value="">직급미정</option>
+                                            <option th:if="${user.position == null}" th:text="직급미정" th:selected="true" th:value="${null}"></option>
                                             <option th:each="position : ${positionEntityList}"
                                                     th:value="${position.id}"
                                                     th:text="${position.name}"
-                                                    th:selected="${position.id == user.position.id}">
+                                                    th:selected="${position.id == user.position?.id}">
                                             </option>
                                         </select>
                                     </td>
                                     <td>
                                         <select th:id="'departmentSelect__' + ${user.id}" class="custom-select">
-                                            <option th:if="${user.department == null}" value="">부서미정</option>
+                                            <option th:if="${user.department == null}" th:text="부서미정" th:selected="true" th:value="${null}"></option>
                                             <option th:each="department : ${departmentEntityList}"
                                                     th:value="${department.id}"
                                                     th:text="${department.name}"
-                                                    th:selected="${department.id == user.department.id}">
+                                                    th:selected="${department.id == user.department?.id}">
                                             </option>
                                         </select>
                                     </td>
