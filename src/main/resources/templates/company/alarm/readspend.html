@@ -27,7 +27,7 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    <div th:include="~{content/side-bar :: side}"></div>
+    <div th:replace="~{content/side-bar :: side}"></div>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -35,7 +35,7 @@
         <!-- Main Content -->
         <div id="content">
 
-            <div th:include="~{content/top-bar :: top}"></div>
+            <div th:replace="~{content/top-bar :: top}"></div>
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -94,7 +94,7 @@
     </div>
     <!-- End of Main Content -->
 
-    <div th:include="~{content/footer :: footer}"></div>
+    <div th:replace="~{content/footer :: footer}"></div>
 
 </div>
 <!-- End of Content Wrapper -->

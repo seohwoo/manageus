@@ -41,7 +41,7 @@ public class AlarmController {
         alarmService.getdepartment(companyId, model );  // 회사아이디로 부서 찾기
 
         model.addAttribute("companyId",companyId);
-        model.addAttribute("id",id);
+        model.addAttribute("id",principal.getName());
 
         return "/company/alarm/write";
     }
@@ -118,8 +118,6 @@ public class AlarmController {
 
         alarmService.receive(userId, model);
 
-        model.addAttribute("companyId",companyId);
-        model.addAttribute("id",id);
 
         return "/company/alarm/receive";
     }

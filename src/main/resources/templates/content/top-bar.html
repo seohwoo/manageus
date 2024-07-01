@@ -60,47 +60,52 @@
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter" >2+</span>
+                <span class="badge badge-danger badge-counter" id="alertCounter">3+</span>
             </a>
+
+
             <!-- Dropdown - Alerts -->
             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                  aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
-                    Alerts Center
+                    알람내용 확인하기
                 </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="mr-3">
-                        <div class="icon-circle bg-primary">
-                            <i class="fas fa-file-alt text-white"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="small text-gray-500">December 12, 2019</div>
-                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                    </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="mr-3">
-                        <div class="icon-circle bg-success">
-                            <i class="fas fa-donate text-white"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="small text-gray-500">December 7, 2019</div>
-                        $290.29 has been deposited into your account!
-                    </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="mr-3">
-                        <div class="icon-circle bg-warning">
-                            <i class="fas fa-exclamation-triangle text-white"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="small text-gray-500">December 2, 2019</div>
-                        Spending Alert: We've noticed unusually high spending for your account.
-                    </div>
-                </a>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>보낸사람</th>
+                        <th>내용</th>
+                        <th>확인결과</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <th:block th:if="${#lists.isEmpty(receive)}">
+                        <tr>
+                            <td colspan="3">안 읽은 메세지 없음</td>
+                        </tr>
+                    </th:block>
+
+                    <th:block th:each="message, iterStat : ${receive}" th:if="${message.readType != 2001}">
+                        <tr>
+                            <td><span th:text="${message.getUserInfo.getName}"></span></td>
+                            <td>
+                                <a th:href="@{/companies/{companyId}/alarm/{id}/readreceive/{messageId}(companyId=${companyId}, id=${id}, messageId=${message.id})}">
+                                    <span th:text="${#strings.length(message.subject) > 8 ? #strings.substring(message.subject, 0, 8).concat('....') : message.subject}"></span>
+                                </a>
+                            </td>
+                            <td>
+                                            <span th:switch="${message.readType}">
+                                                <span th:case="2000">안읽음</span>
+                                                <!-- No case for readType 2001 -->
+                                            </span>
+                            </td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+
                 <a class="dropdown-item text-center small text-gray-500" th:href="@{/companies/{companyId}/alarm/{id}/receive(companyId=${companyId}, id=${id})}">받은메세지 전체보기</a>
             </div>
         </li>
@@ -208,6 +213,45 @@
 
 </nav>
 <!-- End of Topbar -->
+    <!--<input type="hidden" id="companyId" th:value="${companyId}" />
+<input type="hidden" id="id" th:value="${id}" />
+
+<script th:inline="javascript">
+    $(document).ready(function(){
+
+        function fetchAlarmCount() {
+            console.log("ajax작동");
+
+            var companyId = $("#companyId").val();  // hidden input 태그에서 companyId 값을 가져옴
+            var id = $("#id").val();  // hidden input 태그에서 id 값을 가져옴
+
+            console.log("companyId:", companyId);
+            console.log("id:", id);
+
+            // AJAX 요청 보내기
+            $.ajax({
+                url: '/companies/' + companyId + '/alarmnumber/number',
+                type: "POST",
+                contentType: 'application/json',
+                data: JSON.stringify({ companyId: companyId, id: id }),
+                dataType: "json",
+                success: function(data) {
+                    console.log("AJAX 성공:", data);
+                    $("#alertCounter").text(data.alarmcount); // 서버에서 받은 데이터로 알림 카운터 업데이트
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX 에러:", error);
+                }
+            });
+        }
+
+        // 페이지 로드 후 1분마다 fetchAlarmCount 함수 실행
+        fetchAlarmCount(); // 초기 실행
+     setInterval(fetchAlarmCount, 60000); // 1분(60000밀리초)마다 실행
+
+
+    });
+</script>-->
 </div>
 
 </body>

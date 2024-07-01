@@ -1,10 +1,12 @@
 package com.project.manageus.service;
 
+import com.project.manageus.entity.AlarmEntity;
 import com.project.manageus.entity.CompanyEntity;
 import com.project.manageus.entity.UserEntity;
 import com.project.manageus.entity.UserInfoEntity;
 import com.project.manageus.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -20,18 +22,20 @@ public class UrlServiceImpl implements UrlService{
     private final CompanyRepository companyRepository;
     private final DepartmentRepository departmentRepository;
     private final PositionRepository positionRepository;
+    private final AlarmJPARepository alarmJPARepository;
 
     @Autowired
     public UrlServiceImpl(UserRepository userRepository,
                           UserInfoRepository userInfoRepository,
                           CompanyRepository companyRepository,
                           DepartmentRepository departmentRepository,
-                          PositionRepository positionRepository) {
+                          PositionRepository positionRepository, AlarmJPARepository alarmJPARepository) {
         this.userRepository = userRepository;
         this.userInfoRepository = userInfoRepository;
         this.companyRepository = companyRepository;
         this.departmentRepository = departmentRepository;
         this.positionRepository = positionRepository;
+        this.alarmJPARepository = alarmJPARepository;
     }
 
     @Override
@@ -41,6 +45,14 @@ public class UrlServiceImpl implements UrlService{
         model.addAttribute("id", id);
         Optional<UserEntity> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()) {
+
+
+            //이거는 저장해놓기 약속~
+            Sort sort = Sort.by(Sort.Order.desc("readDate"));
+            List<AlarmEntity> receive = alarmJPARepository.findByReader(id, sort);
+            model.addAttribute("receive", receive);
+
+
             Optional<CompanyEntity> optionalCompany = companyRepository.findById(optionalUser.get().getCompanyId());
             if(optionalCompany.isPresent()) {
                 if(Objects.equals(optionalUser.get().getCompanyId(), companyId)) {
@@ -68,5 +80,7 @@ public class UrlServiceImpl implements UrlService{
         }
         return companyUrl;
     }
+
+
 
 }
