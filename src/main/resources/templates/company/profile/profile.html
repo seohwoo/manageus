@@ -70,7 +70,7 @@
                     <div class="col-lg-6">
                         <div class="card shadow mb-4">
                             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                <h5 class="m-0 font-weight-bold text-primary">기본정보</h5>
+                                <h5 class="m-0 font-weight-bold text-primary">회원정보</h5>
                                 <div th:if="${isLoginUser}">
                                     <a th:href="@{/companies/{companyId}/profiles/{id}/form(companyId=${companyId}, id=${id})}" class="btn btn-primary btn-icon-split">
                                         <span class="icon text-white-50">
@@ -118,9 +118,15 @@
                                         <th>성별</th>
                                         <td th:text="${gender}"></td>
                                     </tr>
-                                    <tr>
+                                    <tr th:if="${stamp == null}">
                                         <th>직인</th>
                                         <td th:text="${stamp}"></td>
+                                    </tr>
+                                    <tr th:if="${stamp != null}">
+                                        <th>직인</th>
+                                        <td>
+                                            <img th:src="@{${stamp}}" width="150px" height="50px">
+                                        </td>
                                     </tr>
                                 </table>
                             </div>

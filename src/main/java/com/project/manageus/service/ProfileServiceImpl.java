@@ -1,16 +1,17 @@
 package com.project.manageus.service;
 
-import com.project.manageus.entity.DepartmentEntity;
-import com.project.manageus.entity.PositionEntity;
+import com.project.manageus.dto.UserInfoDTO;
 import com.project.manageus.entity.UserEntity;
-import com.project.manageus.entity.UserInfoEntity;
-import com.project.manageus.repository.DepartmentRepository;
-import com.project.manageus.repository.PositionRepository;
 import com.project.manageus.repository.UserInfoRepository;
 import com.project.manageus.repository.UserRepository;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -19,17 +20,15 @@ public class ProfileServiceImpl implements ProfileService{
 
     private final UserRepository userRepository;
     private final UserInfoRepository userInfoRepository;
-    private final PositionRepository positionRepository;
-    private final DepartmentRepository departmentRepository;
+    private final ResourceLoader resourceLoader;
+
 
     public ProfileServiceImpl(UserRepository userRepository,
                               UserInfoRepository userInfoRepository,
-                              PositionRepository positionRepository,
-                              DepartmentRepository departmentRepository) {
+                              ResourceLoader resourceLoader) {
         this.userRepository = userRepository;
-        this.userInfoRepository =  userInfoRepository;
-        this.positionRepository = positionRepository;
-        this.departmentRepository = departmentRepository;
+        this.userInfoRepository = userInfoRepository;
+        this.resourceLoader = resourceLoader;
     }
 
     @Override
@@ -37,25 +36,61 @@ public class ProfileServiceImpl implements ProfileService{
         Optional<UserEntity> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()) {
             model.addAttribute("isLoginUser", id == Long.parseLong(principal.getName()));
-            Optional<UserInfoEntity> optionalUserInfo = userInfoRepository.findById(id);
-            if(optionalUserInfo.isPresent()) {
-                model.addAttribute("userId", optionalUserInfo.get().getId());
-                model.addAttribute("username", optionalUserInfo.get().getName());
-                model.addAttribute("email", optionalUserInfo.get().getEmail());
-                model.addAttribute("phone", optionalUserInfo.get().getPhone());
-                model.addAttribute("address", optionalUserInfo.get().getAddress());
-                model.addAttribute("birth", optionalUserInfo.get().getBirth());
-                model.addAttribute("gender", optionalUserInfo.get().getGender());
-                model.addAttribute("stamp", optionalUserInfo.get().getStamp() == null ? "직인없음" : optionalUserInfo.get().getStamp());
-            }
-            Optional<PositionEntity> optionalPosition = positionRepository.findById(optionalUser.get().getPositionId());
-            if(optionalPosition.isPresent()) {
-                model.addAttribute("position", optionalPosition.get().getName());
-            }
-            Optional<DepartmentEntity> optionalDepartment = departmentRepository.findById(optionalUser.get().getDepartmentId());
-            if(optionalDepartment.isPresent()) {
-                model.addAttribute("department", optionalDepartment.get().getName());
-            }
+            model.addAttribute("userId", optionalUser.get().getUserInfo().getId());
+            model.addAttribute("username", optionalUser.get().getUserInfo().getName());
+            model.addAttribute("email", optionalUser.get().getUserInfo().getEmail());
+            model.addAttribute("phone", optionalUser.get().getUserInfo().getPhone());
+            model.addAttribute("address", optionalUser.get().getUserInfo().getAddress());
+            model.addAttribute("birth", optionalUser.get().getUserInfo().getBirth());
+            model.addAttribute("gender", optionalUser.get().getUserInfo().getGender());
+            model.addAttribute("stamp", optionalUser.get().getUserInfo().getStamp() == null ? "직인없음" : "/img/stamp/"+ optionalUser.get().getUserInfo().getStamp());
+            model.addAttribute("position", optionalUser.get().getPosition().getName());
+            model.addAttribute("department", optionalUser.get().getDepartment().getName());
         }
     }
+
+    @Override
+    public void updateUser(UserInfoDTO userInfoDTO, MultipartFile multipartFile) {
+        userInfoDTO.setStamp(fileUpload(multipartFile, userInfoDTO.getId()));
+        userInfoRepository.save(userInfoDTO.toUserInfoEntity());
+    }
+
+    //stamp image가 저장되는 경로를 가져옴
+    public String getRealPath() {
+        try {
+            // classpath: 뒤의 경로는 /src/main/resources/ 하위 경로를 의미합니다.
+            Resource resource = resourceLoader.getResource("classpath:static/img/stamp");
+            return resource.getFile().getAbsolutePath();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // 파일 업로드 메서드
+    public String fileUpload(MultipartFile file, Long id) {
+        String filename = null;
+        String path = getRealPath();
+
+        if (file != null) {
+            filename = file.getOriginalFilename();
+            String ext = filename.substring(filename.lastIndexOf("."));
+            filename = id.toString() + ext;
+
+            // 디렉토리가 존재하지 않으면 생성
+            File directory = new File(path);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            File copy = new File(directory, filename);
+
+            try {
+                file.transferTo(copy);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return filename;
+    }
+
 }
