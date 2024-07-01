@@ -69,7 +69,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="card shadow mb-4">
-                            <form th:action="@{~/companies/{companyId}/profiles/{id}(companyId=${companyId}, id=${id})}" method="post">
+                            <form th:action="@{~/companies/{companyId}/profiles/{id}(companyId=${companyId}, id=${id})}" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="_method" value="put" />
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                     <h5 class="m-0 font-weight-bold text-primary">회원정보</h5>
@@ -85,10 +85,12 @@
                                         <tr>
                                             <th>사원번호</th>
                                             <td th:text="${userId}"></td>
+                                            <input type="hidden" class="form-control" th:value="${userId}" name="id" />
                                         </tr>
                                         <tr>
                                             <th>이름</th>
                                             <td th:text="${username}"></td>
+                                            <input type="hidden" class="form-control" th:value="${username}" name="name" />
                                         </tr>
                                         <tr>
                                             <th>부서</th>
@@ -113,14 +115,16 @@
                                         <tr>
                                             <th>생년월일</th>
                                             <td th:text="${birth}"></td>
+                                            <input type="hidden" class="form-control" th:value="${birth}" name="birth" />
                                         </tr>
                                         <tr>
                                             <th>성별</th>
                                             <td th:text="${gender}"></td>
+                                            <input type="hidden" class="form-control" th:value="${gender}" name="gender" />
                                         </tr>
                                         <tr>
                                             <th>직인</th>
-                                            <td><input type="file" class="form-control"></td>
+                                            <td><input type="file" class="form-control" enctype="multipart/form-data" name="stampFile"></td>
                                         </tr>
                                     </table>
                                 </div>
