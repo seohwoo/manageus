@@ -67,6 +67,4 @@ public class ProfileController {
         return url;
     }
 
-
-
 }

@@ -2,6 +2,7 @@ package com.project.manageus.controller.admin;
 
 import com.project.manageus.service.AdminService;
 import com.project.manageus.service.UrlService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,17 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.security.Principal;
 
 @Controller
+@RequiredArgsConstructor    //lombok 생성자 주입
 @RequestMapping("/admin/*")
 public class AdminContorller {
 
     private final AdminService adminService;
     private final UrlService urlService;
-
-    @Autowired
-    public AdminContorller(AdminService adminService, UrlService urlService) {
-        this.adminService = adminService;
-        this.urlService = urlService;
-    }
 
     @GetMapping("/{companyId}")
     public String adminMain(@PathVariable Long companyId,

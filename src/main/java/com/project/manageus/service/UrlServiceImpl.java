@@ -4,6 +4,7 @@ import com.project.manageus.entity.CompanyEntity;
 import com.project.manageus.entity.UserEntity;
 import com.project.manageus.entity.UserInfoEntity;
 import com.project.manageus.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -13,17 +14,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UrlServiceImpl implements UrlService{
 
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
-
-    @Autowired
-    public UrlServiceImpl(UserRepository userRepository,
-                          CompanyRepository companyRepository) {
-        this.userRepository = userRepository;
-        this.companyRepository = companyRepository;
-    }
 
     @Override
     public boolean findUserInfo(String username,Long companyId, Model model) {
