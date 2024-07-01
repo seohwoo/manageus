@@ -26,7 +26,9 @@ public class AdminContorller {
     }
 
     @GetMapping("/{companyId}")
-    public String adminMain(@PathVariable Long companyId, Principal principal, Model model) {
+    public String adminMain(@PathVariable Long companyId,
+                            Principal principal,
+                            Model model) {
         String url = "admin/main.html";
         if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
             url = "redirect:/admin/" + principal.getName();
@@ -36,9 +38,11 @@ public class AdminContorller {
         return url;
     }
 
-    @GetMapping("{companyId}/employee")
-    public String showAllEmployee(@PathVariable Long companyId, Principal principal, Model model) {
-        String url = "admin/employee";
+    @GetMapping("{companyId}/employees")
+    public String showAllEmployee(@PathVariable Long companyId,
+                                  Principal principal,
+                                  Model model) {
+        String url = "admin/employee.html";
         if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
             url = "redirect:/admin/" + principal.getName();
             return url;
@@ -47,20 +51,24 @@ public class AdminContorller {
         return url;
     }
 
-    @PatchMapping("{companyId}/employee")
+    @PatchMapping("{companyId}/employees")
     public String updateUserInfo(@PathVariable Long companyId,
                                  Long userId,
                                  Long positionId,
                                  Long departmentId,
                                  Long statusId) {
-        String url = "redirect:/admin/" + companyId + "/employee";
-        adminService.updateUserInfo(userId, positionId, departmentId, statusId);
+        String url = "redirect:/admin/" + companyId + "/employees";
+        if(!adminService.updateUserInfo(userId, positionId, departmentId, statusId)) {
+            url = "redirect:/admin/" + companyId + "/employees";
+        }
         return url;
     }
 
-    @GetMapping("{companyId}/employee/pending")
-    public String showAllPendingEmployee(@PathVariable Long companyId, Principal principal, Model model) {
-        String url = "admin/pending-employee";
+    @GetMapping("{companyId}/employees/pending")
+    public String showAllPendingEmployee(@PathVariable Long companyId,
+                                         Principal principal,
+                                         Model model) {
+        String url = "admin/pending-employee.html";
         if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
             url = "redirect:/admin/" + principal.getName();
             return url;
@@ -69,15 +77,26 @@ public class AdminContorller {
         return url;
     }
 
-    @PatchMapping("{companyId}/employee/pending")
+    @GetMapping("{companyId}/employees/exit")
+    public String showExitUser(@PathVariable Long companyId,
+                               Principal principal,
+                               Model model) {
+        String url = "/admin/exit-employee.html";
+        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
+            url = "redirect:/admin/" + principal.getName();
+            return url;
+        }
+        model.addAttribute("existUser", adminService.findAllExitEmployee(companyId, model));
+        return url;
+    }
+
+    @PatchMapping("{companyId}/employees/status")
     public String updateStatusUser(@PathVariable Long companyId,
                                    Long userId,
                                    Long statusId) {
-        String url = "redirect:/admin/" + companyId + "/employee";
-        System.out.println(userId);
-        System.out.println(statusId);
+        String url = "redirect:/admin/" + companyId + "/employees/pending";
         if(!adminService.updateUserStatus(userId, statusId)) {
-            url = "redirect:/admin/" + companyId + "/employee/pending";
+            url = "redirect:/admin/" + companyId + "/employees/pending";
         }
         return url;
     }

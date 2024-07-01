@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +41,8 @@ public class AdminServiceImpl implements AdminService{
     public boolean findAllEmployee(Long companyId, Model model) {
         boolean result = false;
         List<UserEntity> userEntityList = userRepository.findAllByCompanyIdAndStatusId(companyId, (long) 1002);
-        if(userEntityList != null) {
+        System.out.println(userEntityList.equals(Collections.emptyList()));
+        if(!userEntityList.equals(Collections.emptyList())) {
             model.addAttribute("userEntityList", userEntityList);
             List<PositionEntity> positionEntityList = positionRepository.findAll();
             model.addAttribute("positionEntityList", positionEntityList);
@@ -56,7 +59,20 @@ public class AdminServiceImpl implements AdminService{
     public boolean findAllPendingEmployee(Long companyId, Model model) {
         boolean result = false;
         List<UserEntity> userEntityList = userRepository.findAllByCompanyIdAndStatusId(companyId, (long) 1001);
-        if(userEntityList != null) {
+        if(!userEntityList.equals(Collections.emptyList())) {
+            model.addAttribute("userEntityList", userEntityList);
+            List<StatusEntity> statusEntityList = statusRepository.findByIdBetween((long) 1002, (long) 1003);
+            model.addAttribute("statusEntityList", statusEntityList);
+            result = true;
+        }
+        return result;
+    }
+
+    @Override
+    public boolean findAllExitEmployee(Long companyId, Model model) {
+        boolean result = false;
+        List<UserEntity> userEntityList = userRepository.findAllByCompanyIdAndStatusId(companyId, (long) 1003);
+        if(!userEntityList.equals(Collections.emptyList())) {
             model.addAttribute("userEntityList", userEntityList);
             List<StatusEntity> statusEntityList = statusRepository.findByIdBetween((long) 1002, (long) 1003);
             model.addAttribute("statusEntityList", statusEntityList);

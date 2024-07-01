@@ -42,6 +42,10 @@ public class UserEntity {
     private PositionEntity position;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private StatusEntity status;
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", referencedColumnName = "id", insertable = false, updatable = false)
     private DepartmentEntity department;
 

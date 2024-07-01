@@ -54,10 +54,7 @@
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
                     </div>
-                    <div class="card-body" th:if="${!existUser}">
-                        <h6 class="m-0 font-weight-bold text-primary">No User Here</h6>
-                    </div>
-                    <div class="card-body" th:if="${existUser}">
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
@@ -104,12 +101,13 @@
                                         <select th:id="'statusSelect__' + ${user.id}" class="custom-select">
                                             <option th:each="status : ${statusEntityList}"
                                                     th:value="${status.id}"
-                                                    th:text="${status.name}">
+                                                    th:text="${status.name}"
+                                                    th:selected="${status.id == user.status?.id}">
                                             </option>
                                         </select>
                                     </td>
                                     <td>
-                                        <form th:id="'form__' + ${user.id}" th:action="@{~/admin/{companyId}/employee(companyId=${companyId})}" method="post" th:onsubmit="handleSubmit(event, [[${user.id}]])">
+                                        <form th:id="'form__' + ${user.id}" th:action="@{~/admin/{companyId}/employees(companyId=${companyId})}" method="post" th:onsubmit="handleSubmit(event, [[${user.id}]])">
                                             <input type="hidden" name="_method" value="patch" />
                                             <input type="hidden" name="userId" th:value="${user.id}" />
                                             <input th:id="'positionId__' + ${user.id}" type="hidden" name="positionId"/>
