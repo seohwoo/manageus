@@ -51,9 +51,10 @@ public class AdminContorller {
     public String updateUserInfo(@PathVariable Long companyId,
                                  Long userId,
                                  Long positionId,
-                                 Long departmentId) {
+                                 Long departmentId,
+                                 Long statusId) {
         String url = "redirect:/admin/" + companyId + "/employee";
-        adminService.updateUserInfo(userId, positionId, departmentId);
+        adminService.updateUserInfo(userId, positionId, departmentId, statusId);
         return url;
     }
 

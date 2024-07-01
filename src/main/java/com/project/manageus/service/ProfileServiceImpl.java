@@ -44,6 +44,7 @@ public class ProfileServiceImpl implements ProfileService{
             model.addAttribute("birth", optionalUser.get().getUserInfo().getBirth());
             model.addAttribute("gender", optionalUser.get().getUserInfo().getGender());
             model.addAttribute("stamp", optionalUser.get().getUserInfo().getStamp() == null ? "직인없음" : "/img/stamp/"+ optionalUser.get().getUserInfo().getStamp());
+            model.addAttribute("existStamp", optionalUser.get().getUserInfo().getStamp() == null);
             model.addAttribute("position", optionalUser.get().getPosition().getName());
             model.addAttribute("department", optionalUser.get().getDepartment().getName());
         }

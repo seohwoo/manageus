@@ -69,6 +69,7 @@
                                     <th>이메일</th>
                                     <th>전화번호</th>
                                     <th>입사일</th>
+                                    <th>상태</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -77,7 +78,7 @@
                                     <td th:text="${user.id}"></td>
                                     <td th:text="${user.userInfo.name}"></td>
                                     <td>
-                                        <select id="positionSelect_${user.id}" class="custom-select">
+                                        <select th:id="'positionSelect__' + ${user.id}" class="custom-select">
                                             <option th:if="${user.position == null}" value="">직급미정</option>
                                             <option th:each="position : ${positionEntityList}"
                                                     th:value="${position.id}"
@@ -87,7 +88,7 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <select id="departmentSelect_${user.id}" class="custom-select">
+                                        <select th:id="'departmentSelect__' + ${user.id}" class="custom-select">
                                             <option th:if="${user.department == null}" value="">부서미정</option>
                                             <option th:each="department : ${departmentEntityList}"
                                                     th:value="${department.id}"
@@ -100,15 +101,24 @@
                                     <td th:text="${user.userInfo.phone}"></td>
                                     <td th:text="${#dates.format(user.regDate, 'yyyy/MM/dd')}"></td>
                                     <td>
-                                        <form id="form_${user.id}" th:action="@{~/admin/{companyId}/employee(companyId=${companyId})}" method="post" onsubmit="handleSubmit(event, '${user.id}')">
+                                        <select th:id="'statusSelect__' + ${user.id}" class="custom-select">
+                                            <option th:each="status : ${statusEntityList}"
+                                                    th:value="${status.id}"
+                                                    th:text="${status.name}">
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <form th:id="'form__' + ${user.id}" th:action="@{~/admin/{companyId}/employee(companyId=${companyId})}" method="post" th:onsubmit="handleSubmit(event, [[${user.id}]])">
                                             <input type="hidden" name="_method" value="patch" />
-                                            <input type="hidden" name="userId" th:value="${user.id}"/>
-                                            <input type="hidden" id="positionId_${user.id}" name="positionId"/>
-                                            <input type="hidden" id="departmentId_${user.id}" name="departmentId"/>
+                                            <input type="hidden" name="userId" th:value="${user.id}" />
+                                            <input th:id="'positionId__' + ${user.id}" type="hidden" name="positionId"/>
+                                            <input th:id="'departmentId__' + ${user.id}" type="hidden" name="departmentId"/>
+                                            <input th:id="'statusId__' + ${user.id}" type="hidden" name="statusId" />
                                             <button type="submit" class="btn btn-success btn-icon-split">
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-check"></i>
-                                                </span>
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-check"></i>
+                                                        </span>
                                                 <span class="text">Submit</span>
                                             </button>
                                         </form>
@@ -143,16 +153,19 @@
     function handleSubmit(event, userId) {
         event.preventDefault();
 
-        const positionSelect = document.getElementById('positionSelect_' + userId);
-        const departmentSelect = document.getElementById('departmentSelect_' + userId);
+        const positionSelect = document.getElementById('positionSelect__' + userId);
+        const departmentSelect = document.getElementById('departmentSelect__' + userId);
+        const statusSelect = document.getElementById('statusSelect__' + userId);
 
-        const positionIdInput = document.getElementById('positionId_' + userId);
-        const departmentIdInput = document.getElementById('departmentId_' + userId);
+        const positionIdInput = document.getElementById('positionId__' + userId);
+        const departmentIdInput = document.getElementById('departmentId__' + userId);
+        const statusIdInput = document.getElementById('statusId__' + userId);
 
         positionIdInput.value = positionSelect.value || null;
         departmentIdInput.value = departmentSelect.value || null;
+        statusIdInput.value = statusSelect.value || null;
 
-        document.getElementById('form_' + userId).submit();
+        document.getElementById('form__' + userId).submit();
     }
 </script>
 

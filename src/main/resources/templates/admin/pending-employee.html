@@ -77,13 +77,13 @@
                                 <tr th:each="user : ${userEntityList}">
                                     <td th:text="${user.id}"></td>
                                     <td th:text="${user.userInfo.name}"></td>
-                                    <td th:text="${user.position?.name ?: '직급없음'}"></td>
-                                    <td th:text="${user.department?.name ?: '부서없음'}"></td>
+                                    <td th:text="${user.position?.name ?: '직급미정'}"></td>
+                                    <td th:text="${user.department?.name ?: '부서미정'}"></td>
                                     <td th:text="${user.userInfo.email}"></td>
                                     <td th:text="${user.userInfo.phone}"></td>
                                     <td th:text="${#dates.format(user.regDate, 'yyyy/MM/dd')}"></td>
                                     <td>
-                                        <select id="statusSelect_${user.id}" class="custom-select">
+                                        <select th:id="'statusSelect__' + ${user.id}" class="custom-select">
                                             <option th:each="status : ${statusEntityList}"
                                                     th:value="${status.id}"
                                                     th:text="${status.name}">
@@ -91,14 +91,14 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <form id="form_${user.id}" th:action="@{~/admin/{companyId}/employee/pending(companyId=${companyId})}" method="post" onsubmit="return submitForm('${user.id}')">
+                                        <form th:id="'form__' + ${user.id}" th:action="@{~/admin/{companyId}/employee/pending(companyId=${companyId})}" method="post" th:onsubmit="handleSubmit(event, [[${user.id}]])">
                                             <input type="hidden" name="_method" value="patch" />
-                                            <input type="hidden" name="userId" th:value="${user.id}"/>
-                                            <input id="statusId_${user.id}" type="hidden" name="statusId"/>
+                                            <input type="hidden" name="userId" th:value="${user.id}" />
+                                            <input th:id="'statusId__' + ${user.id}" type="hidden" name="statusId" />
                                             <button type="submit" class="btn btn-success btn-icon-split">
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-check"></i>
-                                                </span>
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-check"></i>
+                                                        </span>
                                                 <span class="text">Submit</span>
                                             </button>
                                         </form>
@@ -129,14 +129,16 @@
     <i class="fas fa-angle-up"></i>
 </a>
 
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    function submitForm(userId) {
-        var statusId = document.getElementById('statusSelect_' + userId).value;
-        document.getElementById('statusId_' + userId).value = statusId;
-        return true; // Ensure the form is submitted after setting the statusId
+<script>
+    function handleSubmit(event, userId) {
+       event.preventDefault();
+
+       const statusSelect = document.getElementById('statusSelect__' + userId);
+       const statusIdInput = document.getElementById('statusId__' + userId);
+
+       statusIdInput.value = statusSelect.value || null;
+       document.getElementById('form__' + userId).submit();
     }
-    /*]]>*/
 </script>
 <!-- Bootstrap core JavaScript-->
 <script src="/vendor/jquery/jquery.min.js"></script>

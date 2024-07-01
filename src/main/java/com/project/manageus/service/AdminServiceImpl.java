@@ -45,6 +45,8 @@ public class AdminServiceImpl implements AdminService{
             model.addAttribute("positionEntityList", positionEntityList);
             List<DepartmentEntity> departmentEntityList = departmentRepository.findAllByCompanyId(companyId);
             model.addAttribute("departmentEntityList", departmentEntityList);
+            List<StatusEntity> statusEntityList = statusRepository.findByIdBetween((long) 1002, (long) 1003);
+            model.addAttribute("statusEntityList", statusEntityList);
             result = true;
         }
         return result;
@@ -64,13 +66,14 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public boolean updateUserInfo(Long userId, Long positionId, Long departmentId) {
+    public boolean updateUserInfo(Long userId, Long positionId, Long departmentId, Long statusId) {
         boolean result = false;
         Optional<UserEntity> optionalUser = userRepository.findById(userId);
         if(optionalUser.isPresent()) {
             UserDTO userDTO = optionalUser.get().toUserDTO();
             userDTO.setPositionId(positionId);
             userDTO.setDepartmentId(departmentId);
+            userDTO.setStatusId(statusId);
             userRepository.save(userDTO.toUserEntity());
             result = true;
         }
