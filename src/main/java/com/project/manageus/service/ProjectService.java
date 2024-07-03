@@ -21,4 +21,8 @@ public interface ProjectService {
     public ProjectEntity insertProject(ProjectDTO projectDTO);
     public void insertProjectMember(ProjectMemberDTO projectMemberDTO);
     public StatusEntity getStatus(Long statusId);
+    public ProjectDetailEntity projectDetailInfo(Long projectDetailId);
+    public void updateProjectDetail(ProjectDetailDTO projectDetailDTO);
+    public int projectDetailCount(Long projectId);
+    public int projectDetailCompleteCount(Long projectId, Long statusId);
 }

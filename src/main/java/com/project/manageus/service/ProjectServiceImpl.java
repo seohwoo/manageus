@@ -124,4 +124,28 @@ public class ProjectServiceImpl implements ProjectService{
         Optional<StatusEntity> status = statusRepository.findById(statusId);
         return status.orElse(null);
     }
+
+    @Override
+    public ProjectDetailEntity projectDetailInfo(Long projectDetailId) {
+        Optional<ProjectDetailEntity> projectDetailEntity = projectDetailRepository.findById(projectDetailId);
+        return projectDetailEntity.orElse(null);
+    }
+
+    @Override
+    public void updateProjectDetail(ProjectDetailDTO projectDetailDTO) {
+        ProjectDetailEntity projectDetailEntity = projectDetailDTO.toProjectDetailEntity();
+        projectDetailRepository.save(projectDetailEntity);
+    }
+
+    @Override
+    public int projectDetailCount(Long projectId) {
+        int count =  projectDetailRepository.countByProjectId(projectId);
+        return count;
+    }
+
+    @Override
+    public int projectDetailCompleteCount(Long projectId, Long statusId) {
+        int count = projectDetailRepository.countByProjectIdAndStatusId(projectId,statusId);
+        return count;
+    }
 }

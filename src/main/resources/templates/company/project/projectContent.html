@@ -20,7 +20,7 @@
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
             var projectDetails = [];
@@ -57,7 +57,7 @@
             });
         });
 
-    </script>
+    </script>-->
 
 </head>
 
@@ -77,6 +77,33 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 <p><span th:text = "${projectMemberCount} + '명'"></span>이 프로젝트에 참여중입니다.</p>
+
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                                </div>
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" th:text="${taskValue + '%'}"></div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="progress progress-sm mr-2">
+                                            <div class="progress-bar bg-info" role="progressbar"
+                                                 th:style="'width:' + ${taskValue} + '%'" th:aria-valuenow="${taskValue}" aria-valuemin="0"
+                                                 aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <table>
                     <thead>
                     <tr>
@@ -94,8 +121,8 @@
                         <input type="hidden" th:id="'statusId_' + ${iterStat.index + 1}" th:value="${projectDetail.statusId}">
                         <td th:text = "${iterStat.index + 1}"></td>
                         <td> <a th:href = "@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}(companyId = ${companyId}, userId = ${userId}, projectId = ${projectId}, projectDetailId = ${projectDetail.id})}" th:text = "${projectDetail.title}"></a></td>
-                        <td th:id="'status_' + ${iterStat.index + 1}" th:text = "${projectDetail.statusId}"></td>
-                        <td th:id="'user_' + ${iterStat.index + 1}" th:text = "${projectDetail.userId}"></td>
+                        <td th:id="'status_' + ${iterStat.index + 1}" th:text = "${projectDetail.status.name}"></td>
+                        <td th:id="'user_' + ${iterStat.index + 1}" th:text = "${projectDetail.user.userInfo.name}"></td>
                         <td th:text="${#dates.format(projectDetail.startTime, 'yyyy-MM-dd')}"></td>
                         <td th:text="${#dates.format(projectDetail.endTime, 'yyyy-MM-dd')}"></td>
                     </tr>

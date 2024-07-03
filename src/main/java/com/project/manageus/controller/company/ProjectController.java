@@ -60,12 +60,17 @@ public class ProjectController {
         int projectMemberCount = projectService.projectMemberCount(projectId);
         List<ProjectDetailEntity> projectDetailList = projectService.projectDetailList(projectId);
 
+        int projectDetailCount = projectService.projectDetailCount(projectId);
+        Long completeStatusId = 3002L;
+        int projectDetailCompleteCount = projectService.projectDetailCompleteCount(projectId,completeStatusId);
+        int taskValue = (int) Math.round((double) projectDetailCompleteCount / projectDetailCount * 100);
         model.addAttribute("projectMemberCount",projectMemberCount);
         model.addAttribute("leaderId",leaderId);
         model.addAttribute("userId",userId);
         model.addAttribute("projectId",projectId);
         model.addAttribute("companyId",companyId);
         model.addAttribute("projectDetailList",projectDetailList);
+        model.addAttribute("taskValue",taskValue);
 
         return url;
     }
@@ -145,8 +150,43 @@ public class ProjectController {
             return url;
         }
 
+        ProjectDetailEntity projectDetailEntity = projectService.projectDetailInfo(projectDetailId);
+        model.addAttribute("detail",projectDetailEntity);
         return url;
     }
+
+    @GetMapping("/{userId}/project/{projectId}/detail/{projectDetailId}/form")
+    public String updateProjectDetail(@PathVariable Long userId, @PathVariable Long companyId, @PathVariable Long projectId, @PathVariable Long projectDetailId,Principal principal, Model model) {
+
+        String url = "/company/project/updateProjectDetail.html";
+        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
+            url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+            return url;
+        }
+
+        ProjectDetailEntity projectDetailEntity = projectService.projectDetailInfo(projectDetailId);
+        model.addAttribute("detail",projectDetailEntity);
+
+        return url;
+    }
+
+    @PostMapping("/{userId}/project/{projectId}/detail/{projectDetailId}")
+    public String updateProjectDetailPro(Long detailUserId,ProjectDetailDTO projectDetailDTO,@PathVariable Long userId, @PathVariable Long companyId, @PathVariable Long projectId, @PathVariable Long projectDetailId, Principal principal, Model model){
+        String url = "/company/project/updateProjectDetailPro.html";
+        projectDetailDTO.setId(projectDetailId);
+        projectDetailDTO.setUserId(detailUserId);
+        System.out.println("프로젝트디테일아이디======="+projectDetailDTO.getId());
+        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
+            url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+            return url;
+        }
+
+        projectService.updateProjectDetail(projectDetailDTO);
+
+        return url;
+    }
+
+
 
 
 }
