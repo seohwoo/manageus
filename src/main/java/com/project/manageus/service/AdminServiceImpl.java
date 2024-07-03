@@ -127,7 +127,6 @@ public class AdminServiceImpl implements AdminService{
             if(departmentRepository.existsByCompanyId(departmentDTO.getCompanyId())) {
                 newId = Collections.max(departmentRepository.findAllByCompanyId(departmentDTO.getCompanyId()), Comparator.comparingLong(DepartmentEntity::getId)).getId() + 1;
             }
-            System.out.println(newId);
             departmentDTO.setId(newId);
             departmentRepository.save(departmentDTO.toDepartmentEntity());
             result = true;
