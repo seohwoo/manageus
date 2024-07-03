@@ -118,11 +118,11 @@
                                         <th>성별</th>
                                         <td th:text="${gender}"></td>
                                     </tr>
-                                    <tr th:if="${stamp == null}">
+                                    <tr th:if="${existStamp}">
                                         <th>직인</th>
                                         <td th:text="${stamp}"></td>
                                     </tr>
-                                    <tr th:if="${stamp != null}">
+                                    <tr th:if="${!existStamp}">
                                         <th>직인</th>
                                         <td>
                                             <img th:src="@{${stamp}}" width="150px" height="50px">

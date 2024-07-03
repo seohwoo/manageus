@@ -3,5 +3,11 @@ package com.project.manageus.repository;
 import com.project.manageus.entity.DepartmentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface DepartmentRepository extends JpaRepository<DepartmentEntity, Long> {
+
+    public List<DepartmentEntity> findAllByCompanyId(Long companyId);
+    public boolean existsByName(String name);
+    public boolean existsByCompanyId(Long companyId);
 }

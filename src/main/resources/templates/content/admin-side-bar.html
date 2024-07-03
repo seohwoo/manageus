@@ -19,13 +19,6 @@
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
 
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" th:href="@{/admin/{companyId}(companyId=${companyId})}">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a>
-        </li>
-
         <!-- Divider -->
         <hr class="sidebar-divider">
 
@@ -39,13 +32,14 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-cog"></i>
-                <span>Components</span>
+                <span>사원관리</span>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Custom Components:</h6>
-                    <a class="collapse-item" href="../sample/buttons.html">Buttons</a>
-                    <a class="collapse-item" href="../sample/cards.html">Cards</a>
+                    <h6 class="collapse-header">사원 관리:</h6>
+                    <a class="collapse-item" th:href="@{/admin/{companyId}/employees(companyId=${companyId})}">사원</a>
+                    <a class="collapse-item" th:href="@{/admin/{companyId}/employees/pending(companyId=${companyId})}">승인대기</a>
+                    <a class="collapse-item" th:href="@{/admin/{companyId}/employees/exit(companyId=${companyId})}">탈퇴</a>
                 </div>
             </div>
         </li>
