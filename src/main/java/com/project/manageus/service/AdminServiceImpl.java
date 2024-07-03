@@ -1,5 +1,6 @@
 package com.project.manageus.service;
 
+import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.dto.UserDTO;
 import com.project.manageus.entity.DepartmentEntity;
 import com.project.manageus.entity.PositionEntity;
@@ -13,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AdminServiceImpl implements AdminService{
@@ -108,4 +106,34 @@ public class AdminServiceImpl implements AdminService{
         }
         return result;
     }
+
+    @Override
+    public void findAllDepartment(Long companyId, Model model) {
+        List<DepartmentDTO> departmentDTOList = new ArrayList<>(Collections.emptyList());
+        List<DepartmentEntity> departmentEntityList = departmentRepository.findAllByCompanyId(companyId);
+        for (DepartmentEntity departmentEntity : departmentEntityList) {
+            DepartmentDTO departmentDTO = departmentEntity.toDepartmentDTO();
+            departmentDTO.setDepartmentUserCnt(userRepository.countByDepartmentId(departmentEntity.getId()));
+            departmentDTOList.add(departmentDTO);
+        }
+        model.addAttribute("departmentDTOList", departmentDTOList);
+    }
+
+    @Override
+    public boolean createDepartment(DepartmentDTO departmentDTO) {
+        boolean result = false;
+        if(!departmentRepository.existsByName(departmentDTO.getName())) {
+            Long newId = departmentDTO.getCompanyId() * 100 + 1;
+            if(departmentRepository.existsByCompanyId(departmentDTO.getCompanyId())) {
+                newId = Collections.max(departmentRepository.findAllByCompanyId(departmentDTO.getCompanyId()), Comparator.comparingLong(DepartmentEntity::getId)).getId() + 1;
+            }
+            System.out.println(newId);
+            departmentDTO.setId(newId);
+            departmentRepository.save(departmentDTO.toDepartmentEntity());
+            result = true;
+        }
+        return result;
+    }
+
+
 }

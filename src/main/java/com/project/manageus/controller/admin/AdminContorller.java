@@ -1,15 +1,12 @@
 package com.project.manageus.controller.admin;
 
+import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.service.AdminService;
 import com.project.manageus.service.UrlService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -97,4 +94,39 @@ public class AdminContorller {
         return url;
     }
 
+    @GetMapping("{companyId}/departments")
+    public String showDepartment(@PathVariable Long companyId,
+                                 Principal principal,
+                                 Model model) {
+        String url = "admin/department.html";
+        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
+            url = "redirect:/admin/" + principal.getName();
+            return url;
+        }
+        adminService.findAllDepartment(companyId, model);
+        return url;
+    }
+
+    @GetMapping("{companyId}/departments/form")
+    public String showDepartmentForm(@PathVariable Long companyId,
+                                 Principal principal,
+                                 Model model) {
+        String url = "admin/department-create-form.html";
+        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
+            url = "redirect:/admin/" + principal.getName();
+            return url;
+        }
+        adminService.findAllDepartment(companyId, model);
+        return url;
+    }
+
+    @PostMapping("{companyId}/departments")
+    public String insertDepartment(@PathVariable Long companyId,
+                                   DepartmentDTO departmentDTO) {
+        String url = "redirect:/admin/" + companyId + "/departments";
+        if(!adminService.createDepartment(departmentDTO)) {
+            url = "redirect:/admin/" + companyId + "/departments/form";
+        }
+        return url;
+    }
 }
