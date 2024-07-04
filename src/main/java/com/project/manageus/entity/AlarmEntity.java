@@ -36,6 +36,13 @@ public class AlarmEntity {
     @JoinColumn(name = "reader", referencedColumnName = "id", insertable = false, updatable = false)
     private UserInfoEntity userInfos;   //받은살마이 나일때
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private UserEntity user;
+
+
+
+
     @Builder
     public AlarmEntity(Long id, Long userId, String subject, Long reader, Long readType, Date readDate){
         super();

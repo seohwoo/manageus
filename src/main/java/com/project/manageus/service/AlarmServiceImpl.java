@@ -50,10 +50,6 @@ public class AlarmServiceImpl implements AlarmService{
 
     @Override
     public void insert(AlarmDTO alarmDTO) {   //쪽지 쓰기
-
-        Long read = 2000L;
-        alarmDTO.setReadType(read);
-
         alarmJPARepository.save(alarmDTO.toAlarmEntity());
     }
 
@@ -152,16 +148,19 @@ public class AlarmServiceImpl implements AlarmService{
     }
 
     @Override
-    public JsonObject getAlarmNameDepartment(Long companyId, Long departmentId) {  //회원 이름 가져오기 에이젝스
+    public JsonObject getAlarmNameDepartment(Long companyId, Long departmentId, Long loggedInUserId) {  //회원 이름 가져오기 에이젝스
         JsonObject jsonObject = new JsonObject();
         List<UserEntity> users = userRepository.findAllByCompanyIdAndDepartmentId(companyId, departmentId);
         JsonArray jsonArray = new JsonArray();
         for (UserEntity ue : users) {
+            // 현재 로그인된 사용자와 동일한 사용자인 경우 건너뜁니다.
+            if (ue.getId().equals(loggedInUserId)) {
+                continue;
+            }
             JsonObject jsonObj = new JsonObject();
             String user = ue.getUserInfo().getName() + " " + ue.getPosition().getName();
             Long id = ue.getId();
-            System.out.println("=======fullName"+user);
-            System.out.println("=======id"+id);
+
 
             jsonObj.addProperty("userId", id);
             jsonObj.addProperty("fullName", user);

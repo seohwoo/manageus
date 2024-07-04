@@ -65,18 +65,20 @@
                                 <thead>
                                 <tr>
                                     <th>번호 </th>
+                                    <th>소속부서</th>
                                     <th>보낸사람</th>
                                     <th>내용</th>
-                                    <th>보낸 날짜</th>
+                                    <th>받은 날짜</th>
                                     <th>확인결과</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
                                     <th>번호</th>
+                                    <th>소속부서</th>
                                     <th>보낸사람</th>
                                     <th>내용</th>
-                                    <th>보낸 날짜</th>
+                                    <th>받은 날짜</th>
                                     <th>확인결과</th>
                                 </tr>
                                 </tfoot>
@@ -84,6 +86,8 @@
                                     <tr th:each="receive, iterStat : ${receive}">
                                         <td><span th:text="${iterStat.index + 1}"></span></td>
                                         <td><span th:text="${receive.getUserInfo.getName}"></span></td>
+                                        <td><span th:text="${receive.user.position.name}"></span></td>
+
                                         <td>
                                             <a th:href="@{/companies/{companyId}/alarm/{id}/readreceive/{messageId}(companyId=${companyId}, id=${id}, messageId=${receive.id})}">
                                                 <span th:text="${#strings.length(receive.subject) > 8 ? #strings.substring(receive.subject, 0, 8).concat('....') : receive.subject}"></span>

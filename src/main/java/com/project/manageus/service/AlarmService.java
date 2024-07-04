@@ -22,7 +22,7 @@ public interface AlarmService {
     public void getdepartment(Long companyId, Model model);
 
 
-    JsonObject getAlarmNameDepartment(Long companyId, Long departmentId);  //회사원 가져오기
+    JsonObject getAlarmNameDepartment(Long companyId, Long departmentId, Long loggedInUserId);  //회사원 가져오기
 
 
     JsonObject getAlarmCount(Long id);  //안읽은 사람 숫자 가져오기

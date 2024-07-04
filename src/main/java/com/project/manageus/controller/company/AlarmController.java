@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -45,27 +46,26 @@ public class AlarmController {
 
         return "/company/alarm/write";
     }
-    
 
 
-    @PostMapping("/invitations/names")  //소속원 에이젝스용
+
+    @PostMapping("/invitations/names")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> getAlarmName(@RequestBody DepartmentDTO departmentDTO){
-        System.out.println("=============did: " + departmentDTO.getId());
-        System.out.println("=============cid: " + departmentDTO.getCompanyId());
+    public ResponseEntity<Map<String, Object>> getAlarmName(@RequestBody DepartmentDTO departmentDTO, Principal principal) {
+        Long loggedInUserId = Long.parseLong(principal.getName()); // 현재 로그인된 사용자의 ID 가져오기
+        Long companyId = departmentDTO.getCompanyId();
+        Long departmentId = departmentDTO.getId();
 
-       JsonObject names = alarmService.getAlarmNameDepartment(departmentDTO.getCompanyId(), departmentDTO.getId());
+        JsonObject names = alarmService.getAlarmNameDepartment(companyId, departmentId, loggedInUserId);
 
         Map<String, Object> result = new Gson().fromJson(names, Map.class);
-        return  ResponseEntity.ok(result);
+        return ResponseEntity.ok(result);
     }
+
 
     @PostMapping("/alarmnumber/number")  // 알림 에이젝스
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getAlertCount(@RequestBody DepartmentDTO departmentDTO) { // 알림 카운트 로직
-
-        System.out.println("=============didsdf: " + departmentDTO.getId());
-        System.out.println("=============cidsdf: " + departmentDTO.getCompanyId());
 
         JsonObject names = alarmService.getAlarmCount(departmentDTO.getId());
 
@@ -79,24 +79,27 @@ public class AlarmController {
     // 포스트 매핑 처리해야됨
 
     @PostMapping("/alarm/{id}/formpro")
-    public String writepro(Principal principal, AlarmDTO alarmDTO,@PathVariable Long companyId,
-                           @PathVariable Long id,@RequestParam("reader") String reader,
-                           @RequestParam("subject") String subject){
-
-        Long readtype = Long.valueOf(reader);   //append로  스크립트 처리 < -- 여려명을 리스트로 받아라
+    public String writepro(Principal principal, AlarmDTO alarmDTO, @PathVariable Long companyId,
+                           @PathVariable Long id, @RequestParam("readers[]") List<String> readers,
+                           @RequestParam("subject") String subject) {
 
         Long userId = Long.parseLong(principal.getName());
-         Long readers = Long.parseLong(reader);
-
         alarmDTO.setUserId(userId);
-        alarmDTO.setReader(readers);
         alarmDTO.setSubject(subject);
-        alarmDTO.setReadType(readtype);
 
-        alarmService.insert(alarmDTO);
+        for (String reader : readers) {
+            Long readerId = Long.parseLong(reader);
 
-        return  "redirect:/companies/" + companyId + "/alarm/" + id + "/spend";
+            alarmDTO.setReader(readerId);
+            alarmDTO.setReadType(2000L);  // Set readType to 2000
+
+            alarmService.insert(alarmDTO);
+        }
+
+        return "redirect:/companies/" + companyId + "/alarm/" + id + "/spend";
     }
+
+
 
 
 
