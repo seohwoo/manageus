@@ -1,5 +1,6 @@
 package com.project.manageus.controller.admin;
 
+import com.project.manageus.dto.CompanyDTO;
 import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.service.AdminService;
 import com.project.manageus.service.UrlService;
@@ -126,6 +127,42 @@ public class AdminContorller {
         String url = "redirect:/admin/" + companyId + "/departments";
         if(!adminService.createDepartment(departmentDTO)) {
             url = "redirect:/admin/" + companyId + "/departments/form";
+        }
+        return url;
+    }
+
+    @GetMapping("{companyId}/profile")
+    public String showCompanyProfile(@PathVariable Long companyId,
+                                     Principal principal,
+                                     Model model) {
+        String url = "admin/profile";
+        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
+            url = "redirect:/admin/" + principal.getName();
+            return url;
+        }
+        adminService.findCompanyInfo(companyId, model);
+        return url;
+    }
+
+    @GetMapping("{companyId}/profile/form")
+    public String showCompanyProfileForm(@PathVariable Long companyId,
+                                     Principal principal,
+                                     Model model) {
+        String url = "admin/profile-update-form";
+        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
+            url = "redirect:/admin/" + principal.getName();
+            return url;
+        }
+        adminService.findCompanyInfo(companyId, model);
+        return url;
+    }
+
+    @PutMapping("{companyId}/profile")
+    public String updateCompanyInfo(@PathVariable Long companyId,
+                                    CompanyDTO companyDTO) {
+        String url = "redirect:/admin/" + companyId + "/profile";
+        if(!adminService.updateCompanyInfo(companyDTO)) {
+            url = "redirect:/admin/" +companyId;
         }
         return url;
     }
