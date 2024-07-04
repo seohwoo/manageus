@@ -88,7 +88,6 @@ public class AlarmController {
         Long userId = Long.parseLong(principal.getName());
          Long readers = Long.parseLong(reader);
 
-
         alarmDTO.setUserId(userId);
         alarmDTO.setReader(readers);
         alarmDTO.setSubject(subject);

@@ -50,6 +50,10 @@ public class AlarmServiceImpl implements AlarmService{
 
     @Override
     public void insert(AlarmDTO alarmDTO) {   //쪽지 쓰기
+
+        Long read = 2000L;
+        alarmDTO.setReadType(read);
+
         alarmJPARepository.save(alarmDTO.toAlarmEntity());
     }
 
