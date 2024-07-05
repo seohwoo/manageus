@@ -400,7 +400,7 @@
                                 <tr th:each="list:${list}">
                                     <td><span th:text="${list.id}"/></td>
                                     <td><span th:text="${list.writer}"/></td>
-                                    <td><a th:href="@{'/super/1001/board/' + ${list.id}}"><span th:text="${list.content}"></span></a></td>
+                                    <td><a th:href="@{/super/board/{id}(id=${list.id})}"><span th:text="${list.content}"></span></a></td>
                                     <td><span th:text="${list.reg}"/></td>
                                 </tr>
                                 </tbody>
