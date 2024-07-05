@@ -120,8 +120,9 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public boolean createDepartment(DepartmentDTO departmentDTO) {
         boolean result = false;
-        if(!departmentRepository.existsByName(departmentDTO.getName())) {
+        if(!departmentRepository.existsByNameAndCompanyId(departmentDTO.getName(), departmentDTO.getCompanyId())) {
             Long newId = departmentDTO.getCompanyId() * 100 + 1;
+            System.out.println(newId);
             if(departmentRepository.existsByCompanyId(departmentDTO.getCompanyId())) {
                 newId = Collections.max(departmentRepository.findAllByCompanyId(departmentDTO.getCompanyId()), Comparator.comparingLong(DepartmentEntity::getId)).getId() + 1;
             }
