@@ -47,7 +47,7 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    <div th:include="~{content/side-bar :: side}"></div>
+    <div th:include="~{content/admin-side-bar :: adminside}"></div>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -55,7 +55,7 @@
         <!-- Main Content -->
         <div id="content">
 
-            <div th:include="~{content/top-bar :: top}"></div>
+            <div th:include="~{content/admin-top-bar :: admintop}"></div>
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -69,10 +69,11 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <div class="card shadow mb-4">
-                            <form th:action="@{~/companies/{companyId}/profiles/{id}(companyId=${companyId}, id=${id})}" method="post" enctype="multipart/form-data">
+                            <form th:action="@{~/admin/{companyId}/profile(companyId=${companyId})}" method="post">
                                 <input type="hidden" name="_method" value="put" />
+                                <input type="hidden" class="form-control" th:value="${companyId}" name="id" />
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                    <h5 class="m-0 font-weight-bold text-primary">회원정보</h5>
+                                    <h5 class="m-0 font-weight-bold text-primary">회사정보</h5>
                                     <button type="submit" class="btn btn-success btn-icon-split">
                                         <span class="icon text-white-50">
                                             <i class="fas fa-check"></i>
@@ -83,48 +84,35 @@
                                 <div class="card-body">
                                     <table class="profile-table">
                                         <tr>
-                                            <th>사원번호</th>
-                                            <td th:text="${userId}"></td>
-                                            <input type="hidden" class="form-control" th:value="${userId}" name="id" />
+                                            <th>회사명</th>
+                                            <td th:text="${companyName}"></td>
+                                            <input type="hidden" class="form-control" th:value="${companyName}" name="name" />
                                         </tr>
                                         <tr>
-                                            <th>이름</th>
-                                            <td th:text="${username}"></td>
-                                            <input type="hidden" class="form-control" th:value="${username}" name="name" />
+                                            <th>사업자번호</th>
+                                            <td th:text="${businessNum}"></td>
+                                            <input type="hidden" class="form-control" th:value="${businessNum}" name="businessNum" />
                                         </tr>
                                         <tr>
-                                            <th>부서</th>
-                                            <td th:text="${department}"></td>
+                                            <th>회사코드</th>
+                                            <td th:text="${inviteCode}"></td>
+                                            <input type="hidden" class="form-control" th:value="${inviteCode}" name="inviteCode" />
                                         </tr>
                                         <tr>
-                                            <th>직급</th>
-                                            <td th:text="${position}"></td>
+                                            <th>CEO</th>
+                                            <td><input type="text" class="form-control" th:value="${ceo}" name="ceo"></td>
                                         </tr>
                                         <tr>
                                             <th>이메일</th>
                                             <td><input type="email" class="form-control" th:value="${email}" name="email"></td>
                                         </tr>
                                         <tr>
-                                            <th>전화번호</th>
-                                            <td><input type="tel" class="form-control" th:value="${phone}" name="phone"></td>
-                                        </tr>
-                                        <tr>
                                             <th>주소</th>
                                             <td><input type="text" class="form-control" th:value="${address}" name="address"></td>
                                         </tr>
                                         <tr>
-                                            <th>생년월일</th>
-                                            <td th:text="${birth}"></td>
-                                            <input type="hidden" class="form-control" th:value="${birth}" name="birth" />
-                                        </tr>
-                                        <tr>
-                                            <th>성별</th>
-                                            <td th:text="${gender}"></td>
-                                            <input type="hidden" class="form-control" th:value="${gender}" name="gender" />
-                                        </tr>
-                                        <tr>
-                                            <th>직인</th>
-                                            <td><input type="file" class="form-control" enctype="multipart/form-data" name="stampFile" required></td>
+                                            <th>가입일</th>
+                                            <td th:text="${#dates.format(regDate, 'yyyy/MM/dd')}"></td>
                                         </tr>
                                     </table>
                                 </div>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var result = /*[[${result}]]*/;
+    var companyId = /*[[${companyId}]]*/;
+    var userId = /*[[${userId}]]*/;
+    var projectId = /*[[${projectId}]]*/;
+    if (result == 1) {
+        alert("업무가 등록되었습니다.");
+        window.location.href = `/companies/${companyId}/users/${userId}/project/${projectId}`;
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

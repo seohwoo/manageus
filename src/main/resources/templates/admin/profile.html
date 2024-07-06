@@ -47,7 +47,7 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    <div th:include="~{content/side-bar :: side}"></div>
+    <div th:include="~{content/admin-side-bar :: adminside}"></div>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -55,7 +55,7 @@
         <!-- Main Content -->
         <div id="content">
 
-            <div th:include="~{content/top-bar :: top}"></div>
+            <div th:include="~{content/admin-top-bar :: admintop}"></div>
 
             <!-- Begin Page Content -->
             <div class="container-fluid"> <!-- Updated this line -->
@@ -70,63 +70,43 @@
                     <div class="col-lg-8">
                         <div class="card shadow mb-4 card-custom-width"> <!-- Added card-custom-width class -->
                             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                <h5 class="m-0 font-weight-bold text-primary">회원정보</h5>
-                                <div th:if="${isLoginUser}">
-                                    <a th:href="@{/companies/{companyId}/profiles/{id}/form(companyId=${companyId}, id=${id})}" class="btn btn-primary btn-icon-split">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-arrow-right"></i>
-                                        </span>
-                                        <span class="text">정보수정</span>
-                                    </a>
-                                </div>
+                                <h5 class="m-0 font-weight-bold text-primary">회사정보</h5>
+                                <a th:href="@{/admin/{companyId}/profile/form(companyId=${companyId})}" class="btn btn-primary btn-icon-split">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </span>
+                                    <span class="text">정보수정</span>
+                                </a>
                             </div>
                             <div class="card-body">
                                 <table class="profile-table">
                                     <tr>
-                                        <th>사원번호</th>
-                                        <td th:text="${userId}"></td>
+                                        <th>회사명</th>
+                                        <td th:text="${companyName}"></td>
                                     </tr>
                                     <tr>
-                                        <th>이름</th>
-                                        <td th:text="${username}"></td>
+                                        <th>사업자번호</th>
+                                        <td th:text="${businessNum}"></td>
                                     </tr>
                                     <tr>
-                                        <th>부서</th>
-                                        <td th:text="${department}"></td>
+                                        <th>회사코드</th>
+                                        <td th:text="${inviteCode}"></td>
                                     </tr>
                                     <tr>
-                                        <th>직급</th>
-                                        <td th:text="${position}"></td>
+                                        <th>CEO</th>
+                                        <td th:text="${ceo}"></td>
                                     </tr>
                                     <tr>
                                         <th>이메일</th>
                                         <td th:text="${email}"></td>
                                     </tr>
                                     <tr>
-                                        <th>전화번호</th>
-                                        <td th:text="${phone}"></td>
-                                    </tr>
-                                    <tr>
                                         <th>주소</th>
                                         <td th:text="${address}"></td>
                                     </tr>
                                     <tr>
-                                        <th>생년월일</th>
-                                        <td th:text="${birth}"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>성별</th>
-                                        <td th:text="${gender}"></td>
-                                    </tr>
-                                    <tr th:if="${existStamp}">
-                                        <th>직인</th>
-                                        <td th:text="${stamp}"></td>
-                                    </tr>
-                                    <tr th:if="${!existStamp}">
-                                        <th>직인</th>
-                                        <td>
-                                            <img th:src="@{${stamp}}" width="150px" height="50px">
-                                        </td>
+                                        <th>가입일</th>
+                                        <td th:text="${#dates.format(regDate, 'yyyy/MM/dd')}"></td>
                                     </tr>
                                 </table>
                             </div>
