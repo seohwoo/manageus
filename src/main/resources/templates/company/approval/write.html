@@ -44,13 +44,15 @@
                         <!-- Content Row -->
                         <div class="row">
                             <div class="col-lg-12">
-                                <form th:action="@{/companies/{companyId}/approval/{id}/write(id=${id},companyId=${companyId})}" method="post">
+                                <form th:action="@{/companies/{companyId}/approval/{id}/write(id=${id},companyId=${companyId})}" method="post" onsubmit="return validateForm()">
                                     <input type="hidden" id="companyId" th:value="${companyId}"/>
                                     <!-- 결재 라인 -->
                                     <div class="form-group" id="approverContainer">
                                         <label for="approver">결재 라인</label>
-                                        <button type="button" class="btn btn-secondary" onclick="addApprover()">+</button>
+                                        <!-- ---------------------------------->
+                                        <button type="button" class="btn btn-secondary" id="addButton" onclick="addApprover()">+</button>
                                         <select name="approver" id="approver" class="form-control" onchange="getPersons()" required>
+                                            <option value="----------">결재자 선택해주세요.</option>
                                             <option th:each="approver : ${selectDepartment}" th:value="${approver.id}" th:text="${approver.name}"></option>
                                         </select>
                                         <select id="personSelect" class="form-control" name="personId"></select>
@@ -160,6 +162,25 @@
                 newPersonSelect.name = "personId";
                 newPersonSelect.className = "form-control";
 
+
+
+
+                // 새로운 - 버튼을 생성합니다.
+        var removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.className = "btn btn-danger";
+        removeButton.innerText = "-";
+        removeButton.onclick = function() {
+            removeApprover(newDiv);
+        };
+
+                // 새로운 div에 생성한 select 요소들과 - 버튼을 추가합니다.
+        newDiv.appendChild(newSelect);
+        newDiv.appendChild(newPersonSelect);
+        newDiv.appendChild(removeButton);
+
+
+
                 // 새로운 div에 생성한 select 요소들을 추가합니다.
                 newDiv.appendChild(newSelect);
                 newDiv.appendChild(newPersonSelect);
@@ -168,11 +189,29 @@
                 document.getElementById("approverContainer").appendChild(newDiv);
             }
 
+
             if (clickCount >= 2) {
                 document.getElementById("addButton").disabled = true; // 버튼 비활성화
-                alert("결재 라인은 최대 3명까지 가능합니다."); // 경고창을 띄웁니다.
+                // alert("결재 라인은 최대 3명까지 가능합니다."); // 경고창을 띄웁니다.
             }
         }
+
+
+
+        // JavaScript 함수 정의 시작
+function removeApprover(div) {
+    div.remove(); // 해당 div 요소를 삭제
+    clickCount--; // 클릭 횟수 감소
+
+    // 최대 클릭 횟수 미만이므로 + 버튼 활성화
+    if (clickCount < 2) {
+        document.getElementById("addButton").disabled = false; // 버튼 활성화
+    }
+}
+
+
+
+
 
         function getPersons(event) {
             var departmentId = event.target.value;
@@ -218,6 +257,19 @@
         document.querySelectorAll('select[name="approver"]').forEach(function(select) {
             select.onchange = getPersons;
         });
+
+
+    function validateForm() {
+        var valid = true;
+        var selectElements = document.querySelectorAll("#approverContainer select[name='approver']");
+        selectElements.forEach(function(select) {
+            if (select.value === "----------") {
+                alert("결재 라인을 선택해주세요.");
+                valid = false;
+            }
+        });
+        return valid;
+    }
     </script>
 </html>
 

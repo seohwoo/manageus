@@ -76,6 +76,7 @@ public class ApprovalServiceImpl implements ApprovalService {
         LocalDate signOffLocalDate = startDate.minusDays(2);
         Date signOff = Date.from(signOffLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
+        Adto.setStatusId(1001L);
         Adto.setUserId(id);
         Adto.setSignOff(signOff);
         Adto.setCompanyId(companyId);
