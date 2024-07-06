@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,15 +44,30 @@ public class QaServiceImpl implements QaService{
     }
 
     @Override
-    public void qaRead(Model model,int pageNum) {
+    public void qaRead(Model model,int pageNum,int type) {
         int pageSize=10;
-        int count=qaJPA.countByRef(0L);
+        int count=0;
+        if(type==1) {
+             count = qaJPA.countByRef(0L);
+        }else if(type==2){
+            count= qaJPA.nonAnswerCount();
+        }else if(type==3){
+            count=qaJPA.answerCount();
+        }
         List<QaDTO> list = Collections.emptyList();
         if(count>0) {
             Sort sort = Sort.by(Sort.Order.desc("reg"));
-            Page<QaEntity> page = qaJPA.findByRef(0L, PageRequest.of(pageNum - 1, pageSize, sort));
+            Page<QaEntity> page=Page.empty();
+            if(type==1) {
+               page = qaJPA.findByRef(0L, PageRequest.of(pageNum - 1, pageSize, sort));
+            }else if(type==2){
+                page = qaJPA.nonAnswerList(PageRequest.of(pageNum - 1, pageSize, sort));
+            }else if(type==3){
+                page = qaJPA.answerList(PageRequest.of(pageNum - 1, pageSize, sort));
+            }
             List<QaEntity> entityList = page.getContent();
             list=new ArrayList<>();
+           if(!CollectionUtils.isEmpty(entityList))
             for(QaEntity qe:entityList){
                 QaDTO dto = qe.toQaDTO();
                 list.add(dto);

@@ -22,8 +22,8 @@ public class SuperAdminController {
     }
     //company admincontroller
     @GetMapping("/board")
-    public String qaList(Model model, @RequestParam(value="pageNum",defaultValue = "1")int pageNum) {
-        service.qaRead(model,pageNum);
+    public String qaList(Model model, @RequestParam(value="pageNum",defaultValue = "1")int pageNum,@RequestParam(value = "type",defaultValue = "1")int type) {
+        service.qaRead(model,pageNum,type);
         return "super/qa/list.html";
     }
     @GetMapping("/board/{num}")
