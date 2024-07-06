@@ -10,4 +10,5 @@ public interface DepartmentRepository extends JpaRepository<DepartmentEntity, Lo
     public List<DepartmentEntity> findAllByCompanyId(Long companyId);
     public boolean existsByNameAndCompanyId(String name, Long companyId);
     public boolean existsByCompanyId(Long companyId);
+
 }

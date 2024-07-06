@@ -1,168 +1,183 @@
 package com.project.manageus.controller.company;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.project.manageus.dto.ApprovalDTO;
+import com.project.manageus.dto.DepartmentDTO;
+import com.project.manageus.entity.ApprovalTypeEntity;
+import com.project.manageus.entity.UserEntity;
 import com.project.manageus.service.ApprovalService;
 
+import com.project.manageus.service.UrlService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-
+// http://localhost:8080/companies/1003/approval/10030003/list
 @Controller
-@RequestMapping("/company/*")
+@RequestMapping("/companies/{companyId}/*")
 public class ApprovalController {
 
-    // 배워
-    private final ApprovalService service;
+    private final ApprovalService approvalService;
+    private final UrlService urlService;
 
     @Autowired
-    public ApprovalController(ApprovalService service) {
-        this.service = service;
+    public ApprovalController(ApprovalService approvalService, UrlService urlService) {
+        this.approvalService = approvalService;
+        this.urlService = urlService;
     }
-    // 배워
 
     // 게시판 페이지
-    @GetMapping("/list")
-    public String ApprovalList(HttpSession session) {
-        // 임시 세션값
-        session.setAttribute("user_id", 11111111);
-        //
+    @GetMapping("/approval/{id}/list")
+    public String ApprovalList(@PathVariable Long companyId,
+                               @PathVariable Long id,
+                               Principal principal, Model model) {
+
+        // GetMapping일 땐 필수 ~
+        if (!urlService.findUserInfo(principal.getName(), companyId, model)
+                || id != Long.parseLong(principal.getName())) {
+            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+        }
+        // ~ 까지
+
+        // 결재 리스트 가져오기
+        approvalService.selectApprovalList(model, companyId);
+
         return "/company/approval/list";
     }
-    // 휴가 신청 페이지
-    @GetMapping("/write")
-    public String writeForm(Model model) {
-        // 임시 결재 라인
-        ArrayList<String> approver = new ArrayList<>();
-        approver.add("장의석 부사장");
-        approver.add("이도준 사장");
-        approver.add("김지환 대리");
-        approver.add("서정룡 전무");
-        approver.add("이선민 상무");
-        approver.add("서형우 부장");
-        model.addAttribute("approver", approver);
-        //
 
-        // 임시 휴가종류값
-        ArrayList<String> approvalType = new ArrayList<>();
-        approvalType.add("연차");
-        approvalType.add("월차");
-        approvalType.add("반차");
-        approvalType.add("병가");
-        model.addAttribute("approvalType", approvalType);
-        //
+    // 휴가 신청 페이지
+    @GetMapping("/approval/{id}/write")
+    public String writeForm(@PathVariable Long companyId,
+                            @PathVariable Long id,
+                            Principal principal, Model model) {
+
+        // GetMapping일 땐 필수 ~
+        if (!urlService.findUserInfo(principal.getName(), companyId, model)
+                || id != Long.parseLong(principal.getName())) {
+            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+        }
+        // ~ 까지
+
+        model.addAttribute("companyId", companyId);
+        approvalService.selectDepartment(companyId, model);
+
+
+        // 결재 종류 가져오기
+        approvalService.selectApprovalType(model);
+
         return "/company/approval/write";
     }
 
-    @PostMapping("write")
-    public String writePro(Model model,
-                           @RequestParam(value = "approver") List<String> approvers,
-                           @RequestParam(value = "title") String title,
-                           @RequestParam(value = "approvalType") String approvalType,
-                           @RequestParam(value = "start_date") @DateTimeFormat(pattern = "yy-MM-dd") Date start_date,
-                           @RequestParam(value = "end_date") @DateTimeFormat(pattern = "yy-MM-dd") Date end_date,
-                           @RequestParam(value = "content") String content) {
+    @PostMapping("/approval/{id}/write")
+    public String writePro(@PathVariable Long companyId,
+                           @PathVariable Long id,
+                           Principal principal, Model model,
+                           ApprovalDTO Adto,
+                           @RequestParam("personId") List<Long> personId) {
 
-        model.addAttribute("approvers", approvers);
-        model.addAttribute("title", title);
-        model.addAttribute("approvalType", approvalType);
-        model.addAttribute("start_date", start_date);
-        model.addAttribute("end_date", end_date);
-        model.addAttribute("content", content);
+        // 결재 테이블 인서트
+        approvalService.insertApproval(companyId, id, Adto, personId);
 
-        return "/company/approval/test";
-    }
 
-    @GetMapping("test")
-    public String test() {
-        return "/company.approval/test";
+        return "redirect:/companies/{companyId}/approval/{id}/list";
     }
 
 
-    /*
-    // 결재 리스트
-    @GetMapping("/list")
-    public String list(Model model, HttpSession session) {
-        session.setAttribute("userId", 11111111);
-        return "/company/approval/list";
+    @PostMapping("/approval/write")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> writeAjax(@RequestBody DepartmentDTO dto) {
+        JsonObject JObject = approvalService.selectPositionPeople(dto);
+        Map<String, Object> MSO = new Gson().fromJson(JObject, Map.class);
+        return ResponseEntity.ok(MSO);
     }
 
-    // 휴가 신청하기
-    @PostMapping("/list")
-    public String writeForm(Model model, HttpSession session,
-                            @RequestParam("id") String id,
-                            @RequestParam("pw") int pw, ApprovalDTO dto) {
 
-        Integer userId = (Integer) session.getAttribute("userId");
-        if (userId != null) {
-            model.addAttribute("userId", userId.intValue()); // intValue() 호출하여 값 전달
-        }// else {
-         //   model.addAttribute("userId", null); // 세션에 userId가 없는 경우 null 처리
-        //}
+    @GetMapping("/approval/{id}/info/{approvalId}")
+    public String info(@PathVariable Long companyId,
+                       @PathVariable Long id,
+                       @PathVariable Long approvalId,
+                       Principal principal, Model model) {
 
-        model.addAttribute("id", id);
-        model.addAttribute("pw", pw);
-        service.selectApproval(id, pw, model);
+        // GetMapping일 땐 필수 ~
+        if (!urlService.findUserInfo(principal.getName(), companyId, model)
+                || id != Long.parseLong(principal.getName())) {
+            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+        }
+        // ~ 까지
 
-        // 위에는 값 가져오는거
+        //
+        Long sessionId = Long.parseLong(principal.getName());
+        String sessionIds = principal.getName();
+        model.addAttribute("sessionIds", sessionIds);
+        model.addAttribute("sessionId", sessionId);
 
-        // 아래는 값 넣는거
-        service.isnertApproval(dto);
-
-
-        return "/company/approval/test";
+        // 글번호에 맞는 정보 가져오기
+        approvalService.selectApprovalDetail(approvalId, id, model);
+        return "/company/approval/info";
     }
 
-    // test
-    @GetMapping("/test")
-    public String test() {
+    @RequestMapping("/approval/{id}/update/{approvalId}")
+    public String approvalUpdate(@PathVariable Long companyId,
+                                 @PathVariable Long id,
+                                 @PathVariable Long approvalId) {
 
-        return "/company/approval/test";
+        System.out.println("approvalId---------------------------------------"+approvalId);
+        System.out.println("id---------------------------------------"+id);
+
+        approvalService.approvalUpdate(approvalId, id);
+        return "redirect:/companies/{companyId}/approval/{id}/info/{approvalId}";
     }
 
-    /*
-    // 결재 게시판
-    @GetMapping("/write")
-    public String write(Model model) {
-    /*
-        ArrayList<String> approver = new ArrayList<>();
-        approver.add("장의석 부사장");
-        approver.add("이도준 사장");
-        approver.add("김지환 대리");
-        approver.add("서정룡 전무");
-        approver.add("이선민 상무");
-        approver.add("서형우 부장");
-
-        model.addAttribute("approver", approver);
-
-        return "/company/approval/write.html";
-    }
-
-    @PostMapping("write")
-    public String writePro(Model model, @RequestParam(value = "title") String title,
-                           @RequestParam(value = "subject") String subject) {
-
-        model.addAttribute("title", title);
-        model.addAttribute("subject", subject);
-        return "redirect:/company/approval/list";
-    }
-
-    @GetMapping("list")
-    public String list(Model model, @RequestParam(value = "title") String title,
-                       @RequestParam(value = "subject") String subject) {
-
-        model.addAttribute("title", title);
-        model.addAttribute("subject", subject);
-        return "/company/approval/list.html";
-    }
-    */
 }
+
+/*
+    // 회사 번호가 같은 정보 다 가져오기
+    // ajax 연습
+    @GetMapping("/approval/{id}/test")
+    public String aJaxTEST(@PathVariable Long companyId,
+                           @PathVariable Long id,
+                           Principal principal, Model model) {
+
+        approvalService.selectDepartment(companyId, model);
+
+        return "/company/approval/test";
+    }
+
+    @PostMapping("/approval/test2")
+    public String aJaxTEST2(@PathVariable Long companyId,
+                           @PathVariable Long id,
+                           Principal principal, Model model,
+                            @RequestParam Long departmentId) {
+
+        System.out.println("Selected department ID: " + departmentId);
+
+        return "/company/approval/test2";
+    }
+*/
+
+
+
+
+
+
+/*
+id가 필요할 때는 밑에 코드들 쓰면됨 ( userId)
+if(!urlService.findUserInfo(principal.getName(), companyId, model)
+                || id!=Long.parseLong(principal.getName())) {
+            url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+            return url;
+        }
+        */
