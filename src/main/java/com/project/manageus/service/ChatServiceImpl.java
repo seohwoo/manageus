@@ -160,5 +160,20 @@ public class ChatServiceImpl implements ChatService {
 
     }
 
+    @Override
+    public void changRoomName(Long roomId, String newRoomName) {
+
+        Optional<ChatRoomEntity> room =chatRoomJPA.findById(roomId);
+        if(room.isPresent()){
+            ChatRoomDTO dto = room.get().toChatRoomDTO();
+
+            System.out.println("==============="+dto);
+            dto.setName(newRoomName);
+            System.out.println("==============="+dto);
+            chatRoomJPA.save(dto.toChatRoomEntity());
+
+        }
+    }
+
 
 }

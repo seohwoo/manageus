@@ -42,6 +42,7 @@ public class ChatController {
         model.addAttribute("id",id);
         return "/company/chat/chater";
     }
+
     @GetMapping("/{companyId}/chat")
     public String chatRoomList(Principal principal,@PathVariable(value="companyId")Long companyId,Model model){
         String url ;
@@ -52,10 +53,15 @@ public class ChatController {
         String sid = (String)principal.getName();
         Long id = Long.parseLong(sid);
         service.chatList(model,id);
+        service.chatInvitations(model,companyId);
         model.addAttribute("companyId",companyId);
         model.addAttribute("id",id);
         return "/company/chat/chatRoomList";
     }
+
+
+
+
     @PostMapping("/{companyId}/chat")
     public String chatRoomCreate(Principal principal,@PathVariable(value="companyId")Long companyId,ChatRoomDTO dto,Model model){
         String url ;
@@ -66,6 +72,7 @@ public class ChatController {
        String id =(String)principal.getName();
         Long idl = Long.parseLong(id);
         Long roomId=service.chatNewRoom(dto,idl);
+
         url="redirect:/companies/"+companyId+"/chat/"+roomId+"/"+idl;
         model.addAttribute("companyId",companyId);
         model.addAttribute("id",id);
@@ -89,22 +96,14 @@ public class ChatController {
         // 여기에서 메시지를 데이터베이스에 저장하거나, 다른 클라이언트에 방송하는 등의 로직을 추가할 수 있습니다.
         return ResponseEntity.ok("Message received");
     }
-    @GetMapping("{companyId}/invitations/{roomId}")
-    public String invitations(Model model,@PathVariable(value="companyId")Long companyId,@PathVariable Long roomId){
-            service.chatInvitations(model,companyId);
-            model.addAttribute("roomId",roomId);
-        return "company/chat/chatInvitation";
-    }
+
     @PostMapping("{companyId}/invitations")
     public String insertInvitations(@PathVariable(value="companyId")Long companyId,@RequestParam(value = "personId")Long personId,@RequestParam(value = "roomId")Long roomId){
         ChatDTO dto = new ChatDTO();
         dto.setUserId(personId);
         dto.setChatRoomId(roomId);
         service.userInvitation(dto);
-        String url="redirect:/companies/"+companyId+"/chatRoomList";
-
-
-
+        String url="redirect:/companies/"+companyId+"/chat";
         return url;
     }
     @PostMapping("/invitations/names")
@@ -116,6 +115,11 @@ public class ChatController {
 
         return ResponseEntity.ok(result);
     }
-
+    @PostMapping("/{companyId}/chat/{roomId}/edit")
+    public String roomEdit(@PathVariable(value="companyId")Long companyId,@PathVariable(value="roomId")Long roomId ,@RequestParam(value = "newRoomName") String newRoomName){
+        String url="redirect:/companies/"+companyId+"/chat";
+        service.changRoomName(roomId,newRoomName);
+        return url;
+    }
 
 }

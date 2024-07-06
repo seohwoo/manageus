@@ -66,24 +66,122 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-8">
                             <div th:each="dto : ${list}" class="card shadow mb-4">
-
                                 <div class="card-header py-3">
                                     <a th:href="@{/companies/{companyId}/chat/{roomId}/{id}(roomId=${dto.id},id=${id},companyId=${companyId})}">
                                     <h6 class="m-0 font-weight-bold text-primary">
                                         <span th:text="${dto.name}"></span>
                                     </h6>
-
                                     <div class="header-buttons">
-                                        <a class="btn btn-info" th:href="@{/companies/{companyId}/invitations/{roomId}(companyId=${companyId},roomId=${dto.id})}">+</a>
+                                        <a class="btn btn-info" href="#" data-toggle="modal" data-target="#renameRoomModal">방이름변경</a>
+                                        <a class="btn btn-info" href="#" data-toggle="modal" data-target="#inviteModal">+</a>
                                         <form th:method="delete" th:action="@{/companies/{companyId}/chat(companyId=${companyId})}" >
                                             <input type="hidden" name="userId" th:value="${id}">
                                             <input type="hidden" name="chatRoomId" th:value="${dto.id}">
                                             <button class="btn delete-button" type="submit">x</button>
                                         </form>
                                     </div>
+                                        <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="inviteModalLabel">초대하기</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="#" th:action="@{/companies/{companyId}/invitations(companyId=${companyId})}" method="post">
+                                                            <input type="hidden" id="companyId" th:value="${companyId}"/>
+                                                            <input type="hidden" id="roomId" name="roomId" th:value="${dto.id}"/>
+                                                            <div class="form-group">
+                                                                <label for="departmentSelect">팀을 선택해주세요</label>
+                                                                <select id="departmentSelect" name="departmentId" class="form-control" onchange="getPersons()">
+                                                                    <option>팀을 선택해주세요</option>
+                                                                    <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}">Department</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="personSelect">사람을 선택해주세요</label>
+                                                                <select id="personSelect" name="personId" class="form-control"></select>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">초대 하기</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                        <!-- 방 이름 변경 모달 -->
+                                        <div class="modal fade" id="renameRoomModal" tabindex="-1" role="dialog" aria-labelledby="renameRoomModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="renameRoomModalLabel">방 이름 변경</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form id="renameRoomForm" th:action="@{/companies/{companyId}/chat/{roomId}/edit(companyId=${companyId}, roomId=${dto.id})}" th:method="post">
+                                                            <div class="form-group">
+                                                                <label for="newRoomName">새 방 이름</label>
+                                                                <input type="text" class="form-control" id="newRoomName" name="newRoomName" required>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">변경</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script th:inline="javascript">
+                                            function getPersons() {
+                                                var companyId = $("#companyId").val();
+                                                var roomId = $("#roomId").val();
+                                                var departmentId = document.getElementById("departmentSelect").value;
+
+                                                $.ajax({
+                                                    url: '/companies/invitations/names',
+                                                    type: 'POST',
+                                                    contentType: 'application/json',
+                                                    data: JSON.stringify({ departmentId: departmentId, id: roomId }),
+                                                    dataType: "json",
+                                                    success: function(response) {
+                                                        var personSelect = document.getElementById("personSelect");
+                                                        personSelect.innerHTML = "";
+                                                        response.DepartmentMember.forEach(function(person) {
+                                                            var option = document.createElement("option");
+                                                            option.value = person.userId;
+                                                            option.text = person.fullName;
+                                                            personSelect.add(option);
+                                                        });
+                                                    },
+                                                    error: function(error) {
+                                                        console.log('오류', error);
+                                                    }
+                                                });
+                                            }
+
+                                            $(document).ready(function() {
+                                                $('#renameRoomForm').on('submit', function(e) {
+                                                    e.preventDefault();  // 기본 폼 제출 방지
+                                                    var form = $(this);
+
+                                                    $.ajax({
+                                                        type: form.attr('method'),
+                                                        url: form.attr('action'),
+                                                        data: form.serialize(),
+                                                        success: function() {
+                                                            $('#renameRoomModal').modal('hide');  // 모달 닫기
+                                                            // 폼 제출 후 필요한 추가 작업 (예: 페이지 새로 고침)
+                                                        },
+                                                        error: function() {
+                                                            alert('방 이름 변경에 실패했습니다.');
+                                                        }
+                                                    });
+                                                });
+                                            });
+                                        </script>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -99,6 +197,7 @@
                     </div>
                 </div>
             </div>
+
             <div th:include="~{content/footer :: footer}"></div>
         </div>
     </div>

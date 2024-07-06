@@ -15,4 +15,5 @@ public interface ChatService {
     public void chatInvitations(Model model,Long companyId);
     public JsonObject getNamesfromDepartment(ChatRoomDTO dto);
     public void userInvitation(ChatDTO dto);
+    public void changRoomName(Long roomId,String newRoomName);
 }
