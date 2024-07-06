@@ -1,22 +1,24 @@
 package com.project.manageus.entity;
 
 import com.project.manageus.dto.ApprovalDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @Entity
+@DynamicUpdate
 @Table(name="approval")
+@DynamicInsert
 public class ApprovalEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "user_id")
     private Long userId;
@@ -34,10 +36,28 @@ public class ApprovalEntity {
     private Date signOn;
     @Column(name = "sign_off")
     private Date signOff;
+    @Column(name = "company_id")
+    private Long companyId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "approval_type_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private ApprovalTypeEntity approvalType;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id", referencedColumnName = "approval_id", insertable = false, updatable = false)
+    private ApprovalDetailEntity approvalDetail;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private UserEntity user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private StatusEntity status;
 
     @Builder
     public ApprovalEntity(Long id, Long userId, Long statusId, String title, Long approvalTypeId,
-                          Date startDate, Date endDate, String content, Date signOn, Date signOff) {
+                          Date startDate, Date endDate, String content, Date signOn, Date signOff, Long companyId) {
         super();
         this.id = id;
         this.userId = userId;
@@ -49,6 +69,7 @@ public class ApprovalEntity {
         this.content = content;
         this.signOn = signOn;
         this.signOff = signOff;
+        this.companyId = companyId;
     }
 
     public ApprovalDTO toApprovalDTO() {
@@ -63,6 +84,17 @@ public class ApprovalEntity {
                 .content(this.content)
                 .signOn(this.signOn)
                 .signOff(this.signOff)
+                .companyId(this.companyId)
                 .build();
     } // 이거는 Entity를 DTO로 만드는 작업이다.
 }     // DB에서 넘어올 때는 Entity로 넘어온다.
+
+
+// @OneToOne = 연결되는 값이 1:1 일 때
+// ex) 회원가입과 회원정보 디테일
+// @ManyToOne = 나는 여럿 상대는 하나
+// ex) Many = 결제내역, One = 결제한 사람
+// @OneToMany = 나는 하나 상대는 여럿
+// ex) One = 결제한 사람, Many = 결제내역
+// @ManyToMany = 여럿 대 여럿
+// ex) 쓸 일 거의 없음
