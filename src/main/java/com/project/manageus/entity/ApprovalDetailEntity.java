@@ -1,20 +1,20 @@
 package com.project.manageus.entity;
 
 import com.project.manageus.dto.ApprovalDetailDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Data
 @NoArgsConstructor
 @Entity
+@DynamicUpdate
 @Table(name="approval_detail")
 public class ApprovalDetailEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "approval_id")
     private Long approvalId;

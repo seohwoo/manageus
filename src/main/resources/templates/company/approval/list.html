@@ -47,7 +47,7 @@
                     <div class="card-header py-3">
 
                         <form th:action="@{/companies/{companyId}/approval/{id}/write(id=${id},companyId=${companyId})}" method="get">
-                            <button type="submit" class="btn btn-primary">Approval Application</button>
+                            <button type="submit" class="btn btn-primary">결재 작성</button>
                         </form>
                     </div>
                     <div class="card-body">
@@ -56,16 +56,18 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                     <tr>
-                                        <th>서류번호</th>
+                                        <th>작성자</th>
                                         <th>제목</th>
                                         <th>날짜</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr th:each="approvalList : ${approvalList}">
-                                        <td th:text="${approvalList.id}"></td>
-                                        <td th:text="${approvalList.title}"></td>
-                                        <td th:text="${approvalList.signOn}"></td>
+                                        <td th:text="${approvalList.getUser.getUserInfo.getName}"></td>
+                                        <td>
+                                            <a th:href="@{/companies/{companyId}/approval/{id}/info/{approvalId}(id=${id},companyId=${companyId},approvalId=${approvalList.id})}" th:text="${approvalList.title}"></a>
+                                        </td>
+                                        <td th:text="${#dates.format(approvalList.signOn, 'yyyy-MM-dd')}"></td>
                                     </tr>
                                     </tbody>
                                 </table>

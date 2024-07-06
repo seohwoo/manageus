@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 
     <head>
         <meta charset="utf-8">
@@ -38,20 +38,22 @@
 
                         <!-- Page Heading -->
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-800">Approval Application</h1>
+                            <h2 class="h3 mb-0 text-gray-800">Approval Application</h2>
                         </div>
 
                         <!-- Content Row -->
                         <div class="row">
                             <div class="col-lg-12">
                                 <form th:action="@{/companies/{companyId}/approval/{id}/write(id=${id},companyId=${companyId})}" method="post">
+                                    <input type="hidden" id="companyId" th:value="${companyId}"/>
                                     <!-- 결재 라인 -->
-                                    <div class="form-group">
+                                    <div class="form-group" id="approverContainer">
                                         <label for="approver">결재 라인</label>
-                                        <select name="approver" id="approver" class="form-control" required>
-                                            <option th:each="approver : ${approver}" th:value="${approver}" th:text="${approver}"></option>
-                                        </select>
                                         <button type="button" class="btn btn-secondary" onclick="addApprover()">+</button>
+                                        <select name="approver" id="approver" class="form-control" onchange="getPersons()" required>
+                                            <option th:each="approver : ${selectDepartment}" th:value="${approver.id}" th:text="${approver.name}"></option>
+                                        </select>
+                                        <select id="personSelect" class="form-control" name="personId"></select>
                                     </div>
 
                                     <!-- 제목 -->
@@ -85,7 +87,10 @@
                                     </div>
 
                                     <!-- 제출하기 버튼 -->
-                                    <button type="submit" class="btn btn-primary">제출하기</button>
+                                    <div class="text-right">
+                                        <button type="submit" class="btn btn-primary">제출하기</button>
+                                    </div>
+                                    </br>
                                 </form>
                             </div>
                         </div>
@@ -124,6 +129,99 @@
     </body>
 
     <script th:inline="javascript">
+        var clickCount = 0; // 클릭 횟수를 저장할 변수 선언
+
+        // JavaScript 함수 정의 시작
+        function addApprover() {
+            if (clickCount < 2) { // 최대 2번까지 클릭 가능하도록 제한
+                clickCount++; // 클릭 횟수 증가
+
+                // 새로운 select 요소를 생성합니다.
+                var newDiv = document.createElement("div");
+                var newSelect = document.createElement("select");
+                var newPersonSelect = document.createElement("select");
+
+                // 새로운 select 요소의 속성 설정
+                newSelect.name = "approver";
+                newSelect.className = "form-control";
+                newSelect.required = true;
+                newSelect.onchange = getPersons;
+
+                // 기존의 옵션들을 복사하여 새로운 select 요소에 추가합니다.
+                var approverOptions = document.getElementById("approver").options;
+                for (var i = 0; i < approverOptions.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = approverOptions[i].value;
+                    option.text = approverOptions[i].text;
+                    newSelect.appendChild(option);
+                }
+
+                // 새로운 person select 요소의 속성 설정
+                newPersonSelect.name = "personId";
+                newPersonSelect.className = "form-control";
+
+                // 새로운 div에 생성한 select 요소들을 추가합니다.
+                newDiv.appendChild(newSelect);
+                newDiv.appendChild(newPersonSelect);
+
+                // approverContainer에 새로운 div를 추가합니다.
+                document.getElementById("approverContainer").appendChild(newDiv);
+            }
+
+            if (clickCount >= 2) {
+                document.getElementById("addButton").disabled = true; // 버튼 비활성화
+                alert("결재 라인은 최대 3명까지 가능합니다."); // 경고창을 띄웁니다.
+            }
+        }
+
+        function getPersons(event) {
+            var departmentId = event.target.value;
+            var companyId = document.getElementById("companyId").value;
+
+            console.log(departmentId);
+            $.ajax({
+                url: '/companies/' + companyId + '/approval/write',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ id: departmentId }),
+                dataType: "json",
+                success: function(response) {
+                    var personSelect = event.target.nextElementSibling;
+                    personSelect.innerHTML = "";
+                    response.DepartmentMember.forEach(function(person) {
+                        var option = document.createElement("option");
+                        option.value = person.userId;
+                        option.text = person.fullName;
+                        // value, text 추가
+                        personSelect.add(option);
+                    });
+                    console.log('성공');
+                },
+                error: function(error) {
+                    console.log('오류', error);
+                }
+            });
+        }
+
+        var today = new Date();
+        var nextWeek = new Date();
+        nextWeek.setDate(today.getDate() + 7);
+        var minDate = nextWeek.toISOString().split('T')[0];
+
+        var startDateInput = document.getElementById("startDate");
+        var endDateInput = document.getElementById("endDate");
+
+        startDateInput.setAttribute("min", minDate);
+        endDateInput.setAttribute("min", minDate);
+
+        // 초기 로드 시 모든 approver select 요소에 getPersons 함수 바인딩
+        document.querySelectorAll('select[name="approver"]').forEach(function(select) {
+            select.onchange = getPersons;
+        });
+    </script>
+</html>
+
+<!--
         var clickCount = 0; // 클릭 횟수를 저장할 변수 선언
 
         // JavaScript 함수 정의 시작
@@ -181,6 +279,6 @@
 
     startDateInput.setAttribute("min", minDate);
     endDateInput.setAttribute("min", minDate);
-    </script>
+-->
 
-</html>
+

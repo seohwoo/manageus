@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ApprovalTypeJPARepository extends JpaRepository<ApprovalTypeEntity, Integer> {
+public interface ApprovalTypeJPARepository extends JpaRepository<ApprovalTypeEntity, Long> {
 
 }
