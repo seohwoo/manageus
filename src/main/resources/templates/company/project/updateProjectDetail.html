@@ -39,26 +39,53 @@
             <div th:insert="~{content/top-bar :: top}"></div>
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <form th:action="@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}(companyId=${companyId}, userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetailId})}" method="post">
-                    <input type="hidden" name="detailUserId" th:value="${detail.userId}">
-                    업무명 : <input type="text" name="title" th:value="${detail.title}"><br/>
-                    업무내용 : <input type="text" name="content" th:value="${detail.content}"><br/>
-                    업무상태 : <select name="statusId">
-                                <option value="3000" th:selected="${detail.statusId == 3000}">대기중</option>
-                                <option value="3001" th:selected="${detail.statusId == 3001}">진행중</option>
-                                <option value="3002" th:selected="${detail.statusId == 3002}">완료</option>
-                             </select><br/>
-                    시작일 : <input type="date" name="startTime" th:value="${#dates.format(detail.startTime, 'yyyy-MM-dd')}"><br/>
-                    마감일 : <input type="date" name="endTime" th:value="${#dates.format(detail.endTime, 'yyyy-MM-dd')}"><br/>
-                    <button type="submit" class="btn btn-success btn-icon-split">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-check"></i>
-                                        </span>
-                        <span class="text">수정</span>
-                    </button>
-                </form>
-                    <button th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}(companyId=${companyId}, userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetailId})}'|">뒤로가기</button>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">업무 수정</h6>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}(companyId=${companyId}, userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetailId})}" method="post">
+                            <input type="hidden" name="detailUserId" th:value="${detail.userId}">
 
+                            <div class="form-group">
+                                <label for="title">업무명</label>
+                                <input type="text" class="form-control" id="title" name="title" th:value="${detail.title}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="content">업무내용</label>
+                                <input type="text" class="form-control" id="content" name="content" th:value="${detail.content}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="statusId">업무상태</label>
+                                <select class="form-control" id="statusId" name="statusId">
+                                    <option value="3000" th:selected="${detail.statusId == 3000}">대기중</option>
+                                    <option value="3001" th:selected="${detail.statusId == 3001}">진행중</option>
+                                    <option value="3002" th:selected="${detail.statusId == 3002}">완료</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="startTime">시작일</label>
+                                <input type="date" class="form-control" id="startTime" name="startTime" th:value="${#dates.format(detail.startTime, 'yyyy-MM-dd')}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="endTime">마감일</label>
+                                <input type="date" class="form-control" id="endTime" name="endTime" th:value="${#dates.format(detail.endTime, 'yyyy-MM-dd')}">
+                            </div>
+
+                            <button type="submit" class="btn btn-success btn-icon-split">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text">수정</span>
+                            </button>
+                        </form>
+                        <button class="btn btn-secondary mt-3" th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}(companyId=${companyId}, userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetailId})}'|">뒤로가기</button>
+                    </div>
+                </div>
             </div>
             <!-- /.container-fluid -->
 
