@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface CalendarJPARepository extends JpaRepository <CalendarEntity, Integer> {
+public interface CalendarJPARepository extends JpaRepository <CalendarEntity, Long> {
 
 
    public List<CalendarEntity> findByUserId(Long id);
@@ -14,6 +14,8 @@ public interface CalendarJPARepository extends JpaRepository <CalendarEntity, In
 
    @Query("SELECT c FROM CalendarEntity c JOIN CalendarDetailEntity cd ON c.id = cd.id WHERE c.userId = :id")
    List<CalendarEntity> findByUserIdWithDetail(Long id);
+
+   public CalendarEntity findByUserIdAndCalendarType(Long userId, Long calendarType);
 
 
 }

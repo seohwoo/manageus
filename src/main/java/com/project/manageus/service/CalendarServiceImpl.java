@@ -1,6 +1,10 @@
 package com.project.manageus.service;
 import java.util.List;
+
+import com.project.manageus.dto.CalendarDetailDTO;
+import com.project.manageus.entity.CalendarDetailEntity;
 import com.project.manageus.entity.CalendarEntity;
+import com.project.manageus.repository.CalendarDetailRepository;
 import com.project.manageus.repository.CalendarJPARepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +18,7 @@ import java.util.Optional;
 public class CalendarServiceImpl implements CalendarService {
 
     private final CalendarJPARepository calendarJPARepository;
+    private final CalendarDetailRepository calendarDetailRepository;
 
 
     @Override
@@ -28,6 +33,24 @@ public class CalendarServiceImpl implements CalendarService {
     @Override
     public List<CalendarEntity> getEventsByUserId(Long id) {
         return calendarJPARepository.findByUserIdWithDetail(id);
+    }
+
+    @Override
+    public CalendarEntity getCalendarId(Long userId, Long calendarType) {
+        CalendarEntity calendarEntity = calendarJPARepository.findByUserIdAndCalendarType(userId,calendarType);
+        return calendarEntity;
+    }
+
+    @Override
+    public List<CalendarDetailEntity> getCalendarDetailList(Long calendarId) {
+        List<CalendarDetailEntity> calendarDetailEntityList = calendarDetailRepository.findAllByCalendarId(calendarId);
+        return calendarDetailEntityList;
+    }
+
+    @Override
+    public CalendarDetailEntity addCalendarDetail(CalendarDetailDTO calendarDetailDTO) {
+        CalendarDetailEntity calendarDetailEntity = calendarDetailRepository.save(calendarDetailDTO.toCalendarDetailEntity());
+        return calendarDetailEntity;
     }
 
 

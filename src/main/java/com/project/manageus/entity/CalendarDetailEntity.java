@@ -22,6 +22,8 @@ import java.util.Date;
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
+        @Column(name = "calendar_id")
+        private Long calendarId;
         @UpdateTimestamp
         @Column(name = "start_date")
         private Date startDate;
@@ -29,22 +31,27 @@ import java.util.Date;
         @Column(name = "end_date")
         private Date endDate;
         private String content;
+        private String color;
 
         @Builder
-        public CalendarDetailEntity(Long id, Date startDate, Date endDate, String content){
+        public CalendarDetailEntity(Long id, Long calendarId, Date startDate, Date endDate, String content, String color){
             super();
             this.id = id;
+            this.calendarId = calendarId;
             this.startDate = startDate;
             this.endDate = endDate;
             this.content = content;
+            this.color = color;
         }
 
         public CalendarDetailDTO toCalendarDetailDTO(){
             return CalendarDetailDTO.builder()
                     .id(this.id)
+                    .calendarId(this.calendarId)
                     .startDate(this.startDate)
                     .endDate(this.endDate)
                     .content(this.content)
+                    .color(this.color)
                     .build();
 
         }
