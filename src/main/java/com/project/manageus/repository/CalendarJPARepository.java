@@ -3,9 +3,11 @@ package com.project.manageus.repository;
 import com.project.manageus.entity.CalendarEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface CalendarJPARepository extends JpaRepository <CalendarEntity, Integer> {
 
-   //여기에 sql문장을 적는다
 
+   public List<CalendarEntity> findByUserId(Long id);
 
 }

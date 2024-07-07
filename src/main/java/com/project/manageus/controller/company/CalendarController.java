@@ -38,17 +38,34 @@ public class CalendarController {
 
 
 
-    @GetMapping("/companycalendar") /* 회사달력 */
-    public String companycalendar() {
-        return "calendars/companycalendar.html";
+    @GetMapping("/calendar/{id}/companycalendar") /* 회사달력 */
+    public String companycalendar(Model model, Principal principal, @PathVariable Long companyId,
+                                  @PathVariable Long id) {
+        if (!urlService.findUserInfo(principal.getName(), companyId, model)
+                || id != Long.parseLong(principal.getName())) {
+
+            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+        }
+
+
+        return "/company/calendars/companycalendar.html";
     }
 
 
 
 
-    @GetMapping("/teamcalendar") /* 팀원 달력 */
-    public String teamcalendar () {
-        return "calendars/teamcalendar.html";
+    @GetMapping("/calendar/{id}/teamcalendar") /* 팀원 달력 */
+    public String teamcalendar (Model model, Principal principal, @PathVariable Long companyId,
+                                @PathVariable Long id) {
+        if (!urlService.findUserInfo(principal.getName(), companyId, model)
+                || id != Long.parseLong(principal.getName())) {
+
+            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+        }
+
+        calendarService.calendarlist(model,id);
+
+        return "/company/calendars/teamcalendar.html";
     }
 
 }

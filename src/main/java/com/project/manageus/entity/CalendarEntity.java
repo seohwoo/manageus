@@ -1,10 +1,7 @@
 package com.project.manageus.entity;
 
 import com.project.manageus.dto.CalendarDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,13 +15,21 @@ public class CalendarEntity {
     @Id
     private Long id;
     @Column(name = "company_id")
-    private Long companyId ;
+    private Long companyId;
     @Column(name = "department_id")
-    private Long departmentId ;
+    private Long departmentId;
     @Column(name = "user_id")
-    private Long userId ;
+    private Long userId;
     @Column(name = "calendar_type")
-    private Long calendarType  ;
+    private Long calendarType;
+
+
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
+    private CalendarDetailEntity caldetal;
+
+
 
     @Builder
     public CalendarEntity(Long id, Long companyId, Long departmentId, Long userId, Long calendarType){
