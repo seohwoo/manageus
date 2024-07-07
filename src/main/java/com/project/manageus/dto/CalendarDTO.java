@@ -9,20 +9,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CalendarDTO {
 
-    private int id;
-    private int companyId ;
-    private int departmentId ;
-    private int memberId ;
-    private int calendertype  ;
+    private Long id;
+    private Long companyId ;
+    private Long departmentId ;
+    private Long userId ;
+    private Long calendarType  ;
 
     @Builder
-    public CalendarDTO(int id, int companyId, int departmentId, int memberId, int calendertype){
+    public CalendarDTO(Long id, Long companyId, Long departmentId, Long userId, Long calendarType){
         super();
         this.id = id;
         this.companyId = companyId;
         this.departmentId = departmentId;
-        this.memberId = memberId;
-        this.calendertype = calendertype;
+        this.userId = userId;
+        this.calendarType = calendarType;
     }
 
     public CalendarEntity toCalendarEntity(){
@@ -30,8 +30,8 @@ public class CalendarDTO {
                 .id(this.id)
                 .companyId(this.companyId)
                 .departmentId(this.departmentId)
-                .memberId(this.memberId)
-                .calendertype(this.calendertype)
+                .userId(this.userId)
+                .calendarType(this.calendarType)
                 .build();
 
     } //이거는 dto를 엔터티로 만드는 작업

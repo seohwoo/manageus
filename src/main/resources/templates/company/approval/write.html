@@ -1,57 +1,336 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
     <head>
-        <meta charset="UTF-8">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
         <title>휴가 신청</title>
+
+        <!-- Custom fonts for this template-->
+        <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+        <!-- Custom styles for this template-->
+        <link href="/css/sb-admin-2.min.css" rel="stylesheet">
     </head>
 
-    <body>
-    <h1>휴가 신청하기</h1>
+    <body id="page-top">
 
-        <form action="Vacation.jsp" method="post">
+        <!-- Page Wrapper -->
+        <div id="wrapper">
 
-            결재 라인 :
-            <select id="approver" name="approver">
-                <option th:each="approver : ${approver}" th:value="${approver}" th:text="${approver}"></option>
-            </select>
+            <div th:include="~{content/side-bar :: side}"></div>
 
-            <button type="button" onclick="addApprover()">+</button>
-            <br><br>
-            제목 : <input type="text" id="Content" name="Content" length="100" required>
-            <br><br>
-            휴가 종류 :
-            <select id="VacationID" name="VacationID" required>
-                <option value="1">연차</option>
-                <option value="2">월차</option>
-                <option value="3">반차</option>
-                <option value="4">병가</option>
-            </select>
-            <br><br>
-            휴가 날짜 :
-            <input type="date" id="StartDate" name="StartDate" required>
-            <input type="date" id="FinishDate" name="FinishDate" required>
-            <br><br>
-            <textarea id="Subject" name="Subject" placeholder="휴가 사유" length="500" required></textarea>
-            <br><br>
-            <input type="submit" value="제출하기">
-        </form>
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+
+                <!-- Main Content -->
+                <div id="content">
+
+                    <div th:include="~{content/top-bar :: top}"></div>
+
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid">
+
+                        <!-- Page Heading -->
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                            <h2 class="h3 mb-0 text-gray-800">Approval Application</h2>
+                        </div>
+
+                        <!-- Content Row -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <form th:action="@{/companies/{companyId}/approval/{id}/write(id=${id},companyId=${companyId})}" method="post" onsubmit="return validateForm()">
+                                    <input type="hidden" id="companyId" th:value="${companyId}"/>
+                                    <!-- 결재 라인 -->
+                                    <div class="form-group" id="approverContainer">
+                                        <label for="approver">결재 라인</label>
+                                        <!-- ---------------------------------->
+                                        <button type="button" class="btn btn-secondary" id="addButton" onclick="addApprover()">+</button>
+                                        <select name="approver" id="approver" class="form-control" onchange="getPersons()" required>
+                                            <option value="----------">결재자 선택해주세요.</option>
+                                            <option th:each="approver : ${selectDepartment}" th:value="${approver.id}" th:text="${approver.name}"></option>
+                                        </select>
+                                        <select id="personSelect" class="form-control" name="personId"></select>
+                                    </div>
+
+                                    <!-- 제목 -->
+                                    <div class="form-group">
+                                        <label for="title">제목</label>
+                                        <input type="text" name="title" class="form-control" id="title" placeholder="제목을 입력하세요" required>
+                                    </div>
+
+                                    <!-- 휴가 종류 -->
+                                    <div class="form-group">
+                                        <label for="approvalTypeId">휴가 종류</label>
+                                        <select name="approvalTypeId" id="approvalTypeId" class="form-control" required>
+                                            <option th:each="approvalType : ${approvalType}" th:value="${approvalType.id}" th:text="${approvalType.name}"></option>
+                                        </select>
+                                    </div>
+
+                                    <!-- 휴가 날짜 -->
+                                    <div class="form-group">
+                                        <label for="startDate">휴가 시작 날짜</label>
+                                        <input type="date" name="startDate" id="startDate" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="endDate">휴가 종료 날짜</label>
+                                        <input type="date" name="endDate" id="endDate" class="form-control" required>
+                                    </div>
+
+                                    <!-- 내용 -->
+                                    <div class="form-group">
+                                        <label for="contents">내용</label>
+                                        <textarea name="content" id="contents" class="form-control" rows="3" placeholder="휴가 내용을 입력하세요" required></textarea>
+                                    </div>
+
+                                    <!-- 제출하기 버튼 -->
+                                    <div class="text-right">
+                                        <button type="submit" class="btn btn-primary">제출하기</button>
+                                    </div>
+                                    </br>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.container-fluid -->
+                </div>
+                <!-- End of Main Content -->
+
+                <div th:include="~{content/footer :: footer}"></div>
+            </div>
+            <!-- End of Content Wrapper -->
+        </div>
+        <!-- End of Page Wrapper -->
+
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+
+        <!-- Bootstrap core JavaScript-->
+        <script src="/vendor/jquery/jquery.min.js"></script>
+        <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Core plugin JavaScript-->
+        <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+        <!-- Custom scripts for all pages-->
+        <script src="/js/sb-admin-2.min.js"></script>
+
+        <!-- Page level plugins -->
+        <script src="/vendor/chart.js/Chart.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="/js/demo/chart-area-demo.js"></script>
+        <script src="/js/demo/chart-pie-demo.js"></script>
     </body>
 
     <script th:inline="javascript">
-        function addApprover() {
-            var selectApprover = document.createElement("select");
-            selectApprover.id = "approver";
-            selectApprover.name = "approver";
+        var clickCount = 0; // 클릭 횟수를 저장할 변수 선언
 
-            [[${approver}]].forEach(function(approver) {
-                var option = document.createElement("option");
-                option.value = approver;
-                option.text = approver;
-                selectApprover.add(option);
-            });
-            var findSelect = document.getElementById("approver");
-            findSelect.insertAdjacentElement('afterend', selectApprover);
+        // JavaScript 함수 정의 시작
+        function addApprover() {
+            if (clickCount < 2) { // 최대 2번까지 클릭 가능하도록 제한
+                clickCount++; // 클릭 횟수 증가
+
+                // 새로운 select 요소를 생성합니다.
+                var newDiv = document.createElement("div");
+                var newSelect = document.createElement("select");
+                var newPersonSelect = document.createElement("select");
+
+                // 새로운 select 요소의 속성 설정
+                newSelect.name = "approver";
+                newSelect.className = "form-control";
+                newSelect.required = true;
+                newSelect.onchange = getPersons;
+
+                // 기존의 옵션들을 복사하여 새로운 select 요소에 추가합니다.
+                var approverOptions = document.getElementById("approver").options;
+                for (var i = 0; i < approverOptions.length; i++) {
+                    var option = document.createElement("option");
+                    option.value = approverOptions[i].value;
+                    option.text = approverOptions[i].text;
+                    newSelect.appendChild(option);
+                }
+
+                // 새로운 person select 요소의 속성 설정
+                newPersonSelect.name = "personId";
+                newPersonSelect.className = "form-control";
+
+
+
+
+                // 새로운 - 버튼을 생성합니다.
+        var removeButton = document.createElement("button");
+        removeButton.type = "button";
+        removeButton.className = "btn btn-danger";
+        removeButton.innerText = "-";
+        removeButton.onclick = function() {
+            removeApprover(newDiv);
+        };
+
+                // 새로운 div에 생성한 select 요소들과 - 버튼을 추가합니다.
+        newDiv.appendChild(newSelect);
+        newDiv.appendChild(newPersonSelect);
+        newDiv.appendChild(removeButton);
+
+
+
+                // 새로운 div에 생성한 select 요소들을 추가합니다.
+                newDiv.appendChild(newSelect);
+                newDiv.appendChild(newPersonSelect);
+
+                // approverContainer에 새로운 div를 추가합니다.
+                document.getElementById("approverContainer").appendChild(newDiv);
+            }
+
+
+            if (clickCount >= 2) {
+                document.getElementById("addButton").disabled = true; // 버튼 비활성화
+                // alert("결재 라인은 최대 3명까지 가능합니다."); // 경고창을 띄웁니다.
+            }
         }
+
+
+
+        // JavaScript 함수 정의 시작
+function removeApprover(div) {
+    div.remove(); // 해당 div 요소를 삭제
+    clickCount--; // 클릭 횟수 감소
+
+    // 최대 클릭 횟수 미만이므로 + 버튼 활성화
+    if (clickCount < 2) {
+        document.getElementById("addButton").disabled = false; // 버튼 활성화
+    }
+}
+
+
+
+
+
+        function getPersons(event) {
+            var departmentId = event.target.value;
+            var companyId = document.getElementById("companyId").value;
+
+            console.log(departmentId);
+            $.ajax({
+                url: '/companies/' + companyId + '/approval/write',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ id: departmentId }),
+                dataType: "json",
+                success: function(response) {
+                    var personSelect = event.target.nextElementSibling;
+                    personSelect.innerHTML = "";
+                    response.DepartmentMember.forEach(function(person) {
+                        var option = document.createElement("option");
+                        option.value = person.userId;
+                        option.text = person.fullName;
+                        // value, text 추가
+                        personSelect.add(option);
+                    });
+                    console.log('성공');
+                },
+                error: function(error) {
+                    console.log('오류', error);
+                }
+            });
+        }
+
+        var today = new Date();
+        var nextWeek = new Date();
+        nextWeek.setDate(today.getDate() + 7);
+        var minDate = nextWeek.toISOString().split('T')[0];
+
+        var startDateInput = document.getElementById("startDate");
+        var endDateInput = document.getElementById("endDate");
+
+        startDateInput.setAttribute("min", minDate);
+        endDateInput.setAttribute("min", minDate);
+
+        // 초기 로드 시 모든 approver select 요소에 getPersons 함수 바인딩
+        document.querySelectorAll('select[name="approver"]').forEach(function(select) {
+            select.onchange = getPersons;
+        });
+
+
+    function validateForm() {
+        var valid = true;
+        var selectElements = document.querySelectorAll("#approverContainer select[name='approver']");
+        selectElements.forEach(function(select) {
+            if (select.value === "----------") {
+                alert("결재 라인을 선택해주세요.");
+                valid = false;
+            }
+        });
+        return valid;
+    }
     </script>
 </html>
+
+<!--
+        var clickCount = 0; // 클릭 횟수를 저장할 변수 선언
+
+        // JavaScript 함수 정의 시작
+        function addApprover() {
+            if (clickCount < 2) { // 최대 2번까지 클릭 가능하도록 제한
+                clickCount++; // 클릭 횟수 증가
+
+                // 기존의 select 요소를 id를 통해 찾아옵니다.
+                var existingSelect = document.getElementById("approver");
+
+                // 새로운 select 요소를 생성합니다.
+                var newSelect = document.createElement("select");
+
+                // 새로운 select 요소의 name 속성을 설정합니다.
+                newSelect.name = "approver";
+
+                // 필요한 경우 새로운 select 요소에 required 속성을 추가할 수 있습니다.
+                newSelect.required = true;
+
+                // Thymeleaf 표현식을 사용하여 옵션을 추가합니다.
+                [[${approver}]].forEach(function(approver) {
+                    // 각각의 옵션 요소를 생성합니다.
+                    var option = document.createElement("option");
+
+                    // 옵션의 값(value)을 설정합니다.
+                    option.value = approver;
+
+                    // 옵션에 표시될 텍스트(text)를 설정합니다.
+                    option.text = approver;
+
+                    // 새로운 select 요소에 옵션을 추가합니다.
+                    newSelect.appendChild(option);
+                });
+
+                // 기존의 select 요소 뒤에 새로운 select 요소를 추가합니다.
+                existingSelect.insertAdjacentElement('afterend', newSelect);
+            }
+
+            if (clickCount > 2) {
+                alert("결재 라인은 최대 3명까지 가능합니다."); // 경고창을 띄웁니다.
+                document.getElementById("addButton").disabled = true; // 버튼 비활성화
+            }
+        }
+
+
+    var today = new Date();
+    var nextWeek = new Date();
+
+    nextWeek.setDate(today.getDate() + 7);
+
+    var minDate = nextWeek.toISOString().split('T')[0];
+
+    var startDateInput = document.getElementById("startDate");
+    var endDateInput = document.getElementById("endDate");
+
+    startDateInput.setAttribute("min", minDate);
+    endDateInput.setAttribute("min", minDate);
+-->
+
+

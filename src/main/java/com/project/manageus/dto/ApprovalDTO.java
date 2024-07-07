@@ -4,6 +4,7 @@ import com.project.manageus.entity.ApprovalEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -11,39 +12,52 @@ import java.util.Date;
 @Data
 @NoArgsConstructor // 기본 생성자 자동 생성 필수.
 public class ApprovalDTO {
-    private int ID;
-    private int DocumentID;
-    private int StatusID;
-    private int VacationID;
-    private String Content;
-    private String Subject;
-    private Date StartDate;
-    private Date FinishDate;
+    private Long id;
+    private Long userId;
+    private Long statusId;
+    private String title;
+    private Long approvalTypeId;
+    @DateTimeFormat(pattern = "yy-MM-dd")
+    private Date startDate;
+    @DateTimeFormat(pattern = "yy-MM-dd")
+    private Date endDate;
+    private String content;
+    @DateTimeFormat(pattern = "yy-MM-dd")
+    private Date signOn;
+    @DateTimeFormat(pattern = "yy-MM-dd")
+    private Date signOff;
+    private Long companyId;
 
     @Builder
-    public ApprovalDTO(int ID, int DocumentID, int StatusID, int VacationID, String Content,
-    String Subject, Date StartDate, Date FinishDate) {
+    public ApprovalDTO(Long id, Long userId, Long statusId, String title, Long approvalTypeId,
+                       Date startDate, Date endDate, String content, Date signOn, Date signOff, Long companyId) {
         super();
-        this.ID = ID;
-        this.DocumentID = DocumentID;
-        this.StatusID = StatusID;
-        this.VacationID = VacationID;
-        this.Content = Content;
-        this.Subject = Subject;
-        this.StartDate = StartDate;
-        this.FinishDate = FinishDate;
+        this.id = id;
+        this.userId = userId;
+        this.statusId = statusId;
+        this.title = title;
+        this.approvalTypeId = approvalTypeId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.content = content;
+        this.signOn = signOn;
+        this.signOff = signOff;
+        this.companyId = companyId;
     }
 
     public ApprovalEntity toApprovalEntity() {
         return ApprovalEntity.builder()
-                .ID(this.ID)
-                .DocumentID(this.DocumentID)
-                .StatusID(this.StatusID)
-                .VacationID(this.VacationID)
-                .Content(this.Content)
-                .Subject(this.Subject)
-                .StartDate(this.StartDate)
-                .FinishDate(this.FinishDate)
+                .id(this.id)
+                .userId(this.userId)
+                .statusId(this.statusId)
+                .title(this.title)
+                .approvalTypeId(this.approvalTypeId)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
+                .content(this.content)
+                .signOn(this.signOn)
+                .signOff(this.signOff)
+                .companyId(this.companyId)
                 .build();
     } // 이거는 DTO를 Entity로 만드는 작업이다.
 }     // 값을 받아와서 넘길 때는 DTO에서 Entity로 넘어간다.

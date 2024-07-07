@@ -36,37 +36,37 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Company Account!</h1>
                             </div>
-                            <form class="user">
+                            <form class="user" action="/company" method="post">
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user" id="exampleInputCompanyName"
-                                           placeholder="Company Name">
+                                           placeholder="Company Name" name="name">
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="password" class="form-control form-control-user"
-                                               id="exampleInputPassword" placeholder="Password">
+                                               id="exampleInputPassword" placeholder="Password" name="pw">
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="password" class="form-control form-control-user"
-                                               id="exampleRepeatPassword" placeholder="Repeat Password">
+                                               id="exampleRepeatPassword" placeholder="Repeat Password" name="repeatPassword">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user" id="exampleInputName"
-                                        placeholder="CEO Name">
+                                        placeholder="CEO Name" name="ceo">
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user" id="exampleInputBusinessNum"
-                                           placeholder="Business Number">
+                                           placeholder="Business Number" name="businessNum">
                                 </div>
                                 <div class="form-group">
                                     <input type="email" class="form-control form-control-user"
                                            id="exampleInputEmail" aria-describedby="emailHelp"
-                                           placeholder="Enter Your Email...">
+                                           placeholder="Enter Your Email..." name="email">
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user" id="exampleInputAddress"
-                                           placeholder="Company Address">
+                                           placeholder="Company Address" name="address">
                                 </div>
                                 <input type="submit"  value="Register Account" class="btn btn-primary btn-user btn-block"/>
                                 <hr>

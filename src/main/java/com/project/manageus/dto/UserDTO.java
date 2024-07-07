@@ -11,17 +11,17 @@ import java.util.Date;
 @NoArgsConstructor
 public class UserDTO {
 
-    private int id;
+    private Long id;
     private String password;
-    private int positionId;
-    private int companyId;
-    private int statusId;
-    private int authId;
-    private int departmentId;
-    private Date regdate;
+    private Long positionId;
+    private Long companyId;
+    private Long statusId;
+    private Long authId;
+    private Long departmentId;
+    private Date regDate;
 
     @Builder
-    public UserDTO( int id,String password,int positionId,int companyId,int statusId,int authId,int departmentId,Date regdate) {
+    public UserDTO(Long id, String password, Long positionId, Long companyId, Long statusId, Long authId, Long departmentId, Date regDate) {
         super();
         this.id = id;
         this.password = password;
@@ -30,7 +30,7 @@ public class UserDTO {
         this.statusId = statusId;
         this.authId = authId;
         this.departmentId = departmentId;
-        this.regdate = regdate;
+        this.regDate = regDate;
     }
 
     public UserEntity toUserEntity() {
@@ -42,7 +42,7 @@ public class UserDTO {
                 .statusId(this.statusId)
                 .authId(this.authId)
                 .departmentId(this.departmentId)
-                .regdate(this.regdate)
+                .regDate(this.regDate)
                 .build();
     }
 

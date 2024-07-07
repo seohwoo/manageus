@@ -11,22 +11,20 @@ import java.util.Date;
 @NoArgsConstructor
 public class QaDTO {
 
-    private int id;
+    private Long id;
     private String writer;
     private String email;
     private String contact;
-    private String password;
     private String content;
     private Date reg;
-    private int ref;
+    private Long ref;
 
     @Builder
-    public QaDTO(int id,String writer,String email,String contact,String password,String content,Date reg,int ref){
+    public QaDTO(Long id,String writer,String email,String contact,String content,Date reg,Long ref){
         this.id=id;
         this.writer=writer;
         this.email=email;
         this.contact=contact;
-        this.password=password;
         this.content=content;
         this.reg=reg;
         this.ref=ref;
@@ -38,7 +36,6 @@ public class QaDTO {
                 .writer(this.writer)
                 .email(this.email)
                 .contact(this.contact)
-                .password(this.password)
                 .content(this.content)
                 .reg(this.reg)
                 .ref(this.ref).build();
