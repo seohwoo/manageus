@@ -1,77 +1,26 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>개인 달력</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>개인달력</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          var calendarEl = document.getElementById('calendar');
-          var today = new Date().toISOString().split('T')[0]; // 현재 날짜를 'YYYY-MM-DD' 형식으로 가져옴
-
-          var calendar = new FullCalendar.Calendar(calendarEl, {
-            headerToolbar: {
-              left: 'prevYear,prev,next,nextYear today',
-              center: 'title',
-              right: 'dayGridMonth,dayGridWeek,dayGridDay addEventButton'
-            },
-            initialDate: today, // 현재 날짜로 설정
-            navLinks: true, // can click day/week names to navigate views
-            editable: true,
-            dayMaxEvents: true, // allow "more" link when too many events
-            events: [
-              // Add your events here
-            ],
-            locale: 'ko', // Change locale to Korean
-            titleFormat: { // Custom title format
-              year: 'numeric',
-              month: 'long'
-            },
-            customButtons: {
-              addEventButton: {
-                text: '일정 추가',
-                click: function() {
-                  document.getElementById('eventModal').style.display = 'block';
-                }
-              }
-            }
-          });
-
-          calendar.render();
-
-          document.getElementById('addEvent').addEventListener('click', function() {
-            var title = document.getElementById('eventTitle').value;
-            var startDateStr = document.getElementById('startDate').value;
-            var endDateStr = document.getElementById('endDate').value;
-            var color = document.getElementById('eventColor').value;
-            var startDate = new Date(startDateStr + 'T00:00:00'); // will be in local time
-            var endDate = new Date(endDateStr + 'T00:00:00'); // will be in local time
-
-            if (title && !isNaN(startDate.valueOf()) && !isNaN(endDate.valueOf()) && startDate <= endDate) { // valid?
-              calendar.addEvent({
-                title: title,
-                start: startDate,
-                end: endDate,
-                color: color, // add color to event
-                allDay: true
-              });
-              alert('Event added: ' + title);
-              document.getElementById('eventModal').style.display = 'none';
-              document.getElementById('eventTitle').value = '';
-              document.getElementById('startDate').value = '';
-              document.getElementById('endDate').value = '';
-              document.getElementById('eventColor').value = '#3788d8'; // reset color to default
-            } else {
-              alert('유효하지 않은 날짜입니다.');
-            }
-          });
-
-          document.getElementById('closeModal').addEventListener('click', function() {
-            document.getElementById('eventModal').style.display = 'none';
-          });
-        });
-    </script>
     <style>
         body {
           margin: 40px 10px;
@@ -124,31 +73,228 @@
           cursor: pointer;
         }
     </style>
+
+
 </head>
-<body>
 
-여기는 개인 달력
+<body id="page-top">
 
-<br>
-<div id='calendar'></div>
+<!-- Page Wrapper -->
+<div id="wrapper">
 
-<!-- The Modal -->
-<div id="eventModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content">
-        <span class="close" id="closeModal">&times;</span>
-        <h2>새 일정 추가</h2>
-        <label for="eventTitle">일정 제목:</label>
-        <input type="text" id="eventTitle" name="eventTitle"><br><br>
-        <label for="startDate">시작 날짜 (YYYY-MM-DD):</label>
-        <input type="date" id="startDate" name="startDate"><br><br>
-        <label for="endDate">종료 날짜 (YYYY-MM-DD):</label>
-        <input type="date" id="endDate" name="endDate"><br><br>
-        <label for="eventColor">색상 선택:</label>
-        <input type="color" id="eventColor" name="eventColor" value="#3788d8"><br><br>
-        <button id="addEvent">추가</button>
+    <div th:include="~{content/side-bar :: side}"></div>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <div th:include="~{content/top-bar :: top}"></div>
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <input type="hidden" id="userId" th:value="${id}">
+                <input type="hidden" id="calendarId">
+
+                여기는 개인 달력
+
+                <br>
+                <div id='calendar'></div>
+
+                &lt;!&ndash; The Modal &ndash;&gt;
+                <div id="eventModal" class="modal">
+                    &lt;!&ndash; Modal content &ndash;&gt;
+                    <div class="modal-content">
+                        <span class="close" id="closeModal">&times;</span>
+                        <h2>새 일정 추가</h2>
+
+                        <label for="eventTitle">일정 제목:</label>
+                        <input type="text" id="eventTitle" name="eventTitle"><br><br>
+                        <label for="startDate">시작 날짜 (YYYY-MM-DD):</label>
+                        <input type="date" id="startDate" name="startDate"><br><br>
+                        <label for="endDate">종료 날짜 (YYYY-MM-DD):</label>
+                        <input type="date" id="endDate" name="endDate"><br><br>
+                        <label for="eventColor">색상 선택:</label>
+                        <input type="color" id="eventColor" name="eventColor" value="#3788d8"><br><br>
+                        <button id="addEvent">추가</button>
+                    </div>
+                </div>
+            </div>
+        <!-- End of Main Content -->
+
+        <div th:include="~{content/footer :: footer}"></div>
+
     </div>
+    <!-- End of Content Wrapper -->
+
 </div>
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/js/sb-admin-2.min.js"></script>
+
+
+
+
+    <!--달력라이브러리-->
+
+
+    <script  th:inline="javascript">
+        $(document).ready(function() {
+            var calendarType = 2;
+            var userId = $('#userId').val();
+            console.log('userId:'+userId);
+            var calendarId;
+            $.ajax({
+                type: "GET",
+                url: '/ajax/calendar/getCalendarList',
+                contentType: "application/json; charset=utf-8",
+                data: { calendarType: calendarType,
+                        userId: userId},
+                success: function(data) {
+                    console.log("Received data:", data);
+                    calendarId = data.calendarId;
+                    $('#calendarId').val(calendarId);
+
+
+
+                    data.calendarDetailEntityList.forEach(function(event) {
+                        $('#calendar').fullCalendar('renderEvent', {
+                            title: event.content,  // 일정 제목
+                            start: new Date(event.startDate),  // 시작 날짜 및 시간
+                            end: new Date(event.endDate),  // 종료 날짜 및 시간
+                            color: event.color  // 일정 색상
+                        }, true);
+                    });
+
+
+
+                },
+                error: function(error) {
+                    console.error("Error occurred:", error);
+                }
+            });
+        });
+
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+
+        var today = new Date().toISOString().split('T')[0]; // 현재 날짜를 'YYYY-MM-DD' 형식으로 가져옴
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            headerToolbar: {
+                left: 'prevYear,prev,next,nextYear today',
+                center: 'title',
+                right: 'dayGridMonth,dayGridWeek,dayGridDay addEventButton'
+            },
+            initialDate: today,
+            navLinks: true,
+            editable: true,
+            dayMaxEvents: true,
+            locale: 'ko',  // 한국어 설정
+
+            customButtons: {
+                addEventButton: {
+                    text: '일정 추가',
+                    click: function() {
+                        document.getElementById('eventModal').style.display = 'block';
+                    }
+                }
+            }
+        });
+
+        calendar.render();
+
+        document.getElementById('addEvent').addEventListener('click', function() {
+            var title = document.getElementById('eventTitle').value;
+            var startDateStr = document.getElementById('startDate').value;
+            var endDateStr = document.getElementById('endDate').value;
+            var color = document.getElementById('eventColor').value;
+            var startDate = new Date(startDateStr + 'T00:00:00');
+            var endDate = new Date(endDateStr + 'T00:00:00');
+
+            var calendarId = $('#calendarId').val();
+
+            if (title && !isNaN(startDate.valueOf()) && !isNaN(endDate.valueOf()) && startDate <= endDate) {
+                calendar.addEvent({
+                    title: title,
+                    start: startDate,
+                    end: endDate,
+                    color: color,
+                });
+
+
+
+
+
+                $.ajax({
+                type: "POST",
+                url: '/ajax/calendar/addCalendarDetail',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                        calendarId: calendarId,
+                        startDate: startDate,
+                        endDate: endDate,
+                        content: title,
+                        color: color}),
+                success: function(data) {
+                    console.log("Received data:", data);
+
+
+                },
+                error: function(error) {
+                    console.error("Error occurred:", error);
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+
+                alert('Event added: ' + title);
+                document.getElementById('eventModal').style.display = 'none';
+                document.getElementById('eventTitle').value = '';
+                document.getElementById('startDate').value = '';
+                document.getElementById('endDate').value = '';
+                document.getElementById('eventColor').value = '#3788d8';
+            } else {
+                alert('유효하지 않은 날짜입니다.');
+            }
+        });
+
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('eventModal').style.display = 'none';
+        });
+    });
+    </script>
+
+
 
 </body>
+
 </html>
+
+
