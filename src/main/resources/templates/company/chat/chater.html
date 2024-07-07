@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Dashboard</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
     <style>
         .own-message {
             background-color: green;
@@ -34,104 +45,159 @@
         .message-container.own {
             justify-content: flex-start;
         }
+
+        #msgArea {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        #messageInputSection {
+            margin-top: 10px;
+        }
     </style>
 </head>
 
-<body>
-<div>
-    <div class="container">
-        <div class="col-6">
-            <label><b>채팅방</b></label>
-        </div>
-        <div>
-            <div id="msgArea" class="col-12"></div>
-            <div class="col-6">
-                <div class="input-group mb-3">
-                    <input type="text" id="msg" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <input type="hidden" id="memberId" th:value="${session.memberId}" >
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <div th:include="~{content/side-bar :: side}"></div>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <div th:include="~{content/top-bar :: top}"></div>
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <div class="container">
+                    <div>
+                        <div id="msgArea" class="col-12">
+                            <div th:each="message : ${cmlist}">
+                                <div th:class="${message.userId == id ? 'message-container own' : 'message-container'}">
+                                    <div th:class="${message.userId == id ? 'own-message' : 'other-message'}">
+                                        <b th:text="${message.userId} + ': ' + ${message.message}"></b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="messageInputSection" class="col-12">
+                            <div class="input-group mb-3">
+                                <input type="text" id="msg" name="message" class="form-control" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <input type="hidden" id="userId" th:value="${id}">
+                                <input type="hidden" id="nickName" th:value="${nickname}">
+                                <input type="hidden" name="chatRoomId" id="roomId" th:value="${roomId}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<script th:inline="javascript">
-    $(document).ready(function(){
+        <!-- Load jQuery before custom scripts -->
+        <script src="/vendor/jquery/jquery.min.js"></script>
+        <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-        const username = $("#memberId").val();
+        <!-- Core plugin JavaScript-->
+        <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-        $("#disconn").on("click", (e) => {
-            disconnect();
-        })
+        <!-- Custom scripts for all pages-->
+        <script src="/js/sb-admin-2.min.js"></script>
 
-        $("#button-send").on("click", (e) => {
-            send();
-        });
+        <!-- Page level plugins -->
+        <script src="/vendor/chart.js/Chart.min.js"></script>
 
-        const websocket = new WebSocket("ws://192.168.0.104:8080/ws/chat");
+        <!-- Page level custom scripts -->
+        <script src="/js/demo/chart-area-demo.js"></script>
+        <script src="/js/demo/chart-pie-demo.js"></script>
 
-        websocket.onmessage = onMessage;
-        websocket.onopen = onOpen;
-        websocket.onclose = onClose;
+        <script th:inline="javascript">
+            $(document).ready(function() {
+                const id = $("#userId").val();
+                const roomId = $("#roomId").val();
+                const nickname = $("#nickName").val();
+                const websocket = new WebSocket("ws://localhost:8080/ws/chat");
 
-        function send(){
-            let msg = document.getElementById("msg").value;
-            let memberId = document.getElementById("memberId").value;
+                websocket.onmessage = onMessage;
+                websocket.onopen = onOpen;
+                websocket.onclose = onClose;
 
-            console.log(memberId + ":" + msg);
-            websocket.send(memberId + ":" + msg);
+                $("#button-send").on("click", function() {
+                    send();
+                });
 
-            $.ajax({
-                url: '/send-message',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ memberId: memberId, message: msg }),
-                success: function(response) {
-                    console.log('메시지 전송 성공');
-                },
-                error: function(error) {
-                    console.log('메시지 전송 오류:', error);
+                function send() {
+                    let msg = $("#msg").val();
+                    let roomId = $("#roomId").val();
+                    websocket.send(id + ":" + msg);
+
+                    $.ajax({
+                        url: '/companies/send-message',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ userId: id, message: msg, chatRoomId: roomId }),
+                        success: function(response) {
+                            console.log('메시지 전송 성공');
+                        },
+                        error: function(error) {
+                            console.log('메시지 전송 오류:', error);
+                        }
+                    });
+
+                    $("#msg").val('');
+                }
+
+                function addMessage(nickname, message, isOwnMessage) {
+                    var containerClass = isOwnMessage ? 'message-container own' : 'message-container';
+                    var messageClass = isOwnMessage ? 'own-message' : 'other-message';
+                    var str = "<div class='" + containerClass + "'>";
+                    str += "<div class='" + messageClass + "'>";
+                    str += "<b>" + nickname + " : " + message + "</b>";
+                    str += "</div></div>";
+                    $("#msgArea").append(str);
+                }
+
+                function onClose() {}
+
+                function onOpen() {}
+
+                function onMessage(msg) {
+                    var data = msg.data;
+                    var arr = data.split(":");
+                    var userId = arr[0];
+                    var message = arr[1];
+
+                    addMessage(nickname, message, userId == id);
                 }
             });
+        </script>
 
-            document.getElementById("msg").value = '';
-        }
+        <!-- Page Heading -->
 
-        function addMessage(sessionId, message, isOwnMessage) {
-            var containerClass = isOwnMessage ? 'message-container own' : 'message-container';
-            var messageClass = isOwnMessage ? 'own-message' : 'other-message';
-            var str = "<div class='" + containerClass + "'>";
-            str += "<div class='" + messageClass + "'>";
-            str += "<b>" + sessionId + " : " + message + "</b>";
-            str += "</div></div>";
-            $("#msgArea").append(str);
-        }
+        <!-- End of Main Content -->
 
-        // 채팅창에서 나갔을 때
-        function onClose(evt) {
-            var str = username + ": 님이 방을 나가셨습니다.";
-            websocket.send(str);
-        }
+        <div th:include="~{content/footer :: footer}"></div>
 
-        // 채팅창에 들어왔을 때
-        function onOpen(evt) {
-            var str = username + ": 님이 입장하셨습니다.";
-            websocket.send(str);
-        }
+    </div>
+    <!-- End of Content Wrapper -->
 
-        function onMessage(msg) {
-            var data = msg.data;
-            var arr = data.split(":");
-            var sessionId = arr[0];
-            var message = arr[1];
+</div>
+<!-- End of Page Wrapper -->
 
-            addMessage(sessionId, message, sessionId == username);
-        }
-    })
-</script>
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
 
 </body>
+
 </html>

@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface DepartmentRepository extends JpaRepository<DepartmentEntity, Long> {
 
+    public List<DepartmentEntity> findByCompanyId(Long companyId);
     public List<DepartmentEntity> findAllByCompanyId(Long companyId);
     public boolean existsByNameAndCompanyId(String name, Long companyId);
     public boolean existsByCompanyId(Long companyId);
-
 }

@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -34,6 +35,11 @@ public class UserEntity {
     private Long departmentId;
     @Column(name = "reg_date")
     private Date regDate;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auth_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private AuthEntity auth;
+
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
