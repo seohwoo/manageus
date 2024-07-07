@@ -50,8 +50,7 @@ public class LoginServiceImpl implements LoginService, UserDetailsService {
     public boolean createUser(UserDTO userDTO, UserInfoDTO userInfoDTO, String inviteCode) {
         boolean result = false;
 
-        if(companyRepository.existsByInviteCode(inviteCode) &&
-                !userInfoRepository.existsByEmail(userInfoDTO.getEmail())) {
+        if(companyRepository.existsByInviteCode(inviteCode)) {
             CompanyEntity companyEntity = companyRepository.findByInviteCode(inviteCode);
             userDTO.setCompanyId(companyEntity.getId());
             userDTO.setAuthId((long) 3);

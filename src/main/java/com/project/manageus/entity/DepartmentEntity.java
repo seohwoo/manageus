@@ -6,12 +6,16 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "DEPARTMENT")
+@DynamicInsert
+@DynamicUpdate
 public class DepartmentEntity {
 
     @Id

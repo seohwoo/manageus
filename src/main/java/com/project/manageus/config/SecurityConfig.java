@@ -34,6 +34,8 @@ public class SecurityConfig {
                // .requestMatchers("/super/**").hasRole("SUPER")
                // .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
                 .requestMatchers("/h2-console/**").permitAll()
+                // Swagger 관련 리소스 접근 허용
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
                 .requestMatchers("/board/**").permitAll()
                 .requestMatchers("/chat").permitAll()
                 .requestMatchers("/ws/**").permitAll()

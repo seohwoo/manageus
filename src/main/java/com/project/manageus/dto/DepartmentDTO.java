@@ -13,6 +13,7 @@ public class DepartmentDTO {
     private Long id;
     private String name;
     private Long companyId;
+    private Long departmentUserCnt;
 
     @Builder
     public DepartmentDTO(Long id, String name, Long companyId) {
