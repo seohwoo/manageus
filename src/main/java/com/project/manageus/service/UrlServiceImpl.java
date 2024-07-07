@@ -5,6 +5,7 @@ import com.project.manageus.entity.CompanyEntity;
 import com.project.manageus.entity.UserEntity;
 import com.project.manageus.entity.UserInfoEntity;
 import com.project.manageus.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UrlServiceImpl implements UrlService{
 
     private final UserRepository userRepository;
-    private final UserInfoRepository userInfoRepository;
     private final CompanyRepository companyRepository;
     private final DepartmentRepository departmentRepository;
     private final PositionRepository positionRepository;
@@ -66,6 +67,21 @@ public class UrlServiceImpl implements UrlService{
             }else {
                 model.addAttribute("profileImage", "/img/undraw_profile_3.svg");
             }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean findCompanyInfo(String username, Long companyId, Model model) {
+        boolean result = false;
+        if(Long.parseLong(username) == companyId) {
+            Optional<CompanyEntity> optionalCompany = companyRepository.findById(companyId);
+            if(optionalCompany.isPresent()) {
+                model.addAttribute("companyId", companyId);
+                model.addAttribute("company", optionalCompany.get().getName());
+                model.addAttribute("ceo", optionalCompany.get().getCeo());
+            }
+            result = true;
         }
         return result;
     }

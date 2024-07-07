@@ -7,14 +7,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "USER")
 @DynamicInsert
+@DynamicUpdate
 public class UserEntity {
 
     @Id
@@ -34,12 +37,21 @@ public class UserEntity {
     private Date regDate;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auth_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private AuthEntity auth;
+
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     private UserInfoEntity userInfo;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id", referencedColumnName = "id", insertable = false, updatable = false)
     private PositionEntity position;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private StatusEntity status;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", referencedColumnName = "id", insertable = false, updatable = false)
