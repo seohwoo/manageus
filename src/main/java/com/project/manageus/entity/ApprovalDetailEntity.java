@@ -23,6 +23,10 @@ public class ApprovalDetailEntity {
     @Column(name = "status_id")
     private Long statusId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private UserEntity user;
+
     @Builder
     public ApprovalDetailEntity(Long id, Long approvalId, Long userId, Long statusId) {
         super();

@@ -27,7 +27,7 @@ public interface ApprovalService {
     public void selectDepartment(Long companyId, Model model);
 
     // 부서에 맞는 사람 가져오기
-    public JsonObject selectPositionPeople(DepartmentDTO dto);
+    public JsonObject selectPositionPeople(DepartmentDTO dto, Long userId);
 
     // 글번호에 맞는 정보 가져오기
     public void selectApprovalDetail(Long approvalId, Long id, Model model);
