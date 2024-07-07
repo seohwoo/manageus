@@ -25,20 +25,6 @@ public class UrlServiceImpl implements UrlService{
     private final PositionRepository positionRepository;
     private final AlarmJPARepository alarmJPARepository;
 
-    @Autowired
-    public UrlServiceImpl(UserRepository userRepository,
-                          UserInfoRepository userInfoRepository,
-                          CompanyRepository companyRepository,
-                          DepartmentRepository departmentRepository,
-                          PositionRepository positionRepository, AlarmJPARepository alarmJPARepository) {
-        this.userRepository = userRepository;
-        this.userInfoRepository = userInfoRepository;
-        this.companyRepository = companyRepository;
-        this.departmentRepository = departmentRepository;
-        this.positionRepository = positionRepository;
-        this.alarmJPARepository = alarmJPARepository;
-    }
-
     @Override
     public boolean findUserInfo(String username,Long companyId, Model model) {
         boolean result = false;
