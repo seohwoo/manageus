@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +52,7 @@ public class ApprovalServiceImpl implements ApprovalService {
     // 결재 리스트 가져오기
     @Override
     public void selectApprovalList(Model model, Long companyId) {
-        List<ApprovalEntity> approvalList = approvalJPA.findByCompanyId(companyId);
+        List<ApprovalEntity> approvalList = approvalJPA.findByCompanyIdOrderBySignOnDesc(companyId);
 
 
         model.addAttribute("approvalList", approvalList);
@@ -111,18 +112,22 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     // 부서에 맞는 사람 가져오기
     @Override
-    public JsonObject selectPositionPeople(DepartmentDTO dto) {
-
+    public JsonObject selectPositionPeople(DepartmentDTO dto, Long userId) {
+        System.out.println("ServiceImpl-userId-------------------------------------------------------"+userId);
         JsonObject Json = new JsonObject();
 
 
         List<UserEntity> UE = userRepository.findAllByDepartmentId(dto.getId());
 
         JsonArray JA = new JsonArray();
-
-        // List<UserEntity> 수 만큼 반복
+        // 본인 아이디 제외
         for (UserEntity UEA : UE) {
+            if(UEA.getId().equals(userId)) {
+                continue;
+            }
+        // List<UserEntity> 수 만큼 반복
             JsonObject JsonO = new JsonObject();
+            System.out.println(UEA.getId()+"-------------------------------------------------------------------");
             String people = UEA.getUserInfo().getName() + " " + UEA.getPosition().getName();
             Long Uid = UEA.getId();
             JsonO.addProperty("userId", Uid);
@@ -139,6 +144,12 @@ public class ApprovalServiceImpl implements ApprovalService {
     public void selectApprovalDetail(Long approvalId,Long id, Model model) {
         List<ApprovalDetailEntity> approvalDetail = approvalDetailJPA.findByApprovalId(approvalId);
         model.addAttribute("approvalDetail", approvalDetail);
+
+        /*
+        approvalDetail.sort(Comparator.comparingLong(detail -> detail.getUser().getPositionId().reversed()));
+        */
+        System.out.println("approvalDetail----------------------------------------" + approvalDetail);
+
         // approvalDetail에서 userId 값을 String으로 변환하여 새로운 리스트 생성
         List<String> userIdStrings = approvalDetail.stream()
                 .map(detail -> String.valueOf(detail.getUserId()))

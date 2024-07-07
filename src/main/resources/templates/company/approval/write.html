@@ -44,15 +44,17 @@
                         <!-- Content Row -->
                         <div class="row">
                             <div class="col-lg-12">
+                                <span th:text="${id}"></span>
                                 <form th:action="@{/companies/{companyId}/approval/{id}/write(id=${id},companyId=${companyId})}" method="post" onsubmit="return validateForm()">
                                     <input type="hidden" id="companyId" th:value="${companyId}"/>
+                                    <input type="hidden" id="currentUserId" th:value="${id}"/>
                                     <!-- 결재 라인 -->
                                     <div class="form-group" id="approverContainer">
                                         <label for="approver">결재 라인</label>
                                         <!-- ---------------------------------->
                                         <button type="button" class="btn btn-secondary" id="addButton" onclick="addApprover()">+</button>
                                         <select name="approver" id="approver" class="form-control" onchange="getPersons()" required>
-                                            <option value="----------">결재자 선택해주세요.</option>
+                                            <option value="----------">결재자를 선택해주세요.</option>
                                             <option th:each="approver : ${selectDepartment}" th:value="${approver.id}" th:text="${approver.name}"></option>
                                         </select>
                                         <select id="personSelect" class="form-control" name="personId"></select>
@@ -216,10 +218,11 @@ function removeApprover(div) {
         function getPersons(event) {
             var departmentId = event.target.value;
             var companyId = document.getElementById("companyId").value;
+            var currentUserId = document.getElementById("currentUserId").value;
 
             console.log(departmentId);
             $.ajax({
-                url: '/companies/' + companyId + '/approval/write',
+                url: '/companies/' + companyId + '/approval/write?userId=' + currentUserId,
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ id: departmentId }),
@@ -260,19 +263,28 @@ function removeApprover(div) {
 
 
     function validateForm() {
-        var valid = true;
-        var selectElements = document.querySelectorAll("#approverContainer select[name='approver']");
-        selectElements.forEach(function(select) {
-            if (select.value === "----------") {
-                alert("결재 라인을 선택해주세요.");
-                valid = false;
-            }
-        });
-        return valid;
-    }
+    var valid = true;
+    var personSelectElements = document.querySelectorAll("#approverContainer select[name='personId']");
+    var values = [];
+
+    personSelectElements.forEach(function(select) {
+        if (select.value === "----------" || select.value === "") {
+            alert("결재 라인을 선택해주세요.");
+            valid = false;
+            return false; // 반복 종료
+        }
+        if (values.includes(select.value)) {
+            alert("중복된 결재 라인의 사원을 선택하셨습니다.");
+            valid = false;
+            return false; // 반복 종료
+        }
+        values.push(select.value);
+    });
+    return valid;
+}
     </script>
 </html>
-
+<!-- -------------------------->
 <!--
         var clickCount = 0; // 클릭 횟수를 저장할 변수 선언
 

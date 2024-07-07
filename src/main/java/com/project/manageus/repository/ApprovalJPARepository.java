@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface ApprovalJPARepository extends JpaRepository<ApprovalEntity, Long> {
 
     // 결재 리스트 가져오기
-    List<ApprovalEntity> findByCompanyId(Long companyId);
+    List<ApprovalEntity> findByCompanyIdOrderBySignOnDesc(Long companyId);
 
     // 마지막 글 번호 가져오는 쿼리
     public Optional<ApprovalEntity> findFirstByOrderByIdDesc();

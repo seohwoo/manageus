@@ -71,6 +71,7 @@ public class ApprovalController {
         }
         // ~ 까지
 
+        model.addAttribute("id", id);
         model.addAttribute("companyId", companyId);
         approvalService.selectDepartment(companyId, model);
 
@@ -98,8 +99,11 @@ public class ApprovalController {
 
     @PostMapping("/approval/write")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> writeAjax(@RequestBody DepartmentDTO dto) {
-        JsonObject JObject = approvalService.selectPositionPeople(dto);
+    public ResponseEntity<Map<String, Object>> writeAjax(@RequestBody DepartmentDTO dto,
+                                                         @RequestParam Long userId) {
+
+        System.out.println("Controller-userId-------------------------------------------------------"+userId);
+        JsonObject JObject = approvalService.selectPositionPeople(dto, userId);
         Map<String, Object> MSO = new Gson().fromJson(JObject, Map.class);
         return ResponseEntity.ok(MSO);
     }

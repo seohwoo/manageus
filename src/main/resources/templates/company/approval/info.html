@@ -48,7 +48,6 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <div class="text-right">
-
                             <div th:if="${#lists.contains(userIdStrings, sessionIds) and status == 1001}">
                                 <form th:action="@{/companies/{companyId}/approval/{id}/update/{approvalId}(id=${id},companyId=${companyId},approvalId=${approvalId})}" method="post">
                                     <button type="submit" class="btn btn-primary">결재하기</button>
@@ -66,6 +65,22 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTablee" style="float: right; width: 150px; margin-left: 20px;">
+                                <tbody>
+                                <tr>
+                                    <td th:each="detail : ${approvalDetail}" th:text="${detail.user.position.name}"></td>
+                                </tr>
+                                <tr>
+                                    <td th:each="detail : ${approvalDetail}">
+                                        <div th:if="${detail.statusId == 1002}">
+                                            <img th:src="@{'/img/stamp/' + ${detail.user.userInfo.stamp}}"
+                                                 width="30" height="30">
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!-- 나머지 테이블은 그대로 -->
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <tbody>
                                 <tr>
