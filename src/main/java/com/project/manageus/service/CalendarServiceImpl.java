@@ -1,5 +1,5 @@
 package com.project.manageus.service;
-
+import java.util.List;
 import com.project.manageus.entity.CalendarEntity;
 import com.project.manageus.repository.CalendarJPARepository;
 import lombok.RequiredArgsConstructor;
@@ -23,4 +23,12 @@ public class CalendarServiceImpl implements CalendarService {
 
         model.addAttribute("cal",cal);
     }
+
+    /*달력 내용 에이젝스 (팀달력)*/
+    @Override
+    public List<CalendarEntity> getEventsByUserId(Long id) {
+        return calendarJPARepository.findByUserIdWithDetail(id);
+    }
+
+
 }
