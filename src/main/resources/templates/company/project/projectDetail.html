@@ -20,6 +20,8 @@
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
 
+
+
 </head>
 
 <body id="page-top">
@@ -37,30 +39,39 @@
             <div th:insert="~{content/top-bar :: top}"></div>
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <p><span th:text = "${projectMemberCount} + '명'"></span>이 프로젝트에 참여중입니다.</p>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>순번</th>
-                        <th>제목</th>
-                        <th>상태</th>
-                        <th>담당자</th>
-                        <th>시작일</th>
-                        <th>마감일</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each = "projectDetailList, iterStat : ${projectDetailList}">
-                        <td th:text = "${iterStat.index + 1}"></td>
-                        <td th:text = "${projectDetailList.title}"></td>
-                        <td th:text = "${projectDetailList.statusId}"></td>
-                        <td th:text = "${projectDetailList.userId}"></td>
-                        <td th:text="${#dates.format(projectDetailList.startTime, 'yyyy-MM-dd')}"></td>
-                        <td th:text="${#dates.format(projectDetailList.endTime, 'yyyy-MM-dd')}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <button th:if = "${leaderId == userId}" th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}/addContent(companyId=${companyId}, userId=${userId}, projectId=${projectId})}'|">업무 추가</button>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">업무 상세 정보</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-sm-3 font-weight-bold">업무명:</div>
+                            <div class="col-sm-9"><span th:text="${detail.title}"></span></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-3 font-weight-bold">업무내용:</div>
+                            <div class="col-sm-9"><span th:text="${detail.content}"></span></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-3 font-weight-bold">업무상태:</div>
+                            <div class="col-sm-9"><span th:text="${detail.status.name}"></span></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-3 font-weight-bold">시작일:</div>
+                            <div class="col-sm-9"><span th:text="${#dates.format(detail.startTime, 'yyyy-MM-dd')}"></span></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-3 font-weight-bold">마감일:</div>
+                            <div class="col-sm-9"><span th:text="${#dates.format(detail.endTime, 'yyyy-MM-dd')}"></span></div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-right">
+                        <button class="btn btn-primary"
+                                th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}/form(companyId=${companyId}, userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetailId})}'|">업무 수정</button>
+                        <button class="btn btn-secondary"
+                                th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}(companyId=${companyId}, userId=${userId}, projectId=${projectId})}'|">뒤로가기</button>
+                    </div>
+                </div>
             </div>
             <!-- /.container-fluid -->
 

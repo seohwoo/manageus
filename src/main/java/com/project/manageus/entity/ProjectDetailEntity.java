@@ -32,6 +32,14 @@ public class ProjectDetailEntity {
     @Column(name = "end_time")
     private Date endTime;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private UserEntity user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "status_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private StatusEntity status;
+
     @Builder
     public ProjectDetailEntity(Long id, Long projectId, String title, String content, Long statusId, Long userId, Date startTime, Date endTime){
         super();

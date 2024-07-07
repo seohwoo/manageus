@@ -22,33 +22,88 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            var projectId = $('#projectId').val();
+            var companyId = $('#companyId').val();
+            var myId = $('#myId').val();
+            console.log("myId:",myId);
             $.ajax({
                 type: "GET",
-                url: '/ajax/project/getProjectMember',
+                url: '/ajax/project/getCompanyMember',
                 contentType: "application/json; charset=utf-8",
-                data: { projectId: projectId },
+                data: { companyId: companyId , myId : myId},
                 success: function(data) {
                     console.log("Received data:", data);
 
-                    var assigneeSelect = $('#assignee');
-                    data.projectMemberList.forEach(function(member) {
+                    var plusMemberSelect = $('#plusMember');
+                    data.companyMemberList.forEach(function(member) {
                         var userId = Object.keys(member)[0];
                         var userName = member[userId];
                         var option = $('<option></option>')
                             .attr('value', userId)
                             .text(userName);
-                        assigneeSelect.append(option);
+                        plusMemberSelect.append(option);
                     });
                 },
                 error: function(error) {
                     console.error("Error occurred:", error);
                 }
             });
+
+
+        var userId ;
+        var userName ;
+        var selectedUsers = [];
+        $("#plusMemberButton").on("click", function () {
+            var selectedOption = $("#plusMember").find(":selected");
+            userId = selectedOption.val();
+            userName = selectedOption.text(); // 입력값
+            console.log("Selected user ID:", userId);
+            console.log("Selected user name:", userName);
+            var isDuplicate = selectedUsers.some(function(user) {
+            return user.userId === userId;
         });
 
-    </script>
+        if (isDuplicate) {
+            alert("이미 추가된 사용자입니다.");
+            return; // 중복일 경우 추가하지 않음
+        }
 
+            selectedUsers.push({ userId: userId, userName: userName });
+            console.log("selectedUsers=====",selectedUsers);
+            updateSelectedUsersList();
+            });
+
+        function updateSelectedUsersList() {
+        var userListContainer = $('#selectedUsersContainer');
+        userListContainer.empty(); // 기존 목록 초기화
+
+        // 사용자 목록 갱신
+        selectedUsers.forEach(function(user, index) {
+            var userDiv = $('<div class="user-item"></div>');
+
+            var userInput = $('<input>')
+                .attr('type', 'text')
+                .attr('readonly', true)
+                .val(user.userId + ',' + user.userName);
+
+            var userIdInput = $('<input>')
+                .attr('type', 'hidden')
+                .attr('name', 'plusUserId')
+                .val(user.userId);
+
+            var deleteButton = $('<button class="btn btn-danger btn-sm ml-2">X</button>');
+            deleteButton.on('click', function() {
+                // 삭제 버튼 클릭 시 해당 사용자 삭제
+                selectedUsers.splice(index, 1);
+                updateSelectedUsersList(); // 목록 갱신
+            });
+
+            userDiv.append(userInput, userIdInput, deleteButton);
+            userListContainer.append(userDiv);
+        });
+    }
+
+        });
+    </script>
 </head>
 
 <body id="page-top">
@@ -69,31 +124,33 @@
 
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">업무 생성</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">프로젝트 생성</h6>
                     </div>
                     <div class="card-body">
-                        <form th:action="@{/companies/{companyId}/users/{userId}/project/{projectId}(companyId=${companyId}, userId=${userId}, projectId=${projectId})}" method="post">
-                            <input type="hidden" id="projectId" name="projectId" th:value="${projectId}">
-                            <input type="hidden" name="statusId" value="3000">
+                        <form th:action="@{/companies/{companyId}/users/{userId}/project(companyId=${companyId}, userId=${userId})}" method="post">
+                            <input type="hidden" id="companyId" name="companyId" th:value="${companyId}">
+                            <input type="hidden" id="myId" th:value="${userId}">
                             <div class="form-group">
-                                <label for="title">제목</label>
-                                <input type="text" class="form-control" id="title" name="title">
+                                <label for="projectName">프로젝트명</label>
+                                <input type="text" class="form-control" id="projectName" name="name">
                             </div>
                             <div class="form-group">
-                                <label for="content">내용</label>
-                                <textarea class="form-control" name="content" rows="4"></textarea>
+                                <label for="startDate">프로젝트 시작일</label>
+                                <input type="date" class="form-control" id="startDate" name="startDate" th:value="${#dates.format(startDate, 'yyyy-MM-dd')}">
                             </div>
                             <div class="form-group">
-                                <label for="assignee">담당자</label>
-                                <select class="form-control" id="assignee" name="userId"></select>
+                                <label for="endDate">프로젝트 마감일</label>
+                                <input type="date" class="form-control" id="endDate" name="endDate" th:value="${#dates.format(endDate, 'yyyy-MM-dd')}">
                             </div>
                             <div class="form-group">
-                                <label for="startTime">업무 시작일</label>
-                                <input type="date" class="form-control" id="startTime" name="startTime" th:value="${#dates.format(startTime, 'yyyy-MM-dd')}">
-                            </div>
-                            <div class="form-group">
-                                <label for="endTime">업무 마감일</label>
-                                <input type="date" class="form-control" id="endTime" name="endTime" th:value="${#dates.format(endTime, 'yyyy-MM-dd')}">
+                                <label for="plusMember">인원 추가</label>
+                                <div class="input-group mb-3">
+                                    <select class="custom-select" id="plusMember" name="userId"></select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" id="plusMemberButton">추가</button>
+                                    </div>
+                                </div>
+                                <div id="selectedUsersContainer"></div>
                             </div>
                             <button type="submit" class="btn btn-success btn-icon-split">
                                     <span class="icon text-white-50">
