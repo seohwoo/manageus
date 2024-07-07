@@ -1,7 +1,6 @@
 package com.project.manageus.entity;
 
-
-import com.project.manageus.dto.MessageDTO;
+import com.project.manageus.dto.AlarmDTO;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name="alarm")
-public class MessageEntity {
+public class AlarmEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +28,23 @@ public class MessageEntity {
     @Column(name="read_date")
     private Date readDate;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private UserInfoEntity userInfo;  //보낸사람이 나일떄
+
+   @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reader", referencedColumnName = "id", insertable = false, updatable = false)
+    private UserInfoEntity userInfos;   //받은살마이 나일때
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private UserEntity user;
+
+
+
 
     @Builder
-    public MessageEntity(Long id, Long userId, String subject, Long reader, Long readType, Date readDate){
+    public AlarmEntity(Long id, Long userId, String subject, Long reader, Long readType, Date readDate){
         super();
         this.id=id;
         this.userId=userId;
@@ -41,8 +54,8 @@ public class MessageEntity {
         this.readDate=readDate;
     }
 
-    public MessageDTO toMessageDTO(){
-        return MessageDTO.builder()
+    public AlarmDTO toAlarmDTO(){
+        return AlarmDTO.builder()
                 .id(this.id)
                 .userId(this.userId)
                 .subject(this.subject)
@@ -50,8 +63,7 @@ public class MessageEntity {
                 .readType(this.readType)
                 .readDate(this.readDate)
                 .build();
-
-    }//이거는 dto를 엔터티로 만드는 작업
+    }
 
 
 }

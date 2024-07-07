@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>쪽지쓰기</title>
+    <!-- Custom fonts for this template-->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+<body id="page-top">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <div th:include="~{content/side-bar :: side}"></div>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <div th:include="~{content/top-bar :: top}"></div>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">쪽지 작성하기</h1>
+                    <a th:href="@{/companies/{companyId}/alarm/{id}/receive(companyId=${companyId}, id=${id})}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                        <i class="fas fa-download fa-sm text-white-50"></i> 받은 쪽지 전체보기
+                    </a>
+                    <a th:href="@{/companies/{companyId}/alarm/{id}/spend(companyId=${companyId}, id=${id})}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                        <i class="fas fa-download fa-sm text-white-50"></i> 보낸 쪽지 전체보기
+                    </a>
+                </div>
+                <!-- Content Row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">쪽지 작성 양식</h6>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/companies/{companyId}/alarm/{id}/formpro(companyId=${companyId},id=${id})}" method="post">
+                                    <input type="hidden" id="companyId" th:value="${companyId}"/>
+                                    <div class="form-group">
+                                        <label for="recipient">받는 사람</label>
+                                        <select id="recipient" name="readers" required onchange="getPersons()">
+                                            <option value="" disabled selected>부서 선택</option>
+                                            <!-- getcomname 리스트를 반복하여 옵션 추가 -->
+                                            <option th:each="department : ${getcomname}"
+                                                    th:value="${department.id}"
+                                                    th:text="${department.name}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div id="additional-options" class="form-group" style="display: none;">
+                                        <label for="personSelect">인원선택</label>
+                                        <div id="personSelect"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>선택된 인원</label>
+                                        <ul id="selectedPersonsList"></ul>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="content">내용</label>
+                                        <textarea name="subject" rows="5" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">보내기</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Main Content -->
+        <div th:include="~{content/footer :: footer}"></div>
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+<!-- Bootstrap core JavaScript-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="/js/sb-admin-2.min.js"></script>
+<!-- Page level plugins -->
+<script src="/vendor/chart.js/Chart.min.js"></script>
+<!-- Page level custom scripts -->
+<script src="/js/demo/chart-area-demo.js"></script>
+<script src="/js/demo/chart-pie-demo.js"></script>
+<script th:inline="javascript">
+    var selectedPersons = [];
+
+    function getPersons() {
+        var companyId = $("#companyId").val();
+        var readers = document.getElementById("recipient").value;
+        console.log(companyId);
+        console.log(readers);
+        var additionalOptions = document.getElementById("additional-options");
+        if (readers) {
+            additionalOptions.style.display = 'block';
+        } else {
+            additionalOptions.style.display = 'none';
+        }
+        $.ajax({
+            url: '/companies/[[${companyId}]]/invitations/names',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ id: readers, companyId: companyId }),
+            dataType: "json",
+            success: function(response) {
+                var personSelect = document.getElementById("personSelect");
+                personSelect.innerHTML = "";
+
+                response.DepartmentMember.forEach(function(person) {
+                    // Create checkbox element
+                    var checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.name = "readers[]";
+                    checkbox.value = person.userId;
+                    checkbox.id = "person_" + person.userId;
+                    checkbox.onchange = function() { updateSelectedPersons(person.userId, person.fullName, checkbox.checked); };
+
+                    // Create label for checkbox
+                    var label = document.createElement("label");
+                    label.htmlFor = "person_" + person.userId;
+                    label.appendChild(document.createTextNode(person.fullName));
+
+                    // Create div to hold checkbox and label
+                    var div = document.createElement("div");
+                    div.appendChild(checkbox);
+                    div.appendChild(label);
+                    personSelect.appendChild(div);
+
+                    // Check if the person is already selected
+                    if (selectedPersons.some(selected => selected.userId === person.userId)) {
+                        checkbox.checked = true;
+                    }
+                });
+
+                console.log('성공');
+            },
+            error: function(error) {
+                console.log('오류', error);
+            }
+        });
+    }
+
+    function updateSelectedPersons(userId, fullName, isChecked) {
+        if (isChecked) {
+            // Check if the person is already in the array to avoid duplicates
+            if (!selectedPersons.some(person => person.userId === userId)) {
+                selectedPersons.push({ userId: userId, fullName: fullName });
+            }
+        } else {
+            selectedPersons = selectedPersons.filter(function(person) {
+                return person.userId !== userId;
+            });
+        }
+        showSelectedPersons();
+    }
+
+    function showSelectedPersons() {
+        var selectedPersonsList = document.getElementById("selectedPersonsList");
+        selectedPersonsList.innerHTML = "";
+        selectedPersons.forEach(function(person) {
+            var li = document.createElement("li");
+            li.textContent = person.fullName;
+            selectedPersonsList.appendChild(li);
+        });
+    }
+</script>
+</body>
+</html>
