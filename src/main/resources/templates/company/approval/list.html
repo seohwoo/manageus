@@ -59,6 +59,7 @@
                                         <th>작성자</th>
                                         <th>제목</th>
                                         <th>날짜</th>
+                                        <th>상태</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -68,6 +69,7 @@
                                             <a th:href="@{/companies/{companyId}/approval/{id}/info/{approvalId}(id=${id},companyId=${companyId},approvalId=${approvalList.id})}" th:text="${approvalList.title}"></a>
                                         </td>
                                         <td th:text="${#dates.format(approvalList.signOn, 'yyyy-MM-dd')}"></td>
+                                        <td th:text="${approvalList.getStatus.getName}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
