@@ -13,6 +13,7 @@ public class ChatRoomDTO {
     private String name;
     private Long statusId;
     private Date reg;
+    private Long departmentId;
 
     @Builder
     public ChatRoomDTO(Long id,String name,Long statusId,Date reg){

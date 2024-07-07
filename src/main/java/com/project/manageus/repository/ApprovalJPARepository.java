@@ -9,8 +9,17 @@ import org.springframework.data.jpa.repository.Query; // 쿼리문 직접 입력
 import org.springframework.data.repository.query.Param; // 쿼리문 직접 입력
 
 import java.util.List;
+import java.util.Optional;
 
-public interface ApprovalJPARepository extends JpaRepository<ApprovalEntity, Integer> {
+public interface ApprovalJPARepository extends JpaRepository<ApprovalEntity, Long> {
+
+    // 결재 리스트 가져오기
+    List<ApprovalEntity> findByCompanyIdOrderBySignOnDesc(Long companyId);
+
+    // 마지막 글 번호 가져오는 쿼리
+    public Optional<ApprovalEntity> findFirstByOrderByIdDesc();
+
+}
     // 여기에 SQL 적으면됨
 //    @Transactional //            ʼ
 //    @Modifying //            ʼ
@@ -27,4 +36,4 @@ public interface ApprovalJPARepository extends JpaRepository<ApprovalEntity, Int
     @Query(value = "insert into approval(user_id) values(:#{user_id}" , nativeQuery = true)
     int insertApproval(@Param("ApprovalDTO") ApprovalDTO dto);
 */
-}
+

@@ -12,17 +12,17 @@ import java.util.Date;
 public class MessageDTO {
 
     private Long id;
-    private Long userID;
+    private Long userId;
     private String subject;
     private Long reader;
     private Long readType;
     private Date readDate;
 
     @Builder
-    public MessageDTO(Long id, Long userID, String subject, Long reader, Long readType, Date readDate){
+    public MessageDTO(Long id, Long userId, String subject, Long reader, Long readType, Date readDate){
         super();
         this.id=id;
-        this.userID=userID;
+        this.userId=userId;
         this.subject=subject;
         this.reader=reader;
         this.readType=readType;
@@ -33,7 +33,7 @@ public class MessageDTO {
     public MessageEntity toMessageEntity(){
         return MessageEntity.builder()
                 .id(this.id)
-                .userID(this.userID)
+                .userId(this.userId)
                 .subject(this.subject)
                 .reader(this.reader)
                 .readType(this.readType)

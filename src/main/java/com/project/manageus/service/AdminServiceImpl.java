@@ -1,37 +1,33 @@
 package com.project.manageus.service;
 
+import com.project.manageus.dto.CompanyDTO;
+import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.dto.UserDTO;
-import com.project.manageus.entity.DepartmentEntity;
-import com.project.manageus.entity.PositionEntity;
-import com.project.manageus.entity.StatusEntity;
-import com.project.manageus.entity.UserEntity;
-import com.project.manageus.repository.DepartmentRepository;
-import com.project.manageus.repository.PositionRepository;
-import com.project.manageus.repository.StatusRepository;
-import com.project.manageus.repository.UserRepository;
+import com.project.manageus.entity.*;
+import com.project.manageus.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AdminServiceImpl implements AdminService{
 
     private final UserRepository userRepository;
+    private final CompanyRepository companyRepository;
     private final StatusRepository statusRepository;
     private final PositionRepository positionRepository;
     private final DepartmentRepository departmentRepository;
 
     @Autowired
     public AdminServiceImpl(UserRepository userRepository,
+                            CompanyRepository companyRepository,
                             StatusRepository statusRepository,
                             PositionRepository positionRepository,
                             DepartmentRepository departmentRepository) {
         this.userRepository = userRepository;
+        this.companyRepository = companyRepository;
         this.statusRepository = statusRepository;
         this.positionRepository = positionRepository;
         this.departmentRepository = departmentRepository;
@@ -108,4 +104,63 @@ public class AdminServiceImpl implements AdminService{
         }
         return result;
     }
+
+    @Override
+    public void findAllDepartment(Long companyId, Model model) {
+        List<DepartmentDTO> departmentDTOList = new ArrayList<>(Collections.emptyList());
+        List<DepartmentEntity> departmentEntityList = departmentRepository.findAllByCompanyId(companyId);
+        for (DepartmentEntity departmentEntity : departmentEntityList) {
+            DepartmentDTO departmentDTO = departmentEntity.toDepartmentDTO();
+            departmentDTO.setDepartmentUserCnt(userRepository.countByDepartmentId(departmentEntity.getId()));
+            departmentDTOList.add(departmentDTO);
+        }
+        model.addAttribute("departmentDTOList", departmentDTOList);
+    }
+
+    @Override
+    public boolean createDepartment(DepartmentDTO departmentDTO) {
+        boolean result = false;
+        if(!departmentRepository.existsByNameAndCompanyId(departmentDTO.getName(), departmentDTO.getCompanyId())) {
+            Long newId = departmentDTO.getCompanyId() * 100 + 1;
+            System.out.println(newId);
+            if(departmentRepository.existsByCompanyId(departmentDTO.getCompanyId())) {
+                newId = Collections.max(departmentRepository.findAllByCompanyId(departmentDTO.getCompanyId()), Comparator.comparingLong(DepartmentEntity::getId)).getId() + 1;
+            }
+            departmentDTO.setId(newId);
+            departmentRepository.save(departmentDTO.toDepartmentEntity());
+            result = true;
+        }
+        return result;
+    }
+
+    @Override
+    public void findCompanyInfo(Long companyId, Model model) {
+        Optional<CompanyEntity> optionalCompany =  companyRepository.findById(companyId);
+        if(optionalCompany.isPresent()) {
+            model.addAttribute("companyName", optionalCompany.get().getName());
+            model.addAttribute("businessNum", optionalCompany.get().getBusinessNum());
+            model.addAttribute("inviteCode", optionalCompany.get().getInviteCode());
+            model.addAttribute("ceo", optionalCompany.get().getCeo());
+            model.addAttribute("address", optionalCompany.get().getAddress());
+            model.addAttribute("email", optionalCompany.get().getEmail());
+            model.addAttribute("regDate", optionalCompany.get().getRegDate());
+        }
+    }
+
+    @Override
+    public boolean updateCompanyInfo(CompanyDTO companyDTO) {
+        boolean result = false;
+        Optional<CompanyEntity> optionalCompany = companyRepository.findById(companyDTO.getId());
+        if(optionalCompany.isPresent()) {
+            companyDTO.setPw(optionalCompany.get().getPw());
+            companyDTO.setStatusId(optionalCompany.get().getStatusId());
+            companyDTO.setAuthId(optionalCompany.get().getAuthId());
+            companyDTO.setRegDate(optionalCompany.get().getRegDate());
+            companyRepository.save(companyDTO.toCompanyEntity());
+            result = true;
+        }
+        return result;
+    }
+
+
 }

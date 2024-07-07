@@ -39,13 +39,39 @@
             <div th:insert="~{content/top-bar :: top}"></div>
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                업무명 : <span th:text="${detail.title}"></span><br/>
-                업무내용 : <span th:text="${detail.content}"></span><br/>
-                업무상태 : <sapn th:text="${detail.status.name}"></sapn><br/>
-                시작일 : <span th:text="${#dates.format(detail.startTime, 'yyyy-MM-dd')}"></span><br/>
-                마감일 : <span th:text="${#dates.format(detail.endTime, 'yyyy-MM-dd')}"></span><br/>
-                <button th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}/form(companyId=${companyId}, userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetailId})}'|">업무 수정</button>
-                <button th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}(companyId=${companyId}, userId=${userId}, projectId=${projectId})}'|">뒤로가기</button>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">업무 상세 정보</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-sm-3 font-weight-bold">업무명:</div>
+                            <div class="col-sm-9"><span th:text="${detail.title}"></span></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-3 font-weight-bold">업무내용:</div>
+                            <div class="col-sm-9"><span th:text="${detail.content}"></span></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-3 font-weight-bold">업무상태:</div>
+                            <div class="col-sm-9"><span th:text="${detail.status.name}"></span></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-3 font-weight-bold">시작일:</div>
+                            <div class="col-sm-9"><span th:text="${#dates.format(detail.startTime, 'yyyy-MM-dd')}"></span></div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-3 font-weight-bold">마감일:</div>
+                            <div class="col-sm-9"><span th:text="${#dates.format(detail.endTime, 'yyyy-MM-dd')}"></span></div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-right">
+                        <button class="btn btn-primary"
+                                th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}/form(companyId=${companyId}, userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetailId})}'|">업무 수정</button>
+                        <button class="btn btn-secondary"
+                                th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}(companyId=${companyId}, userId=${userId}, projectId=${projectId})}'|">뒤로가기</button>
+                    </div>
+                </div>
             </div>
             <!-- /.container-fluid -->
 

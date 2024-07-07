@@ -121,22 +121,46 @@
             <div th:insert="~{content/top-bar :: top}"></div>
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <form th:action="@{/companies/{companyId}/users/{userId}/project(companyId=${companyId}, userId=${userId})}" method="post">
-                    <input type="hidden" id="companyId" name="companyId" th:value="${companyId}">
-                    <input type="hidden" id="myId" th:value="${userId}">
-                    프로젝트명 : <input type="text" name="name"><br/>
-                    프로젝트 시작일 : <input type="date" name="startDate" th:value="${#dates.format(startDate, 'yyyy-MM-dd')}"><br/>
-                    프로젝트 마감일 : <input type="date" name="endDate" th:value="${#dates.format(endDate, 'yyyy-MM-dd')}"><br/>
-                    인원추가 : <select id="plusMember" name="userId">
-                             </select> <input type="button" id="plusMemberButton" value="추가"></input><br/>
-                    <div id="selectedUsersContainer"></div>
-                    <button type="submit" class="btn btn-success btn-icon-split">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-check"></i>
-                                        </span>
-                        <span class="text">등록</span>
-                    </button>
-                </form>
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">프로젝트 생성</h6>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/companies/{companyId}/users/{userId}/project(companyId=${companyId}, userId=${userId})}" method="post">
+                            <input type="hidden" id="companyId" name="companyId" th:value="${companyId}">
+                            <input type="hidden" id="myId" th:value="${userId}">
+                            <div class="form-group">
+                                <label for="projectName">프로젝트명</label>
+                                <input type="text" class="form-control" id="projectName" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="startDate">프로젝트 시작일</label>
+                                <input type="date" class="form-control" id="startDate" name="startDate" th:value="${#dates.format(startDate, 'yyyy-MM-dd')}">
+                            </div>
+                            <div class="form-group">
+                                <label for="endDate">프로젝트 마감일</label>
+                                <input type="date" class="form-control" id="endDate" name="endDate" th:value="${#dates.format(endDate, 'yyyy-MM-dd')}">
+                            </div>
+                            <div class="form-group">
+                                <label for="plusMember">인원 추가</label>
+                                <div class="input-group mb-3">
+                                    <select class="custom-select" id="plusMember" name="userId"></select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" id="plusMemberButton">추가</button>
+                                    </div>
+                                </div>
+                                <div id="selectedUsersContainer"></div>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-icon-split">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                <span class="text">등록</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
             <!-- /.container-fluid -->
 

@@ -1,18 +1,20 @@
 package com.project.manageus.entity;
 
 import com.project.manageus.dto.ApprovalDetailDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
+@Data
 @NoArgsConstructor
 @Entity
+@DynamicUpdate
 @Table(name="approval_detail")
 public class ApprovalDetailEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "approval_id")
     private Long approvalId;
@@ -20,6 +22,10 @@ public class ApprovalDetailEntity {
     private Long userId;
     @Column(name = "status_id")
     private Long statusId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private UserEntity user;
 
     @Builder
     public ApprovalDetailEntity(Long id, Long approvalId, Long userId, Long statusId) {

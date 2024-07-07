@@ -78,12 +78,11 @@
             <div class="container-fluid">
                 <p><span th:text = "${projectMemberCount} + '명'"></span>이 프로젝트에 참여중입니다.</p>
 
-                <div class="card border-left-info shadow h-100 py-2">
+                <div class="card border-left-info shadow h-100 py-2 mb-4">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                                </div>
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks</div>
                                 <div class="row no-gutters align-items-center">
                                     <div class="col-auto">
                                         <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" th:text="${taskValue + '%'}"></div>
@@ -104,31 +103,42 @@
                     </div>
                 </div>
 
-                <table>
-                    <thead>
-                    <tr>
-                        <th>순번</th>
-                        <th>제목</th>
-                        <th>상태</th>
-                        <th>담당자</th>
-                        <th>시작일</th>
-                        <th>마감일</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each = "projectDetail, iterStat : ${projectDetailList}">
-                        <input type="hidden" th:id="'userId_' + ${iterStat.index + 1}" th:value="${projectDetail.userId}">
-                        <input type="hidden" th:id="'statusId_' + ${iterStat.index + 1}" th:value="${projectDetail.statusId}">
-                        <td th:text = "${iterStat.index + 1}"></td>
-                        <td> <a th:href = "@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}(companyId = ${companyId}, userId = ${userId}, projectId = ${projectId}, projectDetailId = ${projectDetail.id})}" th:text = "${projectDetail.title}"></a></td>
-                        <td th:id="'status_' + ${iterStat.index + 1}" th:text = "${projectDetail.status.name}"></td>
-                        <td th:id="'user_' + ${iterStat.index + 1}" th:text = "${projectDetail.user.userInfo.name}"></td>
-                        <td th:text="${#dates.format(projectDetail.startTime, 'yyyy-MM-dd')}"></td>
-                        <td th:text="${#dates.format(projectDetail.endTime, 'yyyy-MM-dd')}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <button th:if = "${leaderId == userId}" th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}/form(companyId=${companyId}, userId=${userId}, projectId=${projectId})}'|">업무 추가</button>
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">프로젝트 상세 정보</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>순번</th>
+                                    <th>제목</th>
+                                    <th>상태</th>
+                                    <th>담당자</th>
+                                    <th>시작일</th>
+                                    <th>마감일</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="projectDetail, iterStat : ${projectDetailList}">
+                                    <input type="hidden" th:id="'userId_' + ${iterStat.index + 1}" th:value="${projectDetail.userId}">
+                                    <input type="hidden" th:id="'statusId_' + ${iterStat.index + 1}" th:value="${projectDetail.statusId}">
+                                    <td th:text="${iterStat.index + 1}"></td>
+                                    <td>
+                                        <a th:href="@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}(companyId=${companyId}, userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetail.id})}" th:text="${projectDetail.title}"></a>
+                                    </td>
+                                    <td th:id="'status_' + ${iterStat.index + 1}" th:text="${projectDetail.status.name}"></td>
+                                    <td th:id="'user_' + ${iterStat.index + 1}" th:text="${projectDetail.user.userInfo.name}"></td>
+                                    <td th:text="${#dates.format(projectDetail.startTime, 'yyyy-MM-dd')}"></td>
+                                    <td th:text="${#dates.format(projectDetail.endTime, 'yyyy-MM-dd')}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="btn btn-primary mt-3" th:if="${leaderId == userId}" th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}/form(companyId=${companyId}, userId=${userId}, projectId=${projectId})}'|">업무 추가</button>
+                    </div>
+                </div>
             </div>
             <!-- /.container-fluid -->
 
