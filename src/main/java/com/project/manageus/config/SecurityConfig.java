@@ -29,10 +29,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
         http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/", "/login", "/register", "/forgot", "/company",
+                .requestMatchers("/", "/login", "/forgot",
+                        "/users", "/users/new", "/companies", "/companies/new",
                         "/css/**", "/js/**", "/img/**", "/scss/**", "/vendor/**","/static/**").permitAll()
-               // .requestMatchers("/super/**").hasRole("SUPER")
-               // .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
+                .requestMatchers("/super/**").hasRole("SUPER")
+                .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
                 .requestMatchers("/h2-console/**").permitAll()
                 // Swagger 관련 리소스 접근 허용
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
