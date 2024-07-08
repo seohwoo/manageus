@@ -12,6 +12,16 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS for the text area */
+        .custom-textarea {
+            border-radius: 10px;
+            border: 1px solid #ced4da;
+            padding: 15px;
+            font-size: 16px;
+            resize: none;
+        }
+    </style>
 </head>
 <body id="page-top">
 <!-- Page Wrapper -->
@@ -46,7 +56,7 @@
                                     <input type="hidden" id="companyId" th:value="${companyId}"/>
                                     <div class="form-group">
                                         <label for="recipient">받는 사람</label>
-                                        <select id="recipient" name="readers" required onchange="getPersons()">
+                                        <select id="recipient" name="readers" class="form-control" required onchange="getPersons()">
                                             <option value="" disabled selected>부서 선택</option>
                                             <!-- getcomname 리스트를 반복하여 옵션 추가 -->
                                             <option th:each="department : ${getcomname}"
@@ -65,7 +75,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="content">내용</label>
-                                        <textarea name="subject" rows="5" required></textarea>
+                                        <textarea name="subject" rows="5" class="form-control custom-textarea" required></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-primary">보내기</button>
                                 </form>
