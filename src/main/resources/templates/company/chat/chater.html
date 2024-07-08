@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>채팅</title>
 
     <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -63,7 +63,7 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    <div th:include="~{content/side-bar :: side}"></div>
+    <div th:replace="~{content/side-bar :: side}"></div>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -71,7 +71,7 @@
         <!-- Main Content -->
         <div id="content">
 
-            <div th:include="~{content/top-bar :: top}"></div>
+            <div th:replace="~{content/top-bar :: top}"></div>
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
@@ -82,7 +82,7 @@
                             <div th:each="message : ${cmlist}">
                                 <div th:class="${message.userId == id ? 'message-container own' : 'message-container'}">
                                     <div th:class="${message.userId == id ? 'own-message' : 'other-message'}">
-                                        <b th:text="${message.userId} + ': ' + ${message.message}"></b>
+                                        <b th:text="${message.user.userInfo.name} + ': ' + ${message.message}"></b>
                                     </div>
                                 </div>
                             </div>
@@ -134,6 +134,24 @@
                 $("#button-send").on("click", function() {
                     send();
                 });
+                 window.addEventListener("beforeunload", function (e) {
+                    sendLeaveMessage();
+                });
+
+                function sendLeaveMessage() {
+                    $.ajax({
+                        url: '/companies/checkTime',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ userId: id, chatRoomId: roomId }),
+                        success: function(response) {
+                            console.log(response);
+                        },
+                        error: function(error) {
+                            console.log('Error sending leave message:', error);
+                        }
+                    });
+                }
 
                 function send() {
                     let msg = $("#msg").val();
