@@ -26,6 +26,14 @@ public class ChatMessageEntity {
     @Column(name="status_id")
     private Long statusId;
 
+    @OneToOne
+    @JoinColumn(name = "user_id",referencedColumnName = "id",updatable = false,insertable = false)
+    UserEntity user;
+
+    @OneToOne
+    @JoinColumn(name = "chat_room_id",referencedColumnName = "id",updatable = false,insertable = false)
+    ChatRoomEntity chatRoom;
+
     @Builder
     public ChatMessageEntity(Long id, Long chatRoomId, String message, Long userId, Date reg, Long statusId){
         super();

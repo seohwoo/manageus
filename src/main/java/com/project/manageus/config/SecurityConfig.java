@@ -30,7 +30,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers("/", "/login", "/register", "/forgot", "/company",
-                        "/css/**", "/js/**", "/img/**", "/scss/**", "/vendor/**").permitAll()
+                        "/css/**", "/js/**", "/img/**", "/scss/**", "/vendor/**","/static/**").permitAll()
                // .requestMatchers("/super/**").hasRole("SUPER")
                // .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
                 .requestMatchers("/h2-console/**").permitAll()
