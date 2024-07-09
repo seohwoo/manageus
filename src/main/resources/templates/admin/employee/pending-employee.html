@@ -74,26 +74,8 @@
                                 <tr th:each="user : ${userEntityList}">
                                     <td th:text="${user.id}"></td>
                                     <td th:text="${user.userInfo.name}"></td>
-                                    <td>
-                                        <select th:id="'positionSelect__' + ${user.id}" class="custom-select">
-                                            <option th:if="${user.position == null}" th:text="직급미정" th:selected="true" th:value="${null}"></option>
-                                            <option th:each="position : ${positionEntityList}"
-                                                    th:value="${position.id}"
-                                                    th:text="${position.name}"
-                                                    th:selected="${position.id == user.position?.id}">
-                                            </option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select th:id="'departmentSelect__' + ${user.id}" class="custom-select">
-                                            <option th:if="${user.department == null}" th:text="부서미정" th:selected="true" th:value="${null}"></option>
-                                            <option th:each="department : ${departmentEntityList}"
-                                                    th:value="${department.id}"
-                                                    th:text="${department.name}"
-                                                    th:selected="${department.id == user.department?.id}">
-                                            </option>
-                                        </select>
-                                    </td>
+                                    <td th:text="${user.position?.name ?: '직급미정'}"></td>
+                                    <td th:text="${user.department?.name ?: '부서미정'}"></td>
                                     <td th:text="${user.userInfo.email}"></td>
                                     <td th:text="${user.userInfo.phone}"></td>
                                     <td th:text="${#dates.format(user.regDate, 'yyyy/MM/dd')}"></td>
@@ -107,11 +89,9 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <form th:id="'form__' + ${user.id}" th:action="@{~/admin/{companyId}/employees(companyId=${companyId})}" method="post" th:onsubmit="handleSubmit(event, [[${user.id}]])">
+                                        <form th:id="'form__' + ${user.id}" th:action="@{~/admin/companies/{companyId}/users/{id}(companyId=${companyId}, id=${user.id})}" method="post" th:onsubmit="handleSubmit(event, [[${user.id}]])">
                                             <input type="hidden" name="_method" value="patch" />
-                                            <input type="hidden" name="userId" th:value="${user.id}" />
-                                            <input th:id="'positionId__' + ${user.id}" type="hidden" name="positionId"/>
-                                            <input th:id="'departmentId__' + ${user.id}" type="hidden" name="departmentId"/>
+                                            <input type="hidden" name="id" th:value="${user.id}" />
                                             <input th:id="'statusId__' + ${user.id}" type="hidden" name="statusId" />
                                             <button type="submit" class="btn btn-success btn-icon-split">
                                                         <span class="icon text-white-50">
@@ -149,24 +129,15 @@
 
 <script>
     function handleSubmit(event, userId) {
-        event.preventDefault();
+       event.preventDefault();
 
-        const positionSelect = document.getElementById('positionSelect__' + userId);
-        const departmentSelect = document.getElementById('departmentSelect__' + userId);
-        const statusSelect = document.getElementById('statusSelect__' + userId);
+       const statusSelect = document.getElementById('statusSelect__' + userId);
+       const statusIdInput = document.getElementById('statusId__' + userId);
 
-        const positionIdInput = document.getElementById('positionId__' + userId);
-        const departmentIdInput = document.getElementById('departmentId__' + userId);
-        const statusIdInput = document.getElementById('statusId__' + userId);
-
-        positionIdInput.value = positionSelect.value || null;
-        departmentIdInput.value = departmentSelect.value || null;
-        statusIdInput.value = statusSelect.value || null;
-
-        document.getElementById('form__' + userId).submit();
+       statusIdInput.value = statusSelect.value || null;
+       document.getElementById('form__' + userId).submit();
     }
 </script>
-
 <!-- Bootstrap core JavaScript-->
 <script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

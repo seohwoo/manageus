@@ -80,7 +80,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="card shadow mb-4">
-                            <form th:action="@{~/admin/{companyId}/departments(companyId=${companyId})}" method="post">
+                            <form th:action="@{~/admin/companies/{companyId}/departments(companyId=${companyId})}" method="post">
                                 <input type="hidden" name="companyId" th:value="${companyId}" />
                                 <div class="card-header py-3 d-flex align-items-center">
                                     <h6 class="m-0 font-weight-bold text-primary">부서생성</h6>
