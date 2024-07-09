@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .requestMatchers("/board/**").permitAll()
                 .requestMatchers("/chat").permitAll()
                 .requestMatchers("/ws/**").permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
         );
         http.formLogin((auth) -> auth.loginPage("/login")
                 .loginProcessingUrl("/loginProc")

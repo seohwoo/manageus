@@ -2,6 +2,7 @@ package com.project.manageus.controller.admin;
 
 import com.project.manageus.dto.CompanyDTO;
 import com.project.manageus.dto.DepartmentDTO;
+import com.project.manageus.dto.UserDTO;
 import com.project.manageus.service.AdminService;
 import com.project.manageus.service.UrlService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor    //lombok 생성자 주입
-@RequestMapping("/admin/*")
+@RequestMapping("/admin/companies/*")
 public class AdminContorller {
 
     private final AdminService adminService;
@@ -25,14 +26,14 @@ public class AdminContorller {
                             Model model) {
         String url = "admin/main.html";
         if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/admin/" + principal.getName();
+            url = "redirect:/admin/companies/" + principal.getName();
             return url;
         }
         model.addAttribute("existUser", adminService.findAllEmployee(companyId, model));
         return url;
     }
 
-    @GetMapping("{companyId}/employees")
+    @GetMapping("{companyId}/users")
     public String showAllEmployee(@PathVariable Long companyId,
                                   Principal principal,
                                   Model model) {
@@ -45,53 +46,17 @@ public class AdminContorller {
         return url;
     }
 
-    @PatchMapping("{companyId}/employees")
+    @PatchMapping("{companyId}/users/{id}")
     public String updateUserInfo(@PathVariable Long companyId,
-                                 Long userId,
-                                 Long positionId,
-                                 Long departmentId,
-                                 Long statusId) {
+                                 @PathVariable Long id,
+                                 UserDTO userDTO) {
         String url = "redirect:/admin/" + companyId + "/employees";
+        /*
         if(!adminService.updateUserInfo(userId, positionId, departmentId, statusId)) {
             url = "redirect:/admin/" + companyId + "/employees";
         }
-        return url;
-    }
 
-    @GetMapping("{companyId}/employees/pending")
-    public String showAllPendingEmployee(@PathVariable Long companyId,
-                                         Principal principal,
-                                         Model model) {
-        String url = "admin/pending-employee.html";
-        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/admin/" + principal.getName();
-            return url;
-        }
-        model.addAttribute("existUser", adminService.findAllPendingEmployee(companyId, model));
-        return url;
-    }
-
-    @GetMapping("{companyId}/employees/exit")
-    public String showExitUser(@PathVariable Long companyId,
-                               Principal principal,
-                               Model model) {
-        String url = "/admin/exit-employee.html";
-        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/admin/" + principal.getName();
-            return url;
-        }
-        model.addAttribute("existUser", adminService.findAllExitEmployee(companyId, model));
-        return url;
-    }
-
-    @PatchMapping("{companyId}/employees/status")
-    public String updateStatusUser(@PathVariable Long companyId,
-                                   Long userId,
-                                   Long statusId) {
-        String url = "redirect:/admin/" + companyId + "/employees/pending";
-        if(!adminService.updateUserStatus(userId, statusId)) {
-            url = "redirect:/admin/" + companyId + "/employees/pending";
-        }
+         */
         return url;
     }
 
