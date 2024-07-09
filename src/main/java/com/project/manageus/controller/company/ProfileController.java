@@ -13,7 +13,7 @@ import java.security.Principal;
 import java.util.Objects;
 
 @Controller
-@RequestMapping("/companies/{companyId}/profiles/*")
+@RequestMapping("/companies/{companyId}/profile/*")
 public class ProfileController {
 
     private final UrlService urlService;
@@ -26,7 +26,7 @@ public class ProfileController {
         this.profileService = profileService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("users/{id}")
     public String showProfile(@PathVariable Long companyId,
                               @PathVariable Long id,
                               Principal principal,
@@ -40,7 +40,7 @@ public class ProfileController {
         return url;
     }
 
-    @GetMapping("/{id}/form")
+    @GetMapping("users/{id}/edit")
     public String updateProfileForm(@PathVariable Long companyId,
                                     @PathVariable Long id,
                                     Principal principal,
@@ -55,14 +55,14 @@ public class ProfileController {
         return url;
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("users/{id}")
     public String updateProfile(@PathVariable Long companyId, @PathVariable Long id,
                                 UserInfoDTO userInfoDTO,
                                 MultipartFile stampFile) {
         String url = "redirect:/companies/" + companyId;
         if(Objects.equals(id, userInfoDTO.getId())) {
             profileService.updateUser(userInfoDTO, stampFile);
-            url = "redirect:/companies/" + companyId + "/profiles/" + id;
+            url = "redirect:/companies/" + companyId + "/profile/users/" + id;
         }
         return url;
     }
