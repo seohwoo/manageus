@@ -21,8 +21,6 @@ public class UrlServiceImpl implements UrlService{
 
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
-    private final DepartmentRepository departmentRepository;
-    private final PositionRepository positionRepository;
     private final AlarmJPARepository alarmJPARepository;
 
     @Override
@@ -48,6 +46,7 @@ public class UrlServiceImpl implements UrlService{
                 model.addAttribute("company", optionalCompany.get().getName());
             }
             model.addAttribute("name", optionalUser.get().getUserInfo().getName());
+            model.addAttribute("departmentId", optionalUser.get().getDepartmentId());
             if(optionalUser.get().getUserInfo().getGender().equals("남자")) {
                 model.addAttribute("profileImage", "/img/undraw_profile_2.svg");
             }else {

@@ -2,6 +2,7 @@ package com.project.manageus.controller.company;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.project.manageus.dto.ChatCheckDTO;
 import com.project.manageus.dto.ChatDTO;
 import com.project.manageus.dto.ChatMessageDTO;
 import com.project.manageus.dto.ChatRoomDTO;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -57,6 +59,10 @@ public class ChatController {
         model.addAttribute("companyId",companyId);
         model.addAttribute("id",id);
         return "/company/chat/chatRoomList";
+    }
+    @RequestMapping("/ctest")
+    public String ctest(){
+        return "company/chat/content";
     }
 
 
@@ -121,5 +127,18 @@ public class ChatController {
         service.changRoomName(roomId,newRoomName);
         return url;
     }
-
+    @PostMapping("/checkTime")
+    @ResponseBody
+    public ResponseEntity<String> sendMessage(@RequestBody ChatDTO dto) {
+        System.out.println("==============================controller"+dto);// 메시지 처리 (예: 다른 사용자에게 방송, 데이터베이스에 저장 등)
+        service.checkLastTime(dto);
+        System.out.println("==============================controller");
+        // 여기에서 메시지를 데이터베이스에 저장하거나, 다른 클라이언트에 방송하는 등의 로직을 추가할 수 있습니다.
+        return ResponseEntity.ok("Message received");
+    }
+    @RequestMapping("/chatAlarm")
+    public @ResponseBody List<ChatCheckDTO> ajax(Principal principal){
+        Long id = Long.parseLong(principal.getName());
+        return service.chatAlarm(id);
+    }
 }

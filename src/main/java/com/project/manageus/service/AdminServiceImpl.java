@@ -34,10 +34,8 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public boolean findAllEmployee(Long companyId, Model model) {
-        boolean result = false;
-        List<UserEntity> userEntityList = userRepository.findAllByCompanyIdAndStatusId(companyId, (long) 1002);
-        System.out.println(userEntityList.equals(Collections.emptyList()));
+    public void findAllEmployee(Long companyId,Long statusId, Model model) {
+        List<UserEntity> userEntityList = userRepository.findAllByCompanyIdAndStatusId(companyId, statusId);
         if(!userEntityList.equals(Collections.emptyList())) {
             model.addAttribute("userEntityList", userEntityList);
             List<PositionEntity> positionEntityList = positionRepository.findAll();
@@ -46,64 +44,10 @@ public class AdminServiceImpl implements AdminService{
             model.addAttribute("departmentEntityList", departmentEntityList);
             List<StatusEntity> statusEntityList = statusRepository.findByIdBetween((long) 1002, (long) 1003);
             model.addAttribute("statusEntityList", statusEntityList);
-            result = true;
         }
-        return result;
     }
 
-    @Override
-    public boolean findAllPendingEmployee(Long companyId, Model model) {
-        boolean result = false;
-        List<UserEntity> userEntityList = userRepository.findAllByCompanyIdAndStatusId(companyId, (long) 1001);
-        if(!userEntityList.equals(Collections.emptyList())) {
-            model.addAttribute("userEntityList", userEntityList);
-            List<StatusEntity> statusEntityList = statusRepository.findByIdBetween((long) 1002, (long) 1003);
-            model.addAttribute("statusEntityList", statusEntityList);
-            result = true;
-        }
-        return result;
-    }
 
-    @Override
-    public boolean findAllExitEmployee(Long companyId, Model model) {
-        boolean result = false;
-        List<UserEntity> userEntityList = userRepository.findAllByCompanyIdAndStatusId(companyId, (long) 1003);
-        if(!userEntityList.equals(Collections.emptyList())) {
-            model.addAttribute("userEntityList", userEntityList);
-            List<StatusEntity> statusEntityList = statusRepository.findByIdBetween((long) 1002, (long) 1003);
-            model.addAttribute("statusEntityList", statusEntityList);
-            result = true;
-        }
-        return result;
-    }
-
-    @Override
-    public boolean updateUserInfo(Long userId, Long positionId, Long departmentId, Long statusId) {
-        boolean result = false;
-        Optional<UserEntity> optionalUser = userRepository.findById(userId);
-        if(optionalUser.isPresent()) {
-            UserDTO userDTO = optionalUser.get().toUserDTO();
-            userDTO.setPositionId(positionId);
-            userDTO.setDepartmentId(departmentId);
-            userDTO.setStatusId(statusId);
-            userRepository.save(userDTO.toUserEntity());
-            result = true;
-        }
-        return result;
-    }
-
-    @Override
-    public boolean updateUserStatus(Long userId, Long statusId) {
-        boolean result = false;
-        Optional<UserEntity> optionalUser = userRepository.findById(userId);
-        if(optionalUser.isPresent()) {
-            UserDTO userDTO = optionalUser.get().toUserDTO();
-            userDTO.setStatusId(statusId);
-            userRepository.save(userDTO.toUserEntity());
-            result = true;
-        }
-        return result;
-    }
 
     @Override
     public void findAllDepartment(Long companyId, Model model) {
@@ -118,11 +62,38 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
+    public Long findStatusIdById(Long id) {
+        Long statusId = 1002L;
+        Optional<UserEntity> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()) {
+            statusId = optionalUser.get().getStatusId();
+        }
+        return statusId;
+    }
+
+    @Override
+    public boolean updateUser(UserDTO userDTO) {
+        boolean result = false;
+        Optional<UserEntity> optionalUser = userRepository.findById(userDTO.getId());
+        if(optionalUser.isPresent()) {
+            UserDTO newUserDTO = optionalUser.get().toUserDTO();
+            newUserDTO.setStatusId(userDTO.getStatusId());
+            if(userDTO.getDepartmentId() != null
+                    && userDTO.getPositionId() != null) {
+                newUserDTO.setDepartmentId(userDTO.getDepartmentId());
+                newUserDTO.setPositionId(userDTO.getPositionId());
+            }
+            userRepository.save(newUserDTO.toUserEntity());
+            result = true;
+        }
+        return result;
+    }
+
+    @Override
     public boolean createDepartment(DepartmentDTO departmentDTO) {
         boolean result = false;
         if(!departmentRepository.existsByNameAndCompanyId(departmentDTO.getName(), departmentDTO.getCompanyId())) {
             Long newId = departmentDTO.getCompanyId() * 100 + 1;
-            System.out.println(newId);
             if(departmentRepository.existsByCompanyId(departmentDTO.getCompanyId())) {
                 newId = Collections.max(departmentRepository.findAllByCompanyId(departmentDTO.getCompanyId()), Comparator.comparingLong(DepartmentEntity::getId)).getId() + 1;
             }
@@ -134,6 +105,30 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
+    public boolean updateDepartment(DepartmentDTO departmentDTO) {
+        boolean result = false;
+        if(!departmentRepository.existsByNameAndCompanyId(departmentDTO.getName(), departmentDTO.getCompanyId())) {
+            Optional<DepartmentEntity> optionalDepartment = departmentRepository.findById(departmentDTO.getId());
+            if(optionalDepartment.isPresent()) {
+                DepartmentDTO newDepartmentDTO = optionalDepartment.get().toDepartmentDTO();
+                newDepartmentDTO.setName(departmentDTO.getName());
+                departmentRepository.save(newDepartmentDTO.toDepartmentEntity());
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void findDepartmentById(Long departmentId, Model model) {
+        Optional<DepartmentEntity> optionalDepartment = departmentRepository.findById(departmentId);
+        if(optionalDepartment.isPresent()) {
+            model.addAttribute("departmentId", optionalDepartment.get().getId());
+            model.addAttribute("departmentName", optionalDepartment.get().getName());
+        }
+    }
+
+    @Override
     public void findCompanyInfo(Long companyId, Model model) {
         Optional<CompanyEntity> optionalCompany =  companyRepository.findById(companyId);
         if(optionalCompany.isPresent()) {
@@ -141,6 +136,7 @@ public class AdminServiceImpl implements AdminService{
             model.addAttribute("businessNum", optionalCompany.get().getBusinessNum());
             model.addAttribute("inviteCode", optionalCompany.get().getInviteCode());
             model.addAttribute("ceo", optionalCompany.get().getCeo());
+            model.addAttribute("employees", companyRepository.count());
             model.addAttribute("address", optionalCompany.get().getAddress());
             model.addAttribute("email", optionalCompany.get().getEmail());
             model.addAttribute("regDate", optionalCompany.get().getRegDate());
@@ -161,6 +157,5 @@ public class AdminServiceImpl implements AdminService{
         }
         return result;
     }
-
 
 }
