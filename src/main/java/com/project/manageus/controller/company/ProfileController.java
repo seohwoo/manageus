@@ -13,7 +13,7 @@ import java.security.Principal;
 import java.util.Objects;
 
 @Controller
-@RequestMapping("/companies/{companyId}/profile/*")
+@RequestMapping("/manageus/profile/*")
 public class ProfileController {
 
     private final UrlService urlService;
@@ -27,12 +27,11 @@ public class ProfileController {
     }
 
     @GetMapping("users/{id}")
-    public String showProfile(@PathVariable Long companyId,
-                              @PathVariable Long id,
+    public String showProfile(@PathVariable Long id,
                               Principal principal,
                               Model model) {
         String url = "company/profile/profile.html";
-        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
+        if(!urlService.isValidUser(principal.getName(), model)) {
             url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
