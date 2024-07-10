@@ -32,7 +32,7 @@ public class ProfileController {
                               Model model) {
         String url = "company/profile/profile.html";
         if(!urlService.isValidUser(principal.getName(), model)) {
-            url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+            url = "redirect:manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
         profileService.showUserProfile(id, principal, model);
@@ -40,14 +40,13 @@ public class ProfileController {
     }
 
     @GetMapping("users/{id}/edit")
-    public String updateProfileForm(@PathVariable Long companyId,
-                                    @PathVariable Long id,
+    public String updateProfileForm(@PathVariable Long id,
                                     Principal principal,
                                     Model model) {
         String url = "company/profile/profile-update-form.html";
-        if(!urlService.findUserInfo(principal.getName(), companyId, model)
+        if(!urlService.isValidUser(principal.getName(), model)
                 || id!=Long.parseLong(principal.getName())) {
-            url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+            url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
         profileService.showUserProfile(id, principal, model);
@@ -55,13 +54,15 @@ public class ProfileController {
     }
 
     @PutMapping("users/{id}")
-    public String updateProfile(@PathVariable Long companyId, @PathVariable Long id,
+    public String updateProfile(@PathVariable Long id,
+                                Principal principal,
                                 UserInfoDTO userInfoDTO,
                                 MultipartFile stampFile) {
-        String url = "redirect:/companies/" + companyId;
+        Long companyId = Long.parseLong(urlService.findCompanyUrl(principal.getName()));
+        String url = "redirect:/manageus/companies/" + companyId;
         if(Objects.equals(id, userInfoDTO.getId())) {
             profileService.updateUser(userInfoDTO, stampFile);
-            url = "redirect:/companies/" + companyId + "/profile/users/" + id;
+            url = "redirect:/manageus/profile/users/" + id;
         }
         return url;
     }

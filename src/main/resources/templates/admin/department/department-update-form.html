@@ -80,7 +80,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="card shadow mb-4">
-                            <form th:action="@{~/admin/companies/{companyId}/departments/{departmentId}(companyId=${companyId}, departmentId=${departmentId})}" method="post">
+                            <form th:action="@{~/admin/departments/{departmentId}(departmentId=${departmentId})}" method="post">
                                 <input type="hidden" name="_method" value="put" />
                                 <input type="hidden" name="id" th:value="${departmentId}" />
                                 <input type="hidden" name="companyId" th:value="${companyId}" />
