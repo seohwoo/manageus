@@ -38,7 +38,7 @@ public class LoginController {
         if(principal != null) {
             isLogin = true;
             if(principal.getName().length()==8) {
-                url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+                url = "redirect:/manageus/" + urlService.findCompanyUrl(principal.getName());
             }
         }
         model.addAttribute("isLogin", isLogin);
