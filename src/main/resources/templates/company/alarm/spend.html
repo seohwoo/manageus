@@ -43,9 +43,9 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-                <a th:href="@{/companies/{companyId}/alarm/{id}/form(companyId=${companyId}, id=${id})}"  class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                <a th:href="@{/manageus/alarm/messages/new}"  class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                         class="fas fa-download fa-sm text-white-50"></i> 쪽지 쓰기</a>
-                <a th:href="@{/companies/{companyId}/alarm/{id}/receive(companyId=${companyId}, id=${id})}"  class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                <a th:href="@{/manageus/alarm/messages/receive}"  class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                         class="fas fa-download fa-sm text-white-50"></i>내가 받은 쪽지 전체보기</a>
 
                 <!-- DataTales Example -->
@@ -79,7 +79,7 @@
                                             <span th:text="${spend.getUserInfos.getName}"></span>
                                         </td>
                                         <td>
-                                            <a th:href="@{/companies/{companyId}/alarm/{id}/readspend/{messageId}(companyId=${companyId}, id=${id}, messageId=${spend.id})}">
+                                            <a th:href="@{/manageus/alarm/messages/{messageId}/spend(messageId=${spend.id})}">
                                             <span th:text="${#strings.length(spend.subject) > 8 ? #strings.substring(spend.subject, 0, 8).concat('....') : spend.subject}"></span>
                                             </a>
                                         </td>
