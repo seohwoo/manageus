@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>휴가 신청</title>
+    <title>결재 상세 페이지</title>
 
     <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -23,7 +23,7 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    <div th:include="~{content/side-bar :: side}"></div>
+    <div th:replace="~{content/side-bar :: side}"></div>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -31,7 +31,7 @@
         <!-- Main Content -->
         <div id="content">
 
-            <div th:include="~{content/top-bar :: top}"></div>
+            <div th:replace="~{content/top-bar :: top}"></div>
 
             <!-- 여기 쓰면됨 -->
 
@@ -149,7 +149,7 @@
         </div>
         <!-- End of Main Content -->
 
-        <div th:include="~{content/footer :: footer}"></div>
+        <div th:replace="~{content/footer :: footer}"></div>
     </div>
     <!-- End of Content Wrapper -->
 </div>
