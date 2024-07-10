@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,9 +11,7 @@
 
     <!-- Custom fonts for this template -->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
@@ -30,56 +26,41 @@
         .best-wide-column {
             width: 25%;
         }
-
         .narrow-column {
             width: 1%;
             white-space: nowrap;
         }
-
         .btn-icon-split {
             display: inline-flex;
             align-items: center;
         }
-
         .btn-icon-split .icon {
             padding-right: 0.5em;
         }
-
         .btn-icon-split .text {
             white-space: nowrap;
         }
     </style>
-
-
 </head>
 
 <body id="page-top">
-
 <!-- Page Wrapper -->
 <div id="wrapper">
-
     <div th:include="~{content/admin-side-bar :: adminside}"></div>
-
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
-
         <!-- Main Content -->
         <div id="content">
-
             <div th:include="~{content/admin-top-bar :: admintop}"></div>
-
             <!-- Begin Page Content -->
             <div class="container-fluid">
-
                 <!-- Page Heading -->
                 <h1 class="h3 mb-2 text-gray-800">Department</h1>
-
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex align-items-center">
                         <h6 class="m-0 font-weight-bold text-primary">전체부서</h6>
-                        <a th:href="@{/admin/departments/new}"
-                           class="btn btn-primary btn-icon-split ml-auto">
+                        <a th:href="@{/admin/departments/new}" class="btn btn-primary btn-icon-split ml-auto">
                             <span class="icon text-white-50">
                                 <i class="fas fa-arrow-right"></i>
                             </span>
@@ -114,7 +95,10 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a th:href="@{/admin/departments/{departmentId}(departmentId=${department.id})}" class="btn btn-danger btn-icon-split">
+                                        <a href="#" class="btn btn-danger btn-icon-split"
+                                           data-toggle="modal" data-target="#deleteModal"
+                                           th:data-department-id="${department.id}"
+                                           th:data-department-name="${department.name}">
                                             <span class="icon text-white-50">
                                                 <i class="fas fa-trash"></i>
                                             </span>
@@ -124,22 +108,16 @@
                                 </tr>
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>
-
             </div>
             <!-- /.container-fluid -->
-
         </div>
         <!-- End of Main Content -->
-
         <div th:include="~{content/footer :: footer}"></div>
-
     </div>
     <!-- End of Content Wrapper -->
-
 </div>
 <!-- End of Page Wrapper -->
 
@@ -147,6 +125,31 @@
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
+
+<!-- Delete Modal-->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Delete?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete department <span id="modalDepartmentName"></span>?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post">
+                    <input type="hidden" name="_method" value="delete" />
+                    <input type="hidden" name="departmentId" id="modalDepartmentId">
+                    <button class="btn btn-primary" id="confirmDeleteBtn" type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Bootstrap core JavaScript-->
 <script src="/vendor/jquery/jquery.min.js"></script>
@@ -165,6 +168,20 @@
 <!-- Page level custom scripts -->
 <script src="/js/demo/datatables-demo.js"></script>
 
-</body>
+<!-- Custom script to handle modal actions -->
+<script>
+    $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // 모달을 호출한 버튼
+        var departmentId = button.data('department-id'); // data-* 속성에서 부서 ID를 가져옴
+        var departmentName = button.data('department-name'); // data-* 속성에서 부서 이름을 가져옴
+        var modal = $(this);
+        modal.find('#modalDepartmentId').val(departmentId); // 숨겨진 입력 필드에 부서 ID를 설정
+        modal.find('#modalDepartmentName').text(departmentName); // 모달 내의 메시지에 부서 이름을 설정
+        var deleteForm = modal.find('#deleteForm');
+        var deleteUrl = "/admin/departments/" + departmentId; // 삭제 URL 생성
+        deleteForm.attr('action', deleteUrl); // form action 설정
+    });
+</script>
 
+</body>
 </html>

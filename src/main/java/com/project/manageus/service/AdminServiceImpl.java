@@ -120,6 +120,21 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
+    public boolean deleteDepartment(Long departmentId) {
+        System.out.println(departmentId);
+        System.out.println(userRepository.countByDepartmentId(departmentId));
+        boolean result = false;
+        Optional<DepartmentEntity> optionalDepartment = departmentRepository.findById(departmentId);
+        if(optionalDepartment.isPresent()) {
+            if(userRepository.countByDepartmentId(departmentId) == 0) {
+                departmentRepository.delete(optionalDepartment.get());
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @Override
     public void findDepartmentById(Long departmentId, Model model) {
         Optional<DepartmentEntity> optionalDepartment = departmentRepository.findById(departmentId);
         if(optionalDepartment.isPresent()) {

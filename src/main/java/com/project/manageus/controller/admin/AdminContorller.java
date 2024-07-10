@@ -120,6 +120,15 @@ public class AdminContorller {
         return url;
     }
 
+    @DeleteMapping("departments/{departmentId}")
+    public String deleteDepartment(@PathVariable Long departmentId) {
+        String url = "redirect:/admin/departments";
+        if(adminService.deleteDepartment(departmentId)) {
+            url = "redirect:/admin/departments";
+        }
+        return url;
+    }
+
 
     @GetMapping("profile/companies/{companyId}")
     public String showCompanyProfile(@PathVariable Long companyId,
