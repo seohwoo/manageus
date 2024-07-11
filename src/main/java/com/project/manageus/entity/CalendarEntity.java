@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class CalendarEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "company_id")
     private Long companyId;

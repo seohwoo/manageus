@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a th:href="@{/companies/{companyId}/calendar/companyCalendar(companyId=${companyId})}">
+    <button>회사달력</button>
+</a>
+<a th:href="@{/companies/{companyId}/calendar/department/{departmentId}/teamCalendar(companyId=${companyId}, departmentId=${departmentId})}">
+    <button>팀달력</button>
+</a>
+<a th:href="@{/companies/{companyId}/calendar/{id}/myCalendar(companyId=${companyId}, id=${id})}">
+    <button>개인달력</button>
+</a>
+</body>
+</html>
