@@ -20,7 +20,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
-@RequestMapping("/companies/{companyId}/users/*")
+@RequestMapping("/manageus/project/*")
 public class ProjectController {
 
     private final UrlService urlService;
@@ -32,11 +32,11 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @GetMapping("/{userId}/project")
-    public String projectMain(@PathVariable Long companyId, @PathVariable Long userId,Principal principal, Model model) {
+    @GetMapping("/users/{userId}")
+    public String projectMain( @PathVariable Long userId,Principal principal, Model model) {
         String url = "/company/project/projectMain.html";
-        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+        if(!urlService.isValidUser(principal.getName(), model)) {
+            url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
         List<ProjectDTO> myProjectList = projectService.projectList(userId);
@@ -48,14 +48,15 @@ public class ProjectController {
         return url;
     }
 
-    @GetMapping("/{userId}/project/{projectId}")
-    public String projectContent(@PathVariable Long userId, @PathVariable Long companyId, @PathVariable Long projectId, Principal principal, Model model) {
+    @GetMapping("/users/{userId}/projects/{projectId}")
+    public String projectContent(@PathVariable Long userId, @PathVariable Long projectId, Principal principal, Model model) {
 
         String url = "/company/project/projectContent.html";
-        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+        if(!urlService.isValidUser(principal.getName(), model)) {
+            url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
+        Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
         Long leaderId = projectService.projectLeaderId(projectId);
         int projectMemberCount = projectService.projectMemberCount(projectId);
         List<ProjectDetailEntity> projectDetailList = projectService.projectDetailList(projectId);
@@ -75,24 +76,25 @@ public class ProjectController {
         return url;
     }
 
-    @GetMapping("/{userId}/project/{projectId}/form")
-    public String addContent(@PathVariable Long userId, @PathVariable Long companyId, @PathVariable Long projectId, Principal principal, Model model){
+    @GetMapping("/users/{userId}/projects/{projectId}/details/new")
+    public String addContent(@PathVariable Long userId, @PathVariable Long projectId, Principal principal, Model model){
         String url = "/company/project/addContent.html";
-        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+        if(!urlService.isValidUser(principal.getName(), model)) {
+            url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
         model.addAttribute("projectId",projectId);
         return url;
     }
 
-    @PostMapping("/{userId}/project/{projectId}")
-    public String addContentPro(ProjectDetailDTO projectDetailDTO, @PathVariable Long userId, @PathVariable Long companyId, @PathVariable Long projectId, Principal principal, Model model){
+    @PostMapping("/users/{userId}/projects/{projectId}/details")
+    public String addContentPro(ProjectDetailDTO projectDetailDTO, @PathVariable Long userId, @PathVariable Long projectId, Principal principal, Model model){
         String url = "/company/project/addContentPro.html";
-        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+        if(!urlService.isValidUser(principal.getName(),model)) {
+            url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
+        Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
         int result = projectService.insertProjectDetail(projectDetailDTO);
         model.addAttribute("result",result);
         model.addAttribute("userId",userId);
@@ -101,24 +103,26 @@ public class ProjectController {
         return url;
     }
 
-    @GetMapping("/{userId}/project/form")
-    public String addProject(@PathVariable Long userId, @PathVariable Long companyId, Principal principal, Model model){
+    @GetMapping("/users/{userId}/projects/new")
+    public String addProject(@PathVariable Long userId, Principal principal, Model model){
         String url = "/company/project/addProject.html";
-        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+        Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
+        if(!urlService.isValidUser(principal.getName(),model)) {
+            url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
-
+        model.addAttribute("companyId",companyId);
         return url;
     }
 
-    @PostMapping("/{userId}/project")
-    public String addProjectPro(ProjectDTO projectDTO, @RequestParam(required = false)Long[]plusUserId, @PathVariable Long userId, @PathVariable Long companyId, Principal principal, Model model){
+    @PostMapping("/users/{userId}/projects")
+    public String addProjectPro(ProjectDTO projectDTO, @RequestParam(required = false)Long[]plusUserId, @PathVariable Long userId, Principal principal, Model model){
         String url = "/company/project/addProjectPro.html";
+        Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
         projectDTO.setUserId(userId);
         projectDTO.setCompanyId(companyId);
-        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+        if(!urlService.isValidUser(principal.getName(),model)) {
+            url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
 
@@ -141,47 +145,50 @@ public class ProjectController {
 
         return url;
     }
-    @GetMapping("/{userId}/project/{projectId}/detail/{projectDetailId}")
-    public String projectDetail(@PathVariable Long userId, @PathVariable Long companyId, @PathVariable Long projectId, @PathVariable Long projectDetailId,Principal principal, Model model) {
-
+    @GetMapping("/users/{userId}/projects/{projectId}/details/{projectDetailId}")
+    public String projectDetail(@PathVariable Long userId, @PathVariable Long projectId, @PathVariable Long projectDetailId,Principal principal, Model model) {
+        Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
         String url = "/company/project/projectDetail.html";
-        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+        if(!urlService.isValidUser(principal.getName(),model)) {
+            url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
 
         ProjectDetailEntity projectDetailEntity = projectService.projectDetailInfo(projectDetailId);
         model.addAttribute("detail",projectDetailEntity);
+        model.addAttribute("companyId",companyId);
         return url;
     }
 
-    @GetMapping("/{userId}/project/{projectId}/detail/{projectDetailId}/form")
-    public String updateProjectDetail(@PathVariable Long userId, @PathVariable Long companyId, @PathVariable Long projectId, @PathVariable Long projectDetailId,Principal principal, Model model) {
-
+    @GetMapping("/users/{userId}/projects/{projectId}/details/{projectDetailId}/edit")
+    public String updateProjectDetail(@PathVariable Long userId, @PathVariable Long projectId, @PathVariable Long projectDetailId,Principal principal, Model model) {
+        Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
         String url = "/company/project/updateProjectDetail.html";
-        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+        if(!urlService.isValidUser(principal.getName(),model)) {
+            url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
 
         ProjectDetailEntity projectDetailEntity = projectService.projectDetailInfo(projectDetailId);
         model.addAttribute("detail",projectDetailEntity);
-
+        model.addAttribute("companyId",companyId);
         return url;
     }
 
-    @PostMapping("/{userId}/project/{projectId}/detail/{projectDetailId}")
-    public String updateProjectDetailPro(Long detailUserId,ProjectDetailDTO projectDetailDTO,@PathVariable Long userId, @PathVariable Long companyId, @PathVariable Long projectId, @PathVariable Long projectDetailId, Principal principal, Model model){
+    @PostMapping("/users/{userId}/projects/{projectId}/details/{projectDetailId}")
+    public String updateProjectDetailPro(Long detailUserId,ProjectDetailDTO projectDetailDTO,@PathVariable Long userId, @PathVariable Long projectId, @PathVariable Long projectDetailId, Principal principal, Model model){
+        Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
         String url = "/company/project/updateProjectDetailPro.html";
         projectDetailDTO.setId(projectDetailId);
         projectDetailDTO.setUserId(detailUserId);
         System.out.println("프로젝트디테일아이디======="+projectDetailDTO.getId());
-        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+        if(!urlService.isValidUser(principal.getName(),model)) {
+            url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
 
         projectService.updateProjectDetail(projectDetailDTO);
+        model.addAttribute("companyId",companyId);
 
         return url;
     }

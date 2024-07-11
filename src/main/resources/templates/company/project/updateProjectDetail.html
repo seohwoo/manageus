@@ -44,7 +44,7 @@
                         <h6 class="m-0 font-weight-bold text-primary">업무 수정</h6>
                     </div>
                     <div class="card-body">
-                        <form th:action="@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}(companyId=${companyId}, userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetailId})}" method="post">
+                        <form th:action="@{/manageus/project/users/{userId}/projects/{projectId}/details/{projectDetailId}(userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetailId})}" method="post">
                             <input type="hidden" name="detailUserId" th:value="${detail.userId}">
 
                             <div class="form-group">
@@ -54,7 +54,7 @@
 
                             <div class="form-group">
                                 <label for="content">업무내용</label>
-                                <input type="text" class="form-control" id="content" name="content" th:value="${detail.content}">
+                                <input type="text" class="form-control" name="content" th:value="${detail.content}">
                             </div>
 
                             <div class="form-group">
@@ -83,7 +83,7 @@
                                 <span class="text">수정</span>
                             </button>
                         </form>
-                        <button class="btn btn-secondary mt-3" th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}(companyId=${companyId}, userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetailId})}'|">뒤로가기</button>
+                        <button class="btn btn-secondary mt-3" th:attr="onclick=|location.href='@{/manageus/project/users/{userId}/projects/{projectId}/details/{projectDetailId}(userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetailId})}'|">뒤로가기</button>
                     </div>
                 </div>
             </div>

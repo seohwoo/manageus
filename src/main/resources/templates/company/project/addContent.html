@@ -71,7 +71,7 @@
                         <h6 class="m-0 font-weight-bold text-primary">업무 생성</h6>
                     </div>
                     <div class="card-body">
-                        <form th:action="@{/companies/{companyId}/users/{userId}/project/{projectId}(companyId=${companyId}, userId=${userId}, projectId=${projectId})}" method="post">
+                        <form th:action="@{/manageus/project/users/{userId}/projects/{projectId}/details(userId=${userId}, projectId=${projectId})}" method="post">
                             <input type="hidden" id="projectId" name="projectId" th:value="${projectId}">
                             <input type="hidden" name="statusId" value="3000">
                             <div class="form-group">
