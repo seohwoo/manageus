@@ -18,7 +18,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor   //이게있으면 밑에 this를 안써도 된다 롬복기능
-@RequestMapping("/companies/{companyId}/*")
+@RequestMapping("/manageus/calendar/*")
 public class CalendarController {
 
     private final CalendarService calendarService;
@@ -26,14 +26,14 @@ public class CalendarController {
 
 
 
-    @GetMapping("/calendar/{id}/myCalendar") /* 개인달력 */
-    public String myCalendar(Model model, Principal principal, @PathVariable Long companyId,
+    @GetMapping("/users/{id}") /* 개인달력 */
+    public String myCalendar(Model model, Principal principal,
                              @PathVariable Long id) {
-
-        if (!urlService.findUserInfo(principal.getName(), companyId, model)
+        Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
+        if (!urlService.isValidUser(principal.getName(), model)
                 || id != Long.parseLong(principal.getName())) {
 
-            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+            return "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
         }
         Long calendarType = 2L;
         int myCalendarCount = calendarService.myCalendarCount(id,calendarType);
@@ -48,7 +48,7 @@ public class CalendarController {
             System.out.println("마이캘린더 등록 완료");
         }
 
-
+        model.addAttribute("companyId",companyId);
         return "/company/calendars/mycalendar";
     }
 
@@ -64,14 +64,14 @@ public class CalendarController {
         return calendarService.getEventsByUserId(id);
     }
 
-    @GetMapping("/calendar/department/{departmentId}/teamCalendar") /* 부서달력 */
-    public String teamCalendar(Model model, Principal principal, @PathVariable Long companyId,
+    @GetMapping("/department/{departmentId}") /* 부서달력 */
+    public String teamCalendar(Model model, Principal principal,
                                @PathVariable Long departmentId) {
-
-        if (!urlService.findUserInfo(principal.getName(), companyId, model)
+        Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
+        if (!urlService.isValidUser(principal.getName(), model)
         ) {
 
-            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+            return "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
         }
         Long calendarType = 1L;
         int teamCalendarCount = calendarService.teamCalendarCount(departmentId,calendarType);
@@ -83,18 +83,18 @@ public class CalendarController {
             calendarDTO.setCalendarType(calendarType);
             calendarService.addMyCalendar(calendarDTO);
         }
-
+        model.addAttribute("companyId",companyId);
 
         return "/company/calendars/teamcalendar";
     }
 
-    @GetMapping("/calendar/companyCalendar") /* 회사달력 */
+    @GetMapping("/companies/{companyId}") /* 회사달력 */
     public String companyCalendar(Model model, Principal principal, @PathVariable Long companyId) {
 
-        if (!urlService.findUserInfo(principal.getName(), companyId, model)
+        if (!urlService.isValidUser(principal.getName(),model)
         ) {
 
-            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+            return "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
         }
         Long calendarType = 0L;
         int CompanyCalendarCount = calendarService.companyCalendarCount(companyId,calendarType);
@@ -110,11 +110,11 @@ public class CalendarController {
         return "/company/calendars/companycalendar";
     }
 
-    @GetMapping("/calendar/{id}/{departmentId}")
+    @GetMapping("/{id}/{departmentId}/{companyId}")
     public String calendar(Model model, Principal principal, @PathVariable Long companyId,
                            @PathVariable Long departmentId, @PathVariable Long id) {
 
-        if (!urlService.findUserInfo(principal.getName(), companyId, model)
+        if (!urlService.isValidUser(principal.getName(), model)
                 || id != Long.parseLong(principal.getName())) {
 
             return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());

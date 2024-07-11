@@ -5,13 +5,13 @@
     <title>Title</title>
 </head>
 <body>
-<a th:href="@{/companies/{companyId}/calendar/companyCalendar(companyId=${companyId})}">
+<a th:href="@{/manageus/calendar/companies/{companyId}(companyId=${companyId})}">
     <button>회사달력</button>
 </a>
-<a th:href="@{/companies/{companyId}/calendar/department/{departmentId}/teamCalendar(companyId=${companyId}, departmentId=${departmentId})}">
+<a th:href="@{/manageus/calendar/department/{departmentId}(departmentId=${departmentId})}">
     <button>팀달력</button>
 </a>
-<a th:href="@{/companies/{companyId}/calendar/{id}/myCalendar(companyId=${companyId}, id=${id})}">
+<a th:href="@{/manageus/calendar/users/{id}(id=${id})}">
     <button>개인달력</button>
 </a>
 </body>
