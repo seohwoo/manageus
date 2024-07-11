@@ -29,15 +29,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
         http.authorizeHttpRequests((auth) -> auth
-                .requestMatchers("/", "/login", "/forgot",
-                        "/users", "/users/new", "/companies", "/companies/new",
-                        "/css/**", "/js/**", "/img/**", "/scss/**", "/vendor/**","/static/**").permitAll()
-                .requestMatchers("/super/**").hasRole("SUPER")
-                .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
+                .requestMatchers("/", "/login", "/register", "/forgot", "/company",
+                        "/css/**", "/js/**", "/img/**", "/scss/**", "/vendor/**").permitAll()
+               // .requestMatchers("/super/**").hasRole("SUPER")
+               // .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
                 .requestMatchers("/h2-console/**").permitAll()
                 // Swagger 관련 리소스 접근 허용
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/board/**").permitAll()
+                .requestMatchers("/chat").permitAll()
+                .requestMatchers("/ws/**").permitAll()
+                .anyRequest().permitAll()
         );
         http.formLogin((auth) -> auth.loginPage("/login")
                 .loginProcessingUrl("/loginProc")

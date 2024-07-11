@@ -67,9 +67,9 @@
                     </div>
                     <div class="card-footer text-right">
                         <button class="btn btn-primary"
-                                th:attr="onclick=|location.href='@{/manageus/project/users/{userId}/projects/{projectId}/details/{projectDetailId}/edit(userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetailId})}'|">업무 수정</button>
+                                th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}/form(companyId=${companyId}, userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetailId})}'|">업무 수정</button>
                         <button class="btn btn-secondary"
-                                th:attr="onclick=|location.href='@{/manageus/project/users/{userId}/projects/{projectId}(userId=${userId}, projectId=${projectId})}'|">뒤로가기</button>
+                                th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}(companyId=${companyId}, userId=${userId}, projectId=${projectId})}'|">뒤로가기</button>
                     </div>
                 </div>
             </div>

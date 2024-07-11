@@ -72,64 +72,7 @@
          setInterval(fetchAlarmCount, 60000); // 1분(60000밀리초)마다 실행
 
 
-
-
-
-       // 페이지가 로드되면 실행
-       updateChatList();
-
-       // 30초마다 채팅목록을 업데이트하는 함수 정의
-       function updateChatList() {
-           var companyId = $("#companyId").val();
-           // AJAX를 사용하여 서버로부터 데이터 가져오기
-           $.ajax({
-               url: '/companies/chatAlarm', // 실제 서버의 엔드포인트 경로로 수정해야 합니다
-               type: 'POST',
-               success: function(response) {
-                   // 서버에서 받은 데이터로 채팅 목록 업데이트
-                   $('#chatList').empty(); // 기존 채팅 목록 비우기
-                   response.forEach(function(chat) {
-                       var chatItem = '<a class="dropdown-item d-flex align-items-center" href="/companies/' + companyId + '/chat/' + chat.chatRoomId + '/' + chat.id + '">' +
-                           '<div class="dropdown-list-image mr-3">' +
-                           '<div class="status-indicator bg-success"></div>' +
-                           '</div>' +
-                           '<div class="font-weight-bold">' +
-                           '<div class="text-truncate">' + chat.name + '</div>' +
-                           '<div class="small text-gray-500">' + chat.count + '</div>' +
-                           '</div>' +
-                           '</a>';
-                       $('#chatList').append(chatItem);
-                   });
-
-                   // 메시지 카운터 업데이트 (채팅 개수에 따라 수정)
-                   var chatCount = response.length;
-                   $('#messageCounter').text(chatCount);
-               },
-               error: function(xhr, status, error) {
-                   console.error('Error fetching chat list:', error);
-               }
-           });
-
-           // 30초마다 재귀적으로 함수 호출
-           setTimeout(updateChatList, 30000);
-       }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         });
-
-
     </script>
 
 

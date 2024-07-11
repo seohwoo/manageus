@@ -53,7 +53,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex justify-content-between align-items-center">
                         <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
-                        <a th:href="@{/manageus/project/users/{userId}/projects/new(userId=${userId})}" class="btn btn-primary btn-icon-split">
+                        <a th:href="@{/companies/{companyId}/users/{userId}/project/form(companyId=${companyId}, userId=${userId})}" class="btn btn-primary btn-icon-split">
                             <span class="text">프로젝트 생성</span>
                         </a>
                     </div>
@@ -71,7 +71,7 @@
                                 <tbody>
                                 <tr th:each = "myProject, iterStat : ${myProjectList}">
                                     <td th:text = "${iterStat.index + 1}"></td>
-                                    <td> <a th:href = "@{/manageus/project/users/{userId}/projects/{projectId}(userId = ${userId}, projectId = ${myProject.id})}" th:text = "${myProject.name}"></a> </td>
+                                    <td> <a th:href = "@{/companies/{companyId}/users/{userId}/project/{projectId}(companyId = ${companyId}, userId = ${userId}, projectId = ${myProject.id})}" th:text = "${myProject.name}"></a> </td>
                                     <td th:text = "${myProject.startDate}"></td>
                                     <td th:text = "${myProject.endDate}"></td>
                                 </tr>

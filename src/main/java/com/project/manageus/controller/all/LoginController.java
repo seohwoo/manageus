@@ -33,7 +33,7 @@ public class LoginController {
 
     @GetMapping("/")
     public String main(Principal principal, Model model) {
-        String url = "all/main.html";
+        String url = "/all/main.html";
         boolean isLogin = false;
         if(principal != null) {
             isLogin = true;
@@ -47,7 +47,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login() {
-        String url = "all/login/login.html";
+        String url = "/all/login/login.html";
         return url;
     }
 
@@ -68,13 +68,13 @@ public class LoginController {
         return url;
     }
 
-    @GetMapping("/users/new")
+    @GetMapping("/register")
     public String register() {
-        String url = "all/login/register.html";
+        String url = "/all/login/register.html";
         return url;
     }
 
-    @PostMapping("/users")
+    @PostMapping("/register")
     public String registerPro(UserDTO userDTO, UserInfoDTO userInfoDTO, String repeatPassword, String inviteCode) {
         String url = "redirect:/register";
         if(userDTO.getPassword().equals(repeatPassword)) {
@@ -86,13 +86,13 @@ public class LoginController {
         return url;
     }
 
-    @GetMapping("/companies/new")
+    @GetMapping("/company")
     public String company() {
-        String url = "all/login/company-register.html";
+        String url = "/all/login/company-register.html";
         return url;
     }
 
-    @PostMapping("/companies")
+    @PostMapping("/company")
     public String companyPro(CompanyDTO companyDTO, String repeatPassword) {
         String url = "redirect:/company";
         if(companyDTO.getPw().equals(repeatPassword)) {
@@ -106,7 +106,7 @@ public class LoginController {
 
     @GetMapping("/forgot")
     public String forgot() {
-        String url = "all/login/forgot.html";
+        String url = "/all/login/forgot.html";
         return url;
     }
 

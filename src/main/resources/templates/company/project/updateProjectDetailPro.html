@@ -7,13 +7,13 @@
 <body>
 <script th:inline="javascript">
     /*<![CDATA[*/
-
+    var companyId = /*[[${companyId}]]*/;
     var userId = /*[[${userId}]]*/;
     var projectId = /*[[${projectId}]]*/;
     var projectDetailId = /*[[${projectDetailId}]]*/;
 
         alert("업무가 수정되었습니다.");
-        window.location.href = `/manageus/project/users/${userId}/projects/${projectId}/details/${projectDetailId}`;
+        window.location.href = `/companies/${companyId}/users/${userId}/project/${projectId}/detail/${projectDetailId}`;
 
     /*]]>*/
 </script>

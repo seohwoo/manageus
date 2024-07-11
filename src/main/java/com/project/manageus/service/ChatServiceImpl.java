@@ -2,7 +2,6 @@ package com.project.manageus.service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.project.manageus.dto.ChatCheckDTO;
 import com.project.manageus.dto.ChatDTO;
 import com.project.manageus.dto.ChatMessageDTO;
 import com.project.manageus.dto.ChatRoomDTO;
@@ -11,8 +10,6 @@ import com.project.manageus.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.util.CollectionUtils;
-import org.springframework.web.socket.WebSocketSession;
 
 import java.util.*;
 
@@ -25,7 +22,6 @@ public class ChatServiceImpl implements ChatService {
     private final ChatMessageJPARepository chatMessageJPA;
     private final DepartmentRepository departmentJPA;
     private final UserRepository userJPA;
-
 
 
 
@@ -62,7 +58,7 @@ public class ChatServiceImpl implements ChatService {
         cdto.setUserId(id);
         mdto.setUserId(id);
         chatJPA.save(cdto.toChatEntity());
-        mdto.setMessage("님 입장하셧습니다.");
+        mdto.setMessage(username+"님 입장하셧습니다.");
         chatMessageJPA.save(mdto.toChatMessageEntity());
         return nextid;
 
@@ -85,15 +81,11 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public void enterChatRoom(Model model, Long id, Long roomId) {
-        ChatDTO dto = new ChatDTO();
-        dto.setUserId(id);
-        dto.setChatRoomId(roomId);
-        chatJPA.save(dto.toChatEntity());
         List list = Collections.emptyList();
         Optional<UserEntity> ous = userJPA.findById(id);
         String nickname = null;
         if (ous.isPresent()) {
-            nickname = ous.get().getUserInfo().getName();
+            nickname = ous.get().getUserInfo().getName() + " " + ous.get().getPosition().getName();
             model.addAttribute("nickname", nickname);
         }
 
@@ -164,12 +156,6 @@ public class ChatServiceImpl implements ChatService {
         Optional<ChatEntity> room =chatJPA.findById(chatId);
         if(room.isEmpty()){
             chatJPA.save(dto.toChatEntity());
-           Optional<UserEntity> user= userJPA.findById(dto.getUserId());
-            ChatMessageDTO mdto = new ChatMessageDTO();
-            mdto.setChatRoomId(dto.getChatRoomId());
-            mdto.setUserId(dto.getUserId());
-            mdto.setMessage("님 입장하셧습니다.");
-            chatMessageJPA.save(mdto.toChatMessageEntity());
         }
 
     }
@@ -187,47 +173,6 @@ public class ChatServiceImpl implements ChatService {
             chatRoomJPA.save(dto.toChatRoomEntity());
 
         }
-    }
-
-    @Override
-    public void checkLastTime(ChatDTO dto) {
-        ChatIDEntity chatID = new ChatIDEntity();
-        chatID.setUserId(dto.getUserId());
-        chatID.setChatRoomId(dto.getChatRoomId());
-        System.out.println("==============================");
-        Optional<ChatEntity> oce =chatJPA.findById(chatID);
-        System.out.println("=============================="+oce.get());
-        if(oce.isPresent()){
-            System.out.println("==============================");
-            chatJPA.save(dto.toChatEntity());
-            System.out.println("==============================");
-        }
-
-    }
-
-    @Override
-    public List<ChatCheckDTO> chatAlarm(Long id) {
-        int totalCount=0;
-        List<ChatCheckDTO> checkList = new ArrayList<>();
-       List<ChatEntity> chatlist=chatJPA.findByUserId(id);
-       for(ChatEntity ce:chatlist){
-           System.out.println("============================chatAlarm"+ce.getLastTime());
-           List<ChatMessageEntity> messagelist = chatMessageJPA.findByChatRoomIdAndRegGreaterThan(ce.getChatRoomId(),ce.getLastTime());
-           System.out.println("============================chatAlarm"+messagelist);
-          if(messagelist.size()>0){
-              ChatCheckDTO dto = new ChatCheckDTO();
-              dto.setCount(messagelist.size());
-              dto.setName(messagelist.get(0).getChatRoom().getName());
-              dto.setChatRoomId(messagelist.get(0).getChatRoomId());
-              dto.setId(id);
-              checkList.add(dto);
-              System.out.println("============================chatAlarm"+dto);
-              totalCount=totalCount+messagelist.size();
-          }
-
-
-       }
-        return checkList;
     }
 
 

@@ -126,7 +126,7 @@
                                     <input type="hidden" th:id="'statusId_' + ${iterStat.index + 1}" th:value="${projectDetail.statusId}">
                                     <td th:text="${iterStat.index + 1}"></td>
                                     <td>
-                                        <a th:href="@{/manageus/project/users/{userId}/projects/{projectId}/details/{projectDetailId}(userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetail.id})}" th:text="${projectDetail.title}"></a>
+                                        <a th:href="@{/companies/{companyId}/users/{userId}/project/{projectId}/detail/{projectDetailId}(companyId=${companyId}, userId=${userId}, projectId=${projectId}, projectDetailId=${projectDetail.id})}" th:text="${projectDetail.title}"></a>
                                     </td>
                                     <td th:id="'status_' + ${iterStat.index + 1}" th:text="${projectDetail.status.name}"></td>
                                     <td th:id="'user_' + ${iterStat.index + 1}" th:text="${projectDetail.user.userInfo.name}"></td>
@@ -136,7 +136,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <button class="btn btn-primary mt-3" th:if="${leaderId == userId}" th:attr="onclick=|location.href='@{/manageus/project/users/{userId}/projects/{projectId}/details/new(userId=${userId}, projectId=${projectId})}'|">업무 추가</button>
+                        <button class="btn btn-primary mt-3" th:if="${leaderId == userId}" th:attr="onclick=|location.href='@{/companies/{companyId}/users/{userId}/project/{projectId}/form(companyId=${companyId}, userId=${userId}, projectId=${projectId})}'|">업무 추가</button>
                     </div>
                 </div>
             </div>

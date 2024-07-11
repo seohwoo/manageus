@@ -21,6 +21,8 @@ public class UrlServiceImpl implements UrlService{
 
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
+    private final DepartmentRepository departmentRepository;
+    private final PositionRepository positionRepository;
     private final AlarmJPARepository alarmJPARepository;
 
     @Override
@@ -30,6 +32,8 @@ public class UrlServiceImpl implements UrlService{
         model.addAttribute("id", id);
         Optional<UserEntity> optionalUser = userRepository.findById(id);
         if(optionalUser.isPresent()) {
+
+
             //이거는 저장해놓기 약속~
             Sort sort = Sort.by(Sort.Order.desc("readDate"));
             List<AlarmEntity> receive = alarmJPARepository.findByReader(id, sort);
@@ -44,7 +48,6 @@ public class UrlServiceImpl implements UrlService{
                 model.addAttribute("company", optionalCompany.get().getName());
             }
             model.addAttribute("name", optionalUser.get().getUserInfo().getName());
-            model.addAttribute("departmentId", optionalUser.get().getDepartmentId());
             if(optionalUser.get().getUserInfo().getGender().equals("남자")) {
                 model.addAttribute("profileImage", "/img/undraw_profile_2.svg");
             }else {
@@ -64,46 +67,6 @@ public class UrlServiceImpl implements UrlService{
                 model.addAttribute("company", optionalCompany.get().getName());
                 model.addAttribute("ceo", optionalCompany.get().getCeo());
             }
-            result = true;
-        }
-        return result;
-    }
-
-    @Override
-    public boolean isValidUser(String username, Model model) {
-        boolean result = false;
-        Long id = Long.parseLong(username);
-        model.addAttribute("id", id);
-        Optional<UserEntity> optionalUser = userRepository.findById(id);
-        if(optionalUser.isPresent()) {
-            //이거는 저장해놓기 약속~
-            Sort sort = Sort.by(Sort.Order.desc("readDate"));
-            List<AlarmEntity> receive = alarmJPARepository.findByReader(id, sort);
-            model.addAttribute("receive", receive);
-            Optional<CompanyEntity> optionalCompany = companyRepository.findById(optionalUser.get().getCompanyId());
-            if(optionalCompany.isPresent()) {
-                model.addAttribute("company", optionalCompany.get().getName());
-            }
-            model.addAttribute("name", optionalUser.get().getUserInfo().getName());
-            if(optionalUser.get().getUserInfo().getGender().equals("남자")) {
-                model.addAttribute("profileImage", "/img/undraw_profile_2.svg");
-            }else {
-                model.addAttribute("profileImage", "/img/undraw_profile_3.svg");
-            }
-            result = true;
-        }
-        return result;
-    }
-
-    @Override
-    public boolean isValidCompany(String username, Model model) {
-        boolean result = false;
-        Long companyId = Long.parseLong(username);
-        Optional<CompanyEntity> optionalCompany = companyRepository.findById(companyId);
-        if(optionalCompany.isPresent()) {
-            model.addAttribute("companyId", companyId);
-            model.addAttribute("company", optionalCompany.get().getName());
-            model.addAttribute("ceo", optionalCompany.get().getCeo());
             result = true;
         }
         return result;

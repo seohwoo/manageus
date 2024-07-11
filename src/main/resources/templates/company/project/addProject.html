@@ -127,7 +127,7 @@
                         <h6 class="m-0 font-weight-bold text-primary">프로젝트 생성</h6>
                     </div>
                     <div class="card-body">
-                        <form th:action="@{/manageus/project/users/{userId}/projects(userId=${userId})}" method="post">
+                        <form th:action="@{/companies/{companyId}/users/{userId}/project(companyId=${companyId}, userId=${userId})}" method="post">
                             <input type="hidden" id="companyId" name="companyId" th:value="${companyId}">
                             <input type="hidden" id="myId" th:value="${userId}">
                             <div class="form-group">

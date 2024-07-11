@@ -23,34 +23,6 @@
     <!-- Custom styles for this page -->
     <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
-    <style>
-        .wide-column {
-            width: 15%;
-        }
-        .best-wide-column {
-            width: 25%;
-        }
-
-        .narrow-column {
-            width: 1%;
-            white-space: nowrap;
-        }
-
-        .btn-icon-split {
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .btn-icon-split .icon {
-            padding-right: 0.5em;
-        }
-
-        .btn-icon-split .text {
-            white-space: nowrap;
-        }
-    </style>
-
-
 </head>
 
 <body id="page-top">
@@ -78,7 +50,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex align-items-center">
                         <h6 class="m-0 font-weight-bold text-primary">전체부서</h6>
-                        <a th:href="@{/admin/companies/{companyId}/departments/new(companyId=${companyId})}"
+                        <a th:href="@{/admin/{companyId}/departments/form(companyId=${companyId})}"
                            class="btn btn-primary btn-icon-split ml-auto">
                             <span class="icon text-white-50">
                                 <i class="fas fa-arrow-right"></i>
@@ -91,12 +63,10 @@
                             <table class="table table-bordered" id="dataTable">
                                 <thead>
                                 <tr>
-                                    <th class="wide-column">번호</th>
-                                    <th class="wide-column">부서명</th>
-                                    <th class="wide-column">총인원</th>
-                                    <th class="best-wide-column">비고</th>
-                                    <th class="narrow-column"></th>
-                                    <th class="narrow-column"></th>
+                                    <th>번호</th>
+                                    <th>부서명</th>
+                                    <th>총인원</th>
+                                    <th>비고</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -105,26 +75,9 @@
                                     <td th:text="${department.name}">인사팀</td>
                                     <td th:text="${department.departmentUserCnt}">5</td>
                                     <td></td>
-                                    <td>
-                                        <a th:href="@{/admin/companies/{companyId}/departments/{departmentId}/edit(companyId=${companyId}, departmentId=${department.id})}" class="btn btn-warning btn-icon-split">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-exclamation-triangle"></i>
-                                            </span>
-                                            <span class="text">부서수정</span>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a th:href="@{/admin/companies/{companyId}/departments/{departmentId}(companyId=${companyId}, departmentId=${department.id})}" class="btn btn-danger btn-icon-split">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-trash"></i>
-                                            </span>
-                                            <span class="text">부서삭제</span>
-                                        </a>
-                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>

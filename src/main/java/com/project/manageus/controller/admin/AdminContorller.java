@@ -2,7 +2,6 @@ package com.project.manageus.controller.admin;
 
 import com.project.manageus.dto.CompanyDTO;
 import com.project.manageus.dto.DepartmentDTO;
-import com.project.manageus.dto.UserDTO;
 import com.project.manageus.service.AdminService;
 import com.project.manageus.service.UrlService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,7 @@ import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor    //lombok 생성자 주입
-@RequestMapping("/admin/companies/*")
+@RequestMapping("/admin/*")
 public class AdminContorller {
 
     private final AdminService adminService;
@@ -26,38 +25,72 @@ public class AdminContorller {
                             Model model) {
         String url = "admin/main.html";
         if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/admin/companies/" + principal.getName();
+            url = "redirect:/admin/" + principal.getName();
             return url;
         }
+        model.addAttribute("existUser", adminService.findAllEmployee(companyId, model));
         return url;
     }
 
-    @GetMapping("{companyId}/users")
+    @GetMapping("{companyId}/employees")
     public String showAllEmployee(@PathVariable Long companyId,
-                                  @RequestParam Long statusId,
                                   Principal principal,
                                   Model model) {
-        String url = "admin/employee/employee.html";
+        String url = "admin/employee.html";
         if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/admin/companies/" + principal.getName();
+            url = "redirect:/admin/" + principal.getName();
             return url;
         }
-        if(statusId == 1001L) {
-            url = "admin/employee/pending-employee.html";
-        } else if (statusId == 1003L) {
-            url = "admin/employee/exit-employee.html";
-        }
-        adminService.findAllEmployee(companyId, statusId, model);
+        model.addAttribute("existUser", adminService.findAllEmployee(companyId, model));
         return url;
     }
 
-    @PatchMapping("{companyId}/users/{id}")
+    @PatchMapping("{companyId}/employees")
     public String updateUserInfo(@PathVariable Long companyId,
-                                 @PathVariable Long id,
-                                 UserDTO userDTO) {
-        String url = "redirect:/admin/companies/" + companyId + "/users?statusId=" + adminService.findStatusIdById(id);
-        if(adminService.updateUser(userDTO)) {
-            url = "redirect:/admin/companies/" + companyId + "/users?statusId=" + userDTO.getStatusId();
+                                 Long userId,
+                                 Long positionId,
+                                 Long departmentId,
+                                 Long statusId) {
+        String url = "redirect:/admin/" + companyId + "/employees";
+        if(!adminService.updateUserInfo(userId, positionId, departmentId, statusId)) {
+            url = "redirect:/admin/" + companyId + "/employees";
+        }
+        return url;
+    }
+
+    @GetMapping("{companyId}/employees/pending")
+    public String showAllPendingEmployee(@PathVariable Long companyId,
+                                         Principal principal,
+                                         Model model) {
+        String url = "admin/pending-employee.html";
+        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
+            url = "redirect:/admin/" + principal.getName();
+            return url;
+        }
+        model.addAttribute("existUser", adminService.findAllPendingEmployee(companyId, model));
+        return url;
+    }
+
+    @GetMapping("{companyId}/employees/exit")
+    public String showExitUser(@PathVariable Long companyId,
+                               Principal principal,
+                               Model model) {
+        String url = "/admin/exit-employee.html";
+        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
+            url = "redirect:/admin/" + principal.getName();
+            return url;
+        }
+        model.addAttribute("existUser", adminService.findAllExitEmployee(companyId, model));
+        return url;
+    }
+
+    @PatchMapping("{companyId}/employees/status")
+    public String updateStatusUser(@PathVariable Long companyId,
+                                   Long userId,
+                                   Long statusId) {
+        String url = "redirect:/admin/" + companyId + "/employees/pending";
+        if(!adminService.updateUserStatus(userId, statusId)) {
+            url = "redirect:/admin/" + companyId + "/employees/pending";
         }
         return url;
     }
@@ -66,7 +99,7 @@ public class AdminContorller {
     public String showDepartment(@PathVariable Long companyId,
                                  Principal principal,
                                  Model model) {
-        String url = "admin/department/department.html";
+        String url = "admin/department.html";
         if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
             url = "redirect:/admin/" + principal.getName();
             return url;
@@ -75,13 +108,13 @@ public class AdminContorller {
         return url;
     }
 
-    @GetMapping("{companyId}/departments/new")
+    @GetMapping("{companyId}/departments/form")
     public String showDepartmentForm(@PathVariable Long companyId,
                                  Principal principal,
                                  Model model) {
-        String url = "admin/department/department-create-form.html";
+        String url = "admin/department-create-form.html";
         if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/admin/companies/" + principal.getName();
+            url = "redirect:/admin/" + principal.getName();
             return url;
         }
         adminService.findAllDepartment(companyId, model);
@@ -91,58 +124,33 @@ public class AdminContorller {
     @PostMapping("{companyId}/departments")
     public String insertDepartment(@PathVariable Long companyId,
                                    DepartmentDTO departmentDTO) {
-        String url = "redirect:/admin/companies/" + companyId + "/departments";
+        String url = "redirect:/admin/" + companyId + "/departments";
         if(!adminService.createDepartment(departmentDTO)) {
-            url = "redirect:/admin/companies/" + companyId + "/departments/form";
+            url = "redirect:/admin/" + companyId + "/departments/form";
         }
         return url;
     }
-
-    @GetMapping("{companyId}/departments/{departmentId}/edit")
-    public String showDepartmentUpdate(@PathVariable Long companyId,
-                                       @PathVariable Long departmentId,
-                                     Principal principal,
-                                     Model model) {
-        String url = "admin/department/department-update-form.html";
-        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/admin/companies/" + principal.getName();
-            return url;
-        }
-        adminService.findAllDepartment(companyId, model);
-        adminService.findDepartmentById(departmentId, model);
-        return url;
-    }
-
-    @PutMapping("{companyId}/departments/{departmentId}")
-    public String updateDepartment(DepartmentDTO departmentDTO) {
-        String url = "redirect:/admin/companies/" + departmentDTO.getCompanyId() + "/departments/edit";
-        if(adminService.updateDepartment(departmentDTO)) {
-            url = "redirect:/admin/companies/" + departmentDTO.getCompanyId() + "/departments";
-        }
-        return url;
-    }
-
 
     @GetMapping("{companyId}/profile")
     public String showCompanyProfile(@PathVariable Long companyId,
                                      Principal principal,
                                      Model model) {
-        String url = "admin/profile/profile.html";
+        String url = "admin/profile";
         if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/admin/companies/" + principal.getName();
+            url = "redirect:/admin/" + principal.getName();
             return url;
         }
         adminService.findCompanyInfo(companyId, model);
         return url;
     }
 
-    @GetMapping("{companyId}/profile/edit")
+    @GetMapping("{companyId}/profile/form")
     public String showCompanyProfileForm(@PathVariable Long companyId,
                                      Principal principal,
                                      Model model) {
-        String url = "admin/profile/profile-update-form.html";
+        String url = "admin/profile-update-form";
         if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/admin/companies/" + principal.getName();
+            url = "redirect:/admin/" + principal.getName();
             return url;
         }
         adminService.findCompanyInfo(companyId, model);
@@ -152,9 +160,9 @@ public class AdminContorller {
     @PutMapping("{companyId}/profile")
     public String updateCompanyInfo(@PathVariable Long companyId,
                                     CompanyDTO companyDTO) {
-        String url = "redirect:/admin/companies/" + companyId + "/profile";
+        String url = "redirect:/admin/" + companyId + "/profile";
         if(!adminService.updateCompanyInfo(companyDTO)) {
-            url = "redirect:/admin/companies/" +companyId;
+            url = "redirect:/admin/" +companyId;
         }
         return url;
     }

@@ -13,7 +13,7 @@ import java.security.Principal;
 import java.util.Objects;
 
 @Controller
-@RequestMapping("/manageus/profile/*")
+@RequestMapping("/companies/{companyId}/profiles/*")
 public class ProfileController {
 
     private final UrlService urlService;
@@ -26,12 +26,13 @@ public class ProfileController {
         this.profileService = profileService;
     }
 
-    @GetMapping("users/{id}")
-    public String showProfile(@PathVariable Long id,
+    @GetMapping("/{id}")
+    public String showProfile(@PathVariable Long companyId,
+                              @PathVariable Long id,
                               Principal principal,
                               Model model) {
         String url = "company/profile/profile.html";
-        if(!urlService.isValidUser(principal.getName(), model)) {
+        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
             url = "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
@@ -39,7 +40,7 @@ public class ProfileController {
         return url;
     }
 
-    @GetMapping("users/{id}/edit")
+    @GetMapping("/{id}/form")
     public String updateProfileForm(@PathVariable Long companyId,
                                     @PathVariable Long id,
                                     Principal principal,
@@ -54,14 +55,14 @@ public class ProfileController {
         return url;
     }
 
-    @PutMapping("users/{id}")
+    @PutMapping("/{id}")
     public String updateProfile(@PathVariable Long companyId, @PathVariable Long id,
                                 UserInfoDTO userInfoDTO,
                                 MultipartFile stampFile) {
         String url = "redirect:/companies/" + companyId;
         if(Objects.equals(id, userInfoDTO.getId())) {
             profileService.updateUser(userInfoDTO, stampFile);
-            url = "redirect:/companies/" + companyId + "/profile/users/" + id;
+            url = "redirect:/companies/" + companyId + "/profiles/" + id;
         }
         return url;
     }
