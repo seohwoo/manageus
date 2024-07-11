@@ -14,7 +14,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
-@RequestMapping("/companies/{companyId}/users/*")
+@RequestMapping("/manageus/attendance/*")
 public class AttendanceController {
 
     private final UrlService urlService;
@@ -26,14 +26,15 @@ public class AttendanceController {
         this.attendanceService = attendanceService;
     }
 
-    @GetMapping("/{userId}/attendance")
-    public String attendanceMain(@PathVariable Long companyId, @PathVariable Long userId, Principal principal, Model model) {
+    @GetMapping("/users/{userId}")
+    public String attendanceMain(@PathVariable Long userId, Principal principal, Model model) {
+        Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
         String url = "/company/attendance/attendanceMain.html";
-        if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/company/" + urlService.findCompanyUrl(principal.getName());
+        if(!urlService.isValidUser(principal.getName(),model)) {
+            url = "redirect:/manageus/company/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
-
+        model.addAttribute("companyId",companyId);
         return url;
     }
 
