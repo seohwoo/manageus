@@ -19,6 +19,7 @@ import java.security.Principal;
 public class AdminContorller {
 
     private final AdminService adminService;
+    private final ApprovalService approvalService;
     private final UrlService urlService;
 
 
@@ -190,13 +191,27 @@ public class AdminContorller {
 
     @GetMapping("approvals/{approvalId}")
     public String findApproval(@PathVariable Long approvalId, Principal principal, Model model) {
-        String url = "admin/approval-info.html";
+        String url = "admin/approval/approval-info.html";
         Long companyId = Long.parseLong(principal.getName());
         if(!urlService.isValidCompany(principal.getName(), model)) {
             url = "redirect:/admin/companies/" + principal.getName();
             return url;
         }
+        Long sessionId = approvalService.findUserByAprovalId(approvalId);
+        String sessionIds = sessionId.toString();
+        model.addAttribute("sessionIds", sessionIds);
+        model.addAttribute("sessionId", sessionId);
+
+        // 글번호에 맞는 정보 가져오기
+        approvalService.selectApprovalDetail(approvalId, sessionId, model);
         return url;
+    }
+
+    @PatchMapping("approvals/{approvalId}")
+    public String approvalUpdate(@PathVariable Long approvalId,
+                                 @RequestParam("status") Long status) {
+        approvalService.approvalReject(approvalId, status);
+        return "redirect:/admin/approvals/"+approvalId;
     }
 
 }

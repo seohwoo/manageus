@@ -58,6 +58,15 @@
                                 </div>
                             </div>
 
+                            <div th:if="${#lists.contains(userIdStrings, sessionIds) and status == 1001}">
+                                <div th:unless="${status == 1004}">
+                                    <form th:action="@{/manageus/approval/posts/{approvalId}(approvalId=${approvalId})}" method="post">
+                                        <input type="hidden" name="_method" value="put">
+                                        <button type="submit" class="btn btn-primary">결재하기</button>
+                                    </form>
+                                </div>
+                            </div>
+
                             <div th:if="${#lists.contains(userIdStrings, sessionIds) and status == 1002}">
                                 <p>결재 완료</p>
                             </div>

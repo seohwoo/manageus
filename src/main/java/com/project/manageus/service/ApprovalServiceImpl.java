@@ -213,13 +213,9 @@ public class ApprovalServiceImpl implements ApprovalService {
         Optional<ApprovalDetailEntity> optionalAD = approvalDetailJPA.findByApprovalIdAndUserId(approvalId, userId);
         if (optionalAD.isPresent()) {
             ApprovalDetailEntity ADentity = optionalAD.get();
-            logger.info("Entity found: {}", ADentity);
 
             ADentity.setStatusId(1002L);
             approvalDetailJPA.save(ADentity);
-            logger.info("Entity updated and saved: {}", ADentity);
-        } else {
-            logger.warn("No entity found with approvalId: {} and userId: {}", approvalId, userId);
         }
 
 
@@ -259,6 +255,16 @@ public class ApprovalServiceImpl implements ApprovalService {
                 approvalJPA.save(aEntity);
             }
         }
+    }
+
+    @Override
+    public Long findUserByAprovalId(Long approvalId) {
+        Long result = 0L;
+        Optional<ApprovalEntity> optionalApproval = approvalJPA.findById(approvalId);
+        if(optionalApproval.isPresent()) {
+            result = optionalApproval.get().getUserId();
+        }
+        return result;
     }
 }
 /*

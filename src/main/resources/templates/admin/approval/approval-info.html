@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>결재 상세 페이지</title>
+    <title>ManageUs 결제관리</title>
 
     <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -33,40 +33,25 @@
 
             <div th:include="~{content/admin-top-bar :: admintop}"></div>
 
-            <!-- 여기 쓰면됨 -->
-
-
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h3 class="h3 mb-2 text-gray-800 text-center">신청서</h3>
-
-                <th:block th:if="${#lists.contains(userIdStrings, sessionIds)} or ${sessionId.equals(approvalInfo.userId)}">
+                <h3 class="h3 mb-2 text-gray-800 text-center">휴가 신청서</h3>
 
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <div class="text-right" style="display: flex; justify-content: flex-end;">
-                            <div th:if="${#lists.contains(userIdStrings, sessionIds) and status == 1001}">
-                                <div>
-                                    <form th:action="@{/manageus/approval/posts/{approvalId}/reject(approvalId=${approvalId})}" method="post" style="margin-right: 18px;">
-                                        <input type="hidden" name="_method" value="put">
-                                        <input type="hidden" name="status" value="1004">
-                                        <button type="submit" class="btn btn-primary">반려하기</button>
-                                    </form>
-                                </div>
+                        <div class="text-right" style="display: flex; justify-content: flex-end; align-items: center;">
+                            <div style="margin-right: 18px;" th:if="${approvalInfo.statusId != 1004}">
+                                <form th:action="@{/admin/approvals/{approvalId}(approvalId=${approvalId})}" method="post">
+                                    <input type="hidden" name="_method" value="patch">
+                                    <input type="hidden" name="status" value="1004">
+                                    <button type="submit" class="btn btn-primary">반려하기</button>
+                                </form>
                             </div>
-
-                            <div th:if="${#lists.contains(userIdStrings, sessionIds) and status == 1002}">
-                                <p>결재 완료</p>
-                            </div>
-                            <div th:if="${#lists.contains(userIdStrings, sessionIds) and status == 1004}">
-                                <p>결재 반려</p>
-                            </div>
-
                             <div th:if="${sessionId.equals(approvalInfo.userId)}">
-                                <p th:text="${approvalInfo.getStatus.getName}"></p>
+                                <p th:text="결제 + ${approvalInfo.getStatus.getName}"></p>
                             </div>
                         </div>
                     </div>
@@ -80,8 +65,7 @@
                                 <tr>
                                     <td th:each="detail : ${approvalDetail}">
                                         <div th:if="${detail.statusId == 1002}">
-                                            <img th:src="@{'/img/stamp/' + ${detail.user.userInfo.stamp}}"
-                                                 width="30" height="30">
+                                            <img th:src="@{'/img/stamp/' + ${detail.user.userInfo.stamp}}" width="30" height="30">
                                         </div>
                                     </td>
                                 </tr>
@@ -122,11 +106,9 @@
                                     <td colspan="2" style="text-align: center;">
                                         위와 같이 휴가를 신청합니다.
                                         <br/><br/>
-                                        <h5 style="text-align: right; margin: 0; font-size: 15px;"
-                                            th:text="${#dates.format(approvalInfo.signOn, 'yy년MM월dd일')}"></h5>
+                                        <h5 style="text-align: right; margin: 0; font-size: 15px;" th:text="${#dates.format(approvalInfo.signOn, 'yy년MM월dd일')}"></h5>
                                         <br/>
-                                        <h5 style="text-align: right; margin: 0; font-size: 15px;"
-                                            th:text="'신 청 자 : ' + ${userInfoName}"></h5>
+                                        <h5 style="text-align: right; margin: 0; font-size: 15px;" th:text="'신 청 자 : ' + ${userInfoName}"></h5>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -134,11 +116,8 @@
                         </div>
                     </div>
                 </div>
-                </th:block>
             </div>
             <!-- /.container-fluid -->
-
-
         </div>
         <!-- End of Main Content -->
 
@@ -166,8 +145,6 @@
 <!-- Page level plugins -->
 <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
 <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-
 
 </body>
 

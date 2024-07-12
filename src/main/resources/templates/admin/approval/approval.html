@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>ManageUs 결제관리</title>
 
     <!-- Custom fonts for this template -->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -54,7 +54,7 @@
                                 <tr th:each="approval : ${approvalEntities}">
                                     <td th:text="${approval.getUser.getUserInfo.getName}"></td>
                                     <td>
-                                        <a th:href="@{/manageus/approval/posts/{approvalId}(approvalId=${approval.id})}" th:text="${approval.title}"></a>
+                                        <a th:href="@{/admin/approvals/{approvalId}(approvalId=${approval.id})}" th:text="${approval.title}"></a>
                                     </td>
                                     <td th:text="${#dates.format(approval.signOn, 'yyyy-MM-dd')}"></td>
                                     <td th:text="${approval.getStatus.getName}"></td>
