@@ -75,9 +75,10 @@ public class LoginController {
     }
 
     @PostMapping("/users")
-    public String registerPro(UserDTO userDTO, UserInfoDTO userInfoDTO, String repeatPassword, String inviteCode) {
+    public String registerPro(UserDTO userDTO, UserInfoDTO userInfoDTO, String repeatPassword, String inviteCode, String addressDetail) {
         String url = "redirect:/register";
         if(userDTO.getPassword().equals(repeatPassword)) {
+            userInfoDTO.setAddress(userInfoDTO.getAddress() + " " + addressDetail);
             boolean isUserCreated = loginService.createUser(userDTO, userInfoDTO, inviteCode);
             if(isUserCreated) {
                 url = "redirect:/login";
