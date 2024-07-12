@@ -14,6 +14,7 @@ public interface AdminService {
     public void findAllDepartment(Long companyId, Model model);
     public boolean createDepartment(DepartmentDTO departmentDTO);
     public boolean updateDepartment(DepartmentDTO departmentDTO);
+    public boolean deleteDepartment(Long departmentId);
     public void findDepartmentById(Long departmentId, Model model);
     public void findCompanyInfo(Long companyId, Model model);
     public boolean updateCompanyInfo(CompanyDTO companyDTO);

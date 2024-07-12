@@ -37,9 +37,9 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">사원 관리:</h6>
-                    <a class="collapse-item" th:href="@{/admin/companies/{companyId}/users(statusId=1002, companyId=${companyId})}">사원</a>
-                    <a class="collapse-item" th:href="@{/admin/companies/{companyId}/users(statusId=1001, companyId=${companyId})}">승인대기</a>
-                    <a class="collapse-item" th:href="@{/admin/companies/{companyId}/users(statusId=1003, companyId=${companyId})}">탈퇴</a>
+                    <a class="collapse-item" th:href="@{/admin/users(statusId=1002, companyId=${companyId})}">사원</a>
+                    <a class="collapse-item" th:href="@{/admin/users(statusId=1001, companyId=${companyId})}">승인대기</a>
+                    <a class="collapse-item" th:href="@{/admin/users(statusId=1003, companyId=${companyId})}">탈퇴</a>
 
                 </div>
             </div>
@@ -56,7 +56,7 @@
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">부서관리:</h6>
-                    <a class="collapse-item" th:href="@{/admin/companies/{companyId}/departments(companyId=${companyId})}">부서</a>
+                    <a class="collapse-item" th:href="@{/admin/departments}">부서</a>
                     <a class="collapse-item" href="../sample/utilities-border.html">Borders</a>
                     <a class="collapse-item" href="../sample/utilities-animation.html">Animations</a>
                     <a class="collapse-item" href="../sample/utilities-other.html">Other</a>

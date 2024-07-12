@@ -82,6 +82,7 @@ public class UrlServiceImpl implements UrlService{
             model.addAttribute("receive", receive);
             Optional<CompanyEntity> optionalCompany = companyRepository.findById(optionalUser.get().getCompanyId());
             if(optionalCompany.isPresent()) {
+                model.addAttribute("companyId", optionalCompany.get().getId());
                 model.addAttribute("company", optionalCompany.get().getName());
             }
             model.addAttribute("name", optionalUser.get().getUserInfo().getName());
