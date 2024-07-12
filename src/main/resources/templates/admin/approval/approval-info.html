@@ -23,7 +23,7 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    <div th:replace="~{content/side-bar :: side}"></div>
+    <div th:include="~{content/admin-side-bar :: adminside}"></div>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -31,7 +31,7 @@
         <!-- Main Content -->
         <div id="content">
 
-            <div th:replace="~{content/top-bar :: top}"></div>
+            <div th:include="~{content/admin-top-bar :: admintop}"></div>
 
             <!-- 여기 쓰면됨 -->
 
@@ -40,7 +40,7 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h3 class="h3 mb-2 text-gray-800 text-center">휴가 신청서</h3>
+                <h3 class="h3 mb-2 text-gray-800 text-center">신청서</h3>
 
                 <th:block th:if="${#lists.contains(userIdStrings, sessionIds)} or ${sessionId.equals(approvalInfo.userId)}">
 
@@ -49,7 +49,7 @@
                     <div class="card-header py-3">
                         <div class="text-right" style="display: flex; justify-content: flex-end;">
                             <div th:if="${#lists.contains(userIdStrings, sessionIds) and status == 1001}">
-                                <div th:unless="${status == 1002}">
+                                <div>
                                     <form th:action="@{/manageus/approval/posts/{approvalId}/reject(approvalId=${approvalId})}" method="post" style="margin-right: 18px;">
                                         <input type="hidden" name="_method" value="put">
                                         <input type="hidden" name="status" value="1004">

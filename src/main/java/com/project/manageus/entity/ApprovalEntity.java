@@ -47,7 +47,7 @@ public class ApprovalEntity {
     @JoinColumn(name = "id", referencedColumnName = "approval_id", insertable = false, updatable = false)
     private ApprovalDetailEntity approvalDetail;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private UserEntity user;
 

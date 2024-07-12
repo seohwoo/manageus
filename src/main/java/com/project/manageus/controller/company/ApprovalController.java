@@ -137,12 +137,12 @@ public class ApprovalController {
     @PutMapping("/posts/{approvalId}/reject")
     public String approvalReject(@PathVariable Long approvalId, Principal principal,
                                  @RequestParam("status") Long status) {
-        System.out.println(approvalId+"------------------approvalId---------------------------------------------");
-        System.out.println(status+"------------------status---------------------------------------------");
-
         approvalService.approvalReject(approvalId, status);
         //Long id = Long.parseLong(principal.getName());
         //approvalService.approvalUpdate(approvalId, id);
+        if(principal.getName().length()==4) {
+            return "redirect:/admin/approvals" + approvalId;
+        }
         return "redirect:/manageus/approval/posts/"+approvalId;
     }
 }

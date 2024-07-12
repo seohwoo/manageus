@@ -4,6 +4,7 @@ import com.project.manageus.dto.CompanyDTO;
 import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.dto.UserDTO;
 import com.project.manageus.service.AdminService;
+import com.project.manageus.service.ApprovalService;
 import com.project.manageus.service.UrlService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,8 @@ public class AdminContorller {
     private final AdminService adminService;
     private final UrlService urlService;
 
+
+    //main
     @GetMapping("companies/{companyId}")
     public String adminMain(@PathVariable Long companyId,
                             Principal principal,
@@ -32,6 +35,8 @@ public class AdminContorller {
         return url;
     }
 
+
+    //users start
     @GetMapping("users")
     public String showAllEmployee(@RequestParam Long statusId,
                                   Principal principal,
@@ -60,7 +65,9 @@ public class AdminContorller {
         }
         return url;
     }
+    //users end
 
+    //departemnt start
     @GetMapping("departments")
     public String showDepartment(Principal principal,
                                  Model model) {
@@ -128,8 +135,9 @@ public class AdminContorller {
         }
         return url;
     }
+    //department end
 
-
+    //profile start
     @GetMapping("profile/companies/{companyId}")
     public String showCompanyProfile(@PathVariable Long companyId,
                                      Principal principal,
@@ -165,4 +173,30 @@ public class AdminContorller {
         }
         return url;
     }
+    //profile end
+
+    //approval start
+    @GetMapping("approvals")
+    public String findApprovalList(Principal principal, Model model) {
+        String url = "admin/approval/approval.html";
+        Long companyId = Long.parseLong(principal.getName());
+        if(!urlService.isValidCompany(principal.getName(), model)) {
+            url = "redirect:/admin/companies/" + principal.getName();
+            return url;
+        }
+        adminService.findAllApproval(companyId, model);
+        return url;
+    }
+
+    @GetMapping("approvals/{approvalId}")
+    public String findApproval(@PathVariable Long approvalId, Principal principal, Model model) {
+        String url = "admin/approval-info.html";
+        Long companyId = Long.parseLong(principal.getName());
+        if(!urlService.isValidCompany(principal.getName(), model)) {
+            url = "redirect:/admin/companies/" + principal.getName();
+            return url;
+        }
+        return url;
+    }
+
 }
