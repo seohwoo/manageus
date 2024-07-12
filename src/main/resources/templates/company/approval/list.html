@@ -46,7 +46,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
 
-                        <form th:action="@{/companies/{companyId}/approval/{id}/write(id=${id},companyId=${companyId})}" method="get">
+                        <form th:action="@{/manageus/approval/posts/new}" method="get">
                             <button type="submit" class="btn btn-primary">결재 작성</button>
                         </form>
                     </div>
@@ -66,7 +66,7 @@
                                     <tr th:each="approvalList : ${approvalList}">
                                         <td th:text="${approvalList.getUser.getUserInfo.getName}"></td>
                                         <td>
-                                            <a th:href="@{/companies/{companyId}/approval/{id}/info/{approvalId}(id=${id},companyId=${companyId},approvalId=${approvalList.id})}" th:text="${approvalList.title}"></a>
+                                            <a th:href="@{/manageus/approval/posts/{approvalId}(approvalId=${approvalList.id})}" th:text="${approvalList.title}"></a>
                                         </td>
                                         <td th:text="${#dates.format(approvalList.signOn, 'yyyy-MM-dd')}"></td>
                                         <td th:text="${approvalList.getStatus.getName}"></td>

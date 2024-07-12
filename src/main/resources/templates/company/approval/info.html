@@ -47,15 +47,31 @@
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <div class="text-right">
+                        <div class="text-right" style="display: flex; justify-content: flex-end;">
                             <div th:if="${#lists.contains(userIdStrings, sessionIds) and status == 1001}">
-                                <form th:action="@{/companies/{companyId}/approval/{id}/update/{approvalId}(id=${id},companyId=${companyId},approvalId=${approvalId})}" method="post">
-                                    <button type="submit" class="btn btn-primary">결재하기</button>
-                                </form>
+                                <div th:unless="${status == 1002}">
+                                    <form th:action="@{/manageus/approval/posts/{approvalId}/reject(approvalId=${approvalId})}" method="post" style="margin-right: 18px;">
+                                        <input type="hidden" name="_method" value="put">
+                                        <input type="hidden" name="status" value="1004">
+                                        <button type="submit" class="btn btn-primary">반려하기</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div th:if="${#lists.contains(userIdStrings, sessionIds) and status == 1001}">
+                                <div th:unless="${status == 1004}">
+                                    <form th:action="@{/manageus/approval/posts/{approvalId}(approvalId=${approvalId})}" method="post">
+                                        <input type="hidden" name="_method" value="put">
+                                        <button type="submit" class="btn btn-primary">결재하기</button>
+                                    </form>
+                                </div>
                             </div>
 
                             <div th:if="${#lists.contains(userIdStrings, sessionIds) and status == 1002}">
                                 <p>결재 완료</p>
+                            </div>
+                            <div th:if="${#lists.contains(userIdStrings, sessionIds) and status == 1004}">
+                                <p>결재 반려</p>
                             </div>
 
                             <div th:if="${sessionId.equals(approvalInfo.userId)}">

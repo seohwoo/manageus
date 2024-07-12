@@ -15,12 +15,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.swing.text.html.Option;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,6 +52,36 @@ public class ApprovalServiceImpl implements ApprovalService {
     public void selectApprovalList(Model model, Long companyId) {
         List<ApprovalEntity> approvalList = approvalJPA.findByCompanyIdOrderBySignOnDesc(companyId);
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String todayStr = sdf.format(new Date());
+
+        List<Long> matchingIds = new ArrayList<>();
+
+        for (ApprovalEntity approval : approvalList) {
+            Date signOff = approval.getSignOff();
+            if (signOff != null) {
+                String signOffStr = sdf.format(signOff);
+                if (todayStr.equals(signOffStr)) {
+                    matchingIds.add(approval.getId());
+                }
+            }
+        }
+
+        for (Long id : matchingIds) {
+            List<ApprovalDetailEntity> adEntityList = approvalDetailJPA.findByApprovalId(id);
+            for (ApprovalDetailEntity adEntity : adEntityList) {
+                adEntity.setStatusId(1004L);
+            }
+            approvalDetailJPA.saveAll(adEntityList);
+
+            Optional<ApprovalEntity> approvalEntity = approvalJPA.findById(id);
+            if (approvalEntity.isPresent()) {
+                ApprovalEntity aEntity = approvalEntity.get();
+                // statusId 필드가 맞는지 확인 후 수정
+                aEntity.setStatusId(1004L);
+                approvalJPA.save(aEntity);
+            }
+        }
 
         model.addAttribute("approvalList", approvalList);
     }
@@ -113,21 +141,18 @@ public class ApprovalServiceImpl implements ApprovalService {
     // 부서에 맞는 사람 가져오기
     @Override
     public JsonObject selectPositionPeople(DepartmentDTO dto, Long userId) {
-        System.out.println("ServiceImpl-userId-------------------------------------------------------"+userId);
         JsonObject Json = new JsonObject();
-
 
         List<UserEntity> UE = userRepository.findAllByDepartmentId(dto.getId());
 
         JsonArray JA = new JsonArray();
         // 본인 아이디 제외
         for (UserEntity UEA : UE) {
-            if(UEA.getId().equals(userId)) {
+            if (UEA.getId().equals(userId)) {
                 continue;
             }
-        // List<UserEntity> 수 만큼 반복
+            // List<UserEntity> 수 만큼 반복
             JsonObject JsonO = new JsonObject();
-            System.out.println(UEA.getId()+"-------------------------------------------------------------------");
             String people = UEA.getUserInfo().getName() + " " + UEA.getPosition().getName();
             Long Uid = UEA.getId();
             JsonO.addProperty("userId", Uid);
@@ -141,14 +166,9 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     // 글번호에 맞는 정보 가져오기
     @Override
-    public void selectApprovalDetail(Long approvalId,Long id, Model model) {
+    public void selectApprovalDetail(Long approvalId, Long id, Model model) {
         List<ApprovalDetailEntity> approvalDetail = approvalDetailJPA.findByApprovalId(approvalId);
         model.addAttribute("approvalDetail", approvalDetail);
-
-        /*
-        approvalDetail.sort(Comparator.comparingLong(detail -> detail.getUser().getPositionId().reversed()));
-        */
-        System.out.println("approvalDetail----------------------------------------" + approvalDetail);
 
         // approvalDetail에서 userId 값을 String으로 변환하여 새로운 리스트 생성
         List<String> userIdStrings = approvalDetail.stream()
@@ -189,7 +209,6 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     @Override
     public void approvalUpdate(Long approvalId, Long userId) {
-        logger.info("approvalUpdate called with approvalId: {} and userId: {}", approvalId, userId);
 
         Optional<ApprovalDetailEntity> optionalAD = approvalDetailJPA.findByApprovalIdAndUserId(approvalId, userId);
         if (optionalAD.isPresent()) {
@@ -220,6 +239,25 @@ public class ApprovalServiceImpl implements ApprovalService {
                     .orElseThrow(() -> new RuntimeException("Approval not found"));
             approvalEntity.setStatusId(1002L);
             approvalJPA.save(approvalEntity);
+        }
+    }
+
+    // 결재 반려 업데이트
+    @Override
+    public void approvalReject(Long approvalId, Long status) {
+        if (status == 1004) {
+            List<ApprovalDetailEntity> adEntityList = approvalDetailJPA.findByApprovalId(approvalId);
+            for (ApprovalDetailEntity adEntity : adEntityList) {
+                adEntity.setStatusId(1004L);
+            }
+            approvalDetailJPA.saveAll(adEntityList);
+
+            Optional<ApprovalEntity> approvalEntity = approvalJPA.findById(approvalId);
+            if (approvalEntity.isPresent()) {
+                ApprovalEntity aEntity = approvalEntity.get();
+                aEntity.setStatusId(1004L);
+                approvalJPA.save(aEntity);
+            }
         }
     }
 }

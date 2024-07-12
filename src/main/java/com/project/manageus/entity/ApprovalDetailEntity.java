@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Data
 @NoArgsConstructor
 @Entity
+@DynamicInsert
 @DynamicUpdate
 @Table(name="approval_detail")
 public class ApprovalDetailEntity {
