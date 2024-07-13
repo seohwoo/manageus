@@ -28,7 +28,6 @@ public class SuperAdminController {
     }
     @GetMapping("/board/{num}")
     public String qaContent(Model model,@PathVariable(value = "num") Long num){
-        System.out.println("num:"+num);
         service.qaContent(model,num);
         return "super/qa/qaContent.html";
     }

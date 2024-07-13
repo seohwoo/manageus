@@ -13,7 +13,7 @@ import java.security.Principal;
 
 
 @Controller
-@RequestMapping("manageus/companies/*")
+@RequestMapping("/manageus/*")
 public class CompanyController {
 
     private final UrlService urlService;
