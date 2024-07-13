@@ -35,6 +35,12 @@ public interface ApprovalService {
     // 승인완료 업데이트
     public void approvalUpdate(Long approvalId, Long userId);
 
+    // 결재반려 업데이트
+    public void approvalReject(Long approvalId, Long status);
+
+    public Long findUserByAprovalId(Long approvalId);
+
+
     // 회사 번호가 같은 정보 다 가져오기
 //    public void selectCompanyId(Long companyId, Model model);
 

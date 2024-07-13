@@ -45,7 +45,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <span th:text="${id}"></span>
-                                <form th:action="@{/companies/{companyId}/approval/{id}/write(id=${id},companyId=${companyId})}" method="post" onsubmit="return validateForm()">
+                                <form th:action="@{/manageus/approval/posts}" method="post" onsubmit="return validateForm()">
                                     <input type="hidden" id="companyId" th:value="${companyId}"/>
                                     <input type="hidden" id="currentUserId" th:value="${id}"/>
                                     <!-- 결재 라인 -->
@@ -222,7 +222,7 @@ function removeApprover(div) {
 
             console.log(departmentId);
             $.ajax({
-                url: '/companies/' + companyId + '/approval/write?userId=' + currentUserId,
+                url: '/manageus/approval/posts/write?userId=' + currentUserId,
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ id: departmentId }),

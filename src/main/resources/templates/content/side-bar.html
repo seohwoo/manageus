@@ -10,7 +10,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/companies/{companyId}(companyId=${companyId})}">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/manageus/companies/{companyId}(companyId=${companyId})}">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -22,7 +22,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" th:href="@{/company/{companyId}(companyId=${companyId})}">
+            <a class="nav-link" th:href="@{/manageus/companies/{companyId}(companyId=${companyId})}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
@@ -44,7 +44,7 @@
             </a>
             <div id="chatarea" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Custom Components:</h6>
+                    <h6 class="collapse-header">채팅</h6>
                     <a class="collapse-item" th:href="@{/companies/{companyId}/chat(companyId=${companyId})}">채팅방목록</a>
                     <a class="collapse-item" href="../sample/cards.html"></a>
                 </div>
@@ -54,13 +54,14 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-cog"></i>
-                <span>Components</span>
+                <span>쪽지</span>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Custom Components:</h6>
-                    <a class="collapse-item" href="../sample/buttons.html">Buttons</a>
-                    <a class="collapse-item" href="../sample/cards.html">Cards</a>
+                    <a class="collapse-item" th:href="@{/companies/{companyId}/alarm/{id}/form(companyId=${companyId}, id=${id})}">쪽지 보내기</a>
+                    <a class="collapse-item" th:href="@{/companies/{companyId}/alarm/{id}/receive(companyId=${companyId}, id=${id})}">보낸 쪽지함</a>
+                    <a class="collapse-item" th:href="@{/companies/{companyId}/alarm/{id}/spend(companyId=${companyId}, id=${id})}">받은 쪽지함</a>
                 </div>
             </div>
         </li>
@@ -113,12 +114,46 @@
             </div>
         </li>
 
+
+
+        <!-- 여기부터 url 적어주면돼 -->
         <!-- Nav Item - Charts -->
         <li class="nav-item">
-            <a class="nav-link" href="../sample/charts.html">
+            <a class="nav-link" th:href="@{/manageus/approval/posts}">
                 <i class="fas fa-fw fa-chart-area"></i>
-                <span>Charts</span></a>
+                <span>결재</span></a>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/manageus/approval/posts}">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>쪽지</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/manageus/approval/posts}">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>채팅</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/manageus/approval/posts}">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>근태</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/manageus/approval/posts}">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>캘린더</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/manageus/approval/posts}">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>프로젝트</span></a>
+        </li>
+        <!-- 여기까지다 -->
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">

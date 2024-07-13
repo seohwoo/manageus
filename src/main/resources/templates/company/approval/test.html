@@ -1,44 +1,50 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
 </head>
-<body>
-<select name="selectDepartment" id="selectDepartment" required>
-    <option th:each="selectDepartment : ${selectDepartment}"
-            th:value="${selectDepartment.id}"
-            th:text="${selectDepartment.name}">
-    </option>
+
+
+
+
+
+<input type="hidden" id="companyId" th:value="${companyId}"/>
+<select id="departmentSelect" name="selectDepartment" onchange="getPersons()">
+    <option>팀을 선택해주세요</option>
+    <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}">Department</option>
 </select>
-
-
-
-<!--
+<select id="personSelect" name="personId"></select>
+<button type="submit">초대 하기</button>
+</form>
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    $(function() {
-        $("#selectDepartment").on("change", function() {
-            var departmentId = $(this).val();
-            var companyId = /*[[${companyId}]]*/ '0'; // Replace with actual value
-            var id = /*[[${id}]]*/ '0'; // Replace with actual value
-
-            $.ajax({
-                url: "/approval/" + companyId + "/" + id + "/selectPeople",
-                data: { departmentId: departmentId },
-                success: function(data) {
-                    var $selectPeople = $("#selectPeople");
-                    $selectPeople.empty();
-                    $.each(data, function(index, person) {
-                        $selectPeople.append($("<option></option>")
-                            .attr("value", person.id)
-                            .text(person.name));
-                    });
-                }
-            });
+    function getPersons() {
+        var companyId = $("#companyId").val();
+        var departmentId = document.getElementById("departmentSelect").value;
+        console.log(companyId);
+        console.log(departmentId);
+        $.ajax({
+            url: '/companies/invitations/names',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ id: departmentId, companyId: companyId }),
+            dataType: "json",
+            success: function(response) {
+                var personSelect = document.getElementById("personSelect");
+                personSelect.innerHTML = "";
+                response.DepartmentMember.forEach(function(person) {
+                    var option = document.createElement("option");
+                    option.value = person.userId;
+                    option.text = person.fullName;
+                    personSelect.add(option);
+                });
+                console.log('성공');
+            },
+            error: function(error) {
+                console.log('오류', error);
+            }
         });
-    });
-    /*]]>*/
+    }
 </script>
--->
+
 </body>
 </html>

@@ -25,9 +25,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-// http://localhost:8080/companies/1003/approval/10030003/list
+// http://localhost:8080/manageus/approval/posts
 @Controller
-@RequestMapping("/companies/{companyId}/*")
+@RequestMapping("/manageus/approval/*")
 public class ApprovalController {
 
     private final ApprovalService approvalService;
@@ -40,15 +40,12 @@ public class ApprovalController {
     }
 
     // 게시판 페이지
-    @GetMapping("/approval/{id}/list")
-    public String ApprovalList(@PathVariable Long companyId,
-                               @PathVariable Long id,
-                               Principal principal, Model model) {
-
+    @GetMapping("/posts")
+    public String ApprovalList(Principal principal, Model model) {
+        Long companyId = Long.parseLong(urlService.findCompanyUrl(principal.getName()));
         // GetMapping일 땐 필수 ~
-        if (!urlService.findUserInfo(principal.getName(), companyId, model)
-                || id != Long.parseLong(principal.getName())) {
-            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+        if (!urlService.isValidUser(principal.getName(), model)) {
+            return "redirect:/manageus/companies/"+companyId;
         }
         // ~ 까지
 
@@ -59,22 +56,19 @@ public class ApprovalController {
     }
 
     // 휴가 신청 페이지
-    @GetMapping("/approval/{id}/write")
-    public String writeForm(@PathVariable Long companyId,
-                            @PathVariable Long id,
-                            Principal principal, Model model) {
+    @GetMapping("/posts/new")
+    public String writeForm(Principal principal, Model model) {
 
+        Long companyId = Long.parseLong(urlService.findCompanyUrl(principal.getName()));
         // GetMapping일 땐 필수 ~
-        if (!urlService.findUserInfo(principal.getName(), companyId, model)
-                || id != Long.parseLong(principal.getName())) {
-            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+        if (!urlService.isValidUser(principal.getName(), model)) {
+            return "redirect:/manageus/companies/"+companyId;
         }
         // ~ 까지
 
-        model.addAttribute("id", id);
+        model.addAttribute("id", principal.getName());
         model.addAttribute("companyId", companyId);
         approvalService.selectDepartment(companyId, model);
-
 
         // 결재 종류 가져오기
         approvalService.selectApprovalType(model);
@@ -82,43 +76,43 @@ public class ApprovalController {
         return "/company/approval/write";
     }
 
-    @PostMapping("/approval/{id}/write")
-    public String writePro(@PathVariable Long companyId,
-                           @PathVariable Long id,
-                           Principal principal, Model model,
+    //휴가 신청하기 pro
+    @PostMapping("/posts")
+    public String writePro(Principal principal, Model model,
                            ApprovalDTO Adto,
                            @RequestParam("personId") List<Long> personId) {
+
+        Long companyId = Long.parseLong(urlService.findCompanyUrl(principal.getName()));
+        Long id = Long.parseLong(principal.getName());
 
         // 결재 테이블 인서트
         approvalService.insertApproval(companyId, id, Adto, personId);
 
-
-        return "redirect:/companies/{companyId}/approval/{id}/list";
+        model.addAttribute("id", id);
+        model.addAttribute("companyId", companyId);
+        return "redirect:/manageus/approval/posts";
     }
 
 
-    @PostMapping("/approval/write")
+    @PostMapping("/posts/write")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> writeAjax(@RequestBody DepartmentDTO dto,
                                                          @RequestParam Long userId) {
 
-        System.out.println("Controller-userId-------------------------------------------------------"+userId);
         JsonObject JObject = approvalService.selectPositionPeople(dto, userId);
         Map<String, Object> MSO = new Gson().fromJson(JObject, Map.class);
         return ResponseEntity.ok(MSO);
     }
 
 
-    @GetMapping("/approval/{id}/info/{approvalId}")
-    public String info(@PathVariable Long companyId,
-                       @PathVariable Long id,
-                       @PathVariable Long approvalId,
+    @GetMapping("/posts/{approvalId}")
+    public String info(@PathVariable Long approvalId,
                        Principal principal, Model model) {
 
+        Long companyId = Long.parseLong(urlService.findCompanyUrl(principal.getName()));
         // GetMapping일 땐 필수 ~
-        if (!urlService.findUserInfo(principal.getName(), companyId, model)
-                || id != Long.parseLong(principal.getName())) {
-            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+        if (!urlService.isValidUser(principal.getName(), model)) {
+            return "redirect:/manageus/companies/"+companyId;
         }
         // ~ 까지
 
@@ -129,22 +123,28 @@ public class ApprovalController {
         model.addAttribute("sessionId", sessionId);
 
         // 글번호에 맞는 정보 가져오기
-        approvalService.selectApprovalDetail(approvalId, id, model);
+        approvalService.selectApprovalDetail(approvalId, sessionId, model);
         return "/company/approval/info";
     }
 
-    @RequestMapping("/approval/{id}/update/{approvalId}")
-    public String approvalUpdate(@PathVariable Long companyId,
-                                 @PathVariable Long id,
-                                 @PathVariable Long approvalId) {
-
-        System.out.println("approvalId---------------------------------------"+approvalId);
-        System.out.println("id---------------------------------------"+id);
-
+    @PutMapping("/posts/{approvalId}")
+    public String approvalUpdate(@PathVariable Long approvalId, Principal principal) {
+        Long id = Long.parseLong(principal.getName());
         approvalService.approvalUpdate(approvalId, id);
-        return "redirect:/companies/{companyId}/approval/{id}/info/{approvalId}";
+        return "redirect:/manageus/approval/posts/"+approvalId;
     }
 
+    @PutMapping("/posts/{approvalId}/reject")
+    public String approvalReject(@PathVariable Long approvalId, Principal principal,
+                                 @RequestParam("status") Long status) {
+        approvalService.approvalReject(approvalId, status);
+        //Long id = Long.parseLong(principal.getName());
+        //approvalService.approvalUpdate(approvalId, id);
+        if(principal.getName().length()==4) {
+            return "redirect:/admin/approvals" + approvalId;
+        }
+        return "redirect:/manageus/approval/posts/"+approvalId;
+    }
 }
 
 /*
