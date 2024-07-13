@@ -61,7 +61,7 @@
 
         <!-- Nav Item - Charts -->
         <li class="nav-item">
-            <a class="nav-link" href="../sample/charts.html">
+            <a class="nav-link" th:href="@{/admin/commute/users}">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>근태관리</span></a>
         </li>
@@ -71,25 +71,6 @@
             <a class="nav-link" href="../sample/charts.html">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>캘린더</span></a>
-        </li>
-
-        <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-               aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-wrench"></i>
-                <span>부서관리</span>
-            </a>
-            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                 data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">부서관리:</h6>
-                    <a class="collapse-item" th:href="@{/admin/departments}">부서</a>
-                    <a class="collapse-item" href="../sample/utilities-border.html">Borders</a>
-                    <a class="collapse-item" href="../sample/utilities-animation.html">Animations</a>
-                    <a class="collapse-item" href="../sample/utilities-other.html">Other</a>
-                </div>
-            </div>
         </li>
 
 

@@ -23,7 +23,7 @@ public class CompanyController {
         this.urlService = urlService;
     }
 
-    @GetMapping("/{companyId}")
+    @GetMapping("companies/{companyId}")
     public String companyMain(@PathVariable Long companyId, Principal principal, Model model) {
         String url = "company/main.html";
         if(!urlService.findUserInfo(principal.getName(), companyId, model)) {

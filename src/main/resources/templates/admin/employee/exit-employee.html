@@ -86,7 +86,7 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <form th:id="'form__' + ${user.id}" th:action="@{~/admin/companies/{companyId}/users/{id}(companyId=${companyId}, id=${user.id})}" method="post" th:onsubmit="handleSubmit(event, [[${user.id}]])">
+                                        <form th:id="'form__' + ${user.id}" th:action="@{~/admin/users/{id}(id=${user.id})}" method="post" th:onsubmit="handleSubmit(event, [[${user.id}]])">
                                             <input type="hidden" name="_method" value="patch" />
                                             <input type="hidden" name="userId" th:value="${user.id}" />
                                             <input th:id="'statusId__' + ${user.id}" type="hidden" name="statusId" />
