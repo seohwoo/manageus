@@ -3,6 +3,7 @@ package com.project.manageus.service;
 import com.google.gson.JsonObject;
 import com.project.manageus.dto.ApprovalDTO;
 import com.project.manageus.dto.DepartmentDTO;
+import com.project.manageus.entity.ApprovalEntity;
 import com.project.manageus.entity.ApprovalTypeEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -34,6 +35,14 @@ public interface ApprovalService {
 
     // 승인완료 업데이트
     public void approvalUpdate(Long approvalId, Long userId);
+
+    // 결재반려 업데이트
+    public void approvalReject(Long approvalId, Long status);
+
+    public Long findUserByAprovalId(Long approvalId);
+
+    public void updateForCalendar(Long approvalId);
+
 
     // 회사 번호가 같은 정보 다 가져오기
 //    public void selectCompanyId(Long companyId, Model model);

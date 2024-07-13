@@ -13,10 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Controller
 @RequestMapping("/ajax/calendar/*")
@@ -29,15 +30,12 @@ public class CalendarAjaxController {
         this.calendarService = calendarService;
     }
 
-    @GetMapping("/getCalendarList")
-    public ResponseEntity<Map<String, Object>> getCalendarList(@RequestParam Long userId, @RequestParam Long calendarType){
+    @GetMapping("/getMyCalendarList")
+    public ResponseEntity<Map<String, Object>> getMyCalendarList(@RequestParam Long userId, @RequestParam Long calendarType){
         Map<String, Object> response = new HashMap<>();
 
-        System.out.println("유저아디 ======= "+userId);
-        System.out.println("타입아이디 ======= "+calendarType);
-        CalendarEntity calendarEntity = calendarService.getCalendarId(userId,calendarType);
+        CalendarEntity calendarEntity = calendarService.getMyCalendarId(userId,calendarType);
         Long calendarId = calendarEntity.getId();
-        System.out.println("캘린더아이디 ==============="+calendarId);
         List<CalendarDetailEntity> calendarDetailEntityList = calendarService.getCalendarDetailList(calendarId);
 
         response.put("calendarDetailEntityList",calendarDetailEntityList);
@@ -53,13 +51,38 @@ public class CalendarAjaxController {
     @PostMapping("/addCalendarDetail")
     public ResponseEntity<Map<String, Object>> addCalendarDetail(@RequestBody CalendarDetailDTO calendarDetailDTO){
         Map<String, Object> response = new HashMap<>();
-        System.out.println("캘린더id======"+calendarDetailDTO.getCalendarId());
-        System.out.println("시작날짜======"+calendarDetailDTO.getStartDate());
-        System.out.println("마감날짜======"+calendarDetailDTO.getEndDate());
-        System.out.println("내용======"+calendarDetailDTO.getContent());
-        System.out.println("색깔======"+calendarDetailDTO.getColor());
 
         CalendarDetailEntity calendarDetailEntity = calendarService.addCalendarDetail(calendarDetailDTO);
+
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/getDepartmentCalendarList")
+    public ResponseEntity<Map<String, Object>> getDepartmentCalendarList(@RequestParam Long departmentId, @RequestParam Long calendarType){
+        Map<String, Object> response = new HashMap<>();
+        CalendarEntity calendarEntity = calendarService.getDepartmentCalendarId(departmentId,calendarType);
+        Long calendarId = calendarEntity.getId();
+        List<CalendarDetailEntity> calendarDetailEntityList = calendarService.getCalendarDetailList(calendarId);
+
+        response.put("calendarDetailEntityList",calendarDetailEntityList);
+        response.put("calendarId",calendarId);
+
+
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/getCompanyCalendarList")
+    public ResponseEntity<Map<String, Object>> getCompanyCalendarList(@RequestParam Long companyId, @RequestParam Long calendarType){
+        Map<String, Object> response = new HashMap<>();
+        CalendarEntity calendarEntity = calendarService.getCompanyCalendarId(companyId,calendarType);
+        Long calendarId = calendarEntity.getId();
+        List<CalendarDetailEntity> calendarDetailEntityList = calendarService.getCalendarDetailList(calendarId);
+
+        response.put("calendarDetailEntityList",calendarDetailEntityList);
+        response.put("calendarId",calendarId);
+
 
 
         return ResponseEntity.ok().body(response);

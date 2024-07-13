@@ -24,10 +24,8 @@ import java.util.Date;
         private Long id;
         @Column(name = "calendar_id")
         private Long calendarId;
-        @UpdateTimestamp
         @Column(name = "start_date")
         private Date startDate;
-        @UpdateTimestamp
         @Column(name = "end_date")
         private Date endDate;
         private String content;

@@ -146,7 +146,7 @@
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                  aria-labelledby="userDropdown">
                 <input type="hidden" id="companyId" th:value="${companyId}">
-                <a class="dropdown-item" th:href="@{/companies/{companyId}/profile/users/{id}(companyId=${companyId}, id=${id})}">
+                <a class="dropdown-item" th:href="@{/manageus/profile/users/{id}(id=${id})}">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                 </a>

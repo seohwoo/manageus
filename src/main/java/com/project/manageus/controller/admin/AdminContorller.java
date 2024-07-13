@@ -4,6 +4,7 @@ import com.project.manageus.dto.CompanyDTO;
 import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.dto.UserDTO;
 import com.project.manageus.service.AdminService;
+import com.project.manageus.service.ApprovalService;
 import com.project.manageus.service.UrlService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,13 +15,16 @@ import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor    //lombok 생성자 주입
-@RequestMapping("/admin/companies/*")
+@RequestMapping("/admin/*")
 public class AdminContorller {
 
     private final AdminService adminService;
+    private final ApprovalService approvalService;
     private final UrlService urlService;
 
-    @GetMapping("/{companyId}")
+
+    //main
+    @GetMapping("companies/{companyId}")
     public String adminMain(@PathVariable Long companyId,
                             Principal principal,
                             Model model) {
@@ -32,13 +36,15 @@ public class AdminContorller {
         return url;
     }
 
-    @GetMapping("{companyId}/users")
-    public String showAllEmployee(@PathVariable Long companyId,
-                                  @RequestParam Long statusId,
+
+    //users start
+    @GetMapping("users")
+    public String showAllEmployee(@RequestParam Long statusId,
                                   Principal principal,
                                   Model model) {
         String url = "admin/employee/employee.html";
-        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
+        Long companyId = Long.parseLong(principal.getName());
+        if(!urlService.isValidCompany(principal.getName(), model)) {
             url = "redirect:/admin/companies/" + principal.getName();
             return url;
         }
@@ -51,23 +57,24 @@ public class AdminContorller {
         return url;
     }
 
-    @PatchMapping("{companyId}/users/{id}")
-    public String updateUserInfo(@PathVariable Long companyId,
-                                 @PathVariable Long id,
+    @PatchMapping("users/{id}")
+    public String updateUserInfo(@PathVariable Long id,
                                  UserDTO userDTO) {
-        String url = "redirect:/admin/companies/" + companyId + "/users?statusId=" + adminService.findStatusIdById(id);
+        String url = "redirect:/admin/users?statusId=" + adminService.findStatusIdById(id);
         if(adminService.updateUser(userDTO)) {
-            url = "redirect:/admin/companies/" + companyId + "/users?statusId=" + userDTO.getStatusId();
+            url = "redirect:/admin/users?statusId=" + userDTO.getStatusId();
         }
         return url;
     }
+    //users end
 
-    @GetMapping("{companyId}/departments")
-    public String showDepartment(@PathVariable Long companyId,
-                                 Principal principal,
+    //departemnt start
+    @GetMapping("departments")
+    public String showDepartment(Principal principal,
                                  Model model) {
         String url = "admin/department/department.html";
-        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
+        Long companyId = Long.parseLong(principal.getName());
+        if(!urlService.isValidCompany(principal.getName(), model)) {
             url = "redirect:/admin/" + principal.getName();
             return url;
         }
@@ -75,12 +82,12 @@ public class AdminContorller {
         return url;
     }
 
-    @GetMapping("{companyId}/departments/new")
-    public String showDepartmentForm(@PathVariable Long companyId,
-                                 Principal principal,
-                                 Model model) {
+    @GetMapping("departments/new")
+    public String showDepartmentForm(Principal principal,
+                                    Model model) {
         String url = "admin/department/department-create-form.html";
-        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
+        Long companyId = Long.parseLong(principal.getName());
+        if(!urlService.isValidCompany(principal.getName(), model)) {
             url = "redirect:/admin/companies/" + principal.getName();
             return url;
         }
@@ -88,23 +95,22 @@ public class AdminContorller {
         return url;
     }
 
-    @PostMapping("{companyId}/departments")
-    public String insertDepartment(@PathVariable Long companyId,
-                                   DepartmentDTO departmentDTO) {
-        String url = "redirect:/admin/companies/" + companyId + "/departments";
+    @PostMapping("departments")
+    public String insertDepartment(DepartmentDTO departmentDTO) {
+        String url = "redirect:/admin/departments";
         if(!adminService.createDepartment(departmentDTO)) {
-            url = "redirect:/admin/companies/" + companyId + "/departments/form";
+            url = "redirect:/admin/departments/form";
         }
         return url;
     }
 
-    @GetMapping("{companyId}/departments/{departmentId}/edit")
-    public String showDepartmentUpdate(@PathVariable Long companyId,
-                                       @PathVariable Long departmentId,
-                                     Principal principal,
-                                     Model model) {
+    @GetMapping("departments/{departmentId}/edit")
+    public String showDepartmentUpdate(@PathVariable Long departmentId,
+                                       Principal principal,
+                                       Model model) {
         String url = "admin/department/department-update-form.html";
-        if(!urlService.findCompanyInfo(principal.getName(), companyId, model)) {
+        Long companyId = Long.parseLong(principal.getName());
+        if(!urlService.isValidCompany(principal.getName(),model)) {
             url = "redirect:/admin/companies/" + principal.getName();
             return url;
         }
@@ -113,17 +119,27 @@ public class AdminContorller {
         return url;
     }
 
-    @PutMapping("{companyId}/departments/{departmentId}")
+    @PutMapping("departments/{departmentId}")
     public String updateDepartment(DepartmentDTO departmentDTO) {
-        String url = "redirect:/admin/companies/" + departmentDTO.getCompanyId() + "/departments/edit";
+        String url = "redirect:/admin/departments/edit";
         if(adminService.updateDepartment(departmentDTO)) {
-            url = "redirect:/admin/companies/" + departmentDTO.getCompanyId() + "/departments";
+            url = "redirect:/admin/departments";
         }
         return url;
     }
 
+    @DeleteMapping("departments/{departmentId}")
+    public String deleteDepartment(@PathVariable Long departmentId) {
+        String url = "redirect:/admin/departments";
+        if(adminService.deleteDepartment(departmentId)) {
+            url = "redirect:/admin/departments";
+        }
+        return url;
+    }
+    //department end
 
-    @GetMapping("{companyId}/profile")
+    //profile start
+    @GetMapping("profile/companies/{companyId}")
     public String showCompanyProfile(@PathVariable Long companyId,
                                      Principal principal,
                                      Model model) {
@@ -136,7 +152,7 @@ public class AdminContorller {
         return url;
     }
 
-    @GetMapping("{companyId}/profile/edit")
+    @GetMapping("profile/companies/{companyId}/edit")
     public String showCompanyProfileForm(@PathVariable Long companyId,
                                      Principal principal,
                                      Model model) {
@@ -149,13 +165,63 @@ public class AdminContorller {
         return url;
     }
 
-    @PutMapping("{companyId}/profile")
+    @PutMapping("profile/companies/{companyId}")
     public String updateCompanyInfo(@PathVariable Long companyId,
                                     CompanyDTO companyDTO) {
-        String url = "redirect:/admin/companies/" + companyId + "/profile";
+        String url = "redirect:/admin/profile/companies/" + companyId;
         if(!adminService.updateCompanyInfo(companyDTO)) {
             url = "redirect:/admin/companies/" +companyId;
         }
         return url;
     }
+    //profile end
+
+    //approval start
+    @GetMapping("approvals")
+    public String findApprovalList(Principal principal, Model model) {
+        String url = "admin/approval/approval.html";
+        Long companyId = Long.parseLong(principal.getName());
+        if(!urlService.isValidCompany(principal.getName(), model)) {
+            url = "redirect:/admin/companies/" + principal.getName();
+            return url;
+        }
+        adminService.findAllApproval(companyId, model);
+        return url;
+    }
+
+    @GetMapping("approvals/{approvalId}")
+    public String findApproval(@PathVariable Long approvalId, Principal principal, Model model) {
+        String url = "admin/approval/approval-info.html";
+        Long companyId = Long.parseLong(principal.getName());
+        if(!urlService.isValidCompany(principal.getName(), model)) {
+            url = "redirect:/admin/companies/" + principal.getName();
+            return url;
+        }
+        Long sessionId = approvalService.findUserByAprovalId(approvalId);
+        String sessionIds = sessionId.toString();
+        model.addAttribute("sessionIds", sessionIds);
+        model.addAttribute("sessionId", sessionId);
+
+        approvalService.selectApprovalDetail(approvalId, sessionId, model);
+        return url;
+    }
+
+    @PatchMapping("approvals/{approvalId}")
+    public String approvalUpdate(@PathVariable Long approvalId,
+                                 @RequestParam("status") Long status) {
+        approvalService.approvalReject(approvalId, status);
+        return "redirect:/admin/approvals/"+approvalId;
+    }
+
+    //approval end
+
+    //attendance start
+    @GetMapping("commute/users")
+    public String findAllAttendace(Principal principal,
+                                   Model model) {
+        String url = "admin/attendance/attendance.html";
+
+        return url;
+    }
+
 }

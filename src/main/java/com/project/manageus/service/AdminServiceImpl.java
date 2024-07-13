@@ -5,6 +5,7 @@ import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.dto.UserDTO;
 import com.project.manageus.entity.*;
 import com.project.manageus.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.ui.Model;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService{
 
     private final UserRepository userRepository;
@@ -19,19 +21,7 @@ public class AdminServiceImpl implements AdminService{
     private final StatusRepository statusRepository;
     private final PositionRepository positionRepository;
     private final DepartmentRepository departmentRepository;
-
-    @Autowired
-    public AdminServiceImpl(UserRepository userRepository,
-                            CompanyRepository companyRepository,
-                            StatusRepository statusRepository,
-                            PositionRepository positionRepository,
-                            DepartmentRepository departmentRepository) {
-        this.userRepository = userRepository;
-        this.companyRepository = companyRepository;
-        this.statusRepository = statusRepository;
-        this.positionRepository = positionRepository;
-        this.departmentRepository = departmentRepository;
-    }
+    private final ApprovalJPARepository approvalJPARepository;
 
     @Override
     public void findAllEmployee(Long companyId,Long statusId, Model model) {
@@ -120,6 +110,19 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
+    public boolean deleteDepartment(Long departmentId) {
+        boolean result = false;
+        Optional<DepartmentEntity> optionalDepartment = departmentRepository.findById(departmentId);
+        if(optionalDepartment.isPresent()) {
+            if(userRepository.countByDepartmentId(departmentId) == 0) {
+                departmentRepository.delete(optionalDepartment.get());
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @Override
     public void findDepartmentById(Long departmentId, Model model) {
         Optional<DepartmentEntity> optionalDepartment = departmentRepository.findById(departmentId);
         if(optionalDepartment.isPresent()) {
@@ -156,6 +159,12 @@ public class AdminServiceImpl implements AdminService{
             result = true;
         }
         return result;
+    }
+
+    @Override
+    public void findAllApproval(Long companyId, Model model) {
+        List<ApprovalEntity> approvalEntities = approvalJPARepository.findByCompanyIdOrderBySignOnDesc(companyId);
+        model.addAttribute("approvalEntities", approvalEntities);
     }
 
 }

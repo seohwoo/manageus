@@ -27,7 +27,7 @@ public class CompanyController {
     public String companyMain(@PathVariable Long companyId, Principal principal, Model model) {
         String url = "company/main.html";
         if(!urlService.findUserInfo(principal.getName(), companyId, model)) {
-            url = "redirect:/manageus/" + urlService.findCompanyUrl(principal.getName());
+            url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
         }
         return url;
