@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/companies/{companyId}/*")
+@RequestMapping("/manageus/alarm/*")
 public class AlarmController {
 
     private final AlarmService alarmService;
@@ -28,15 +28,13 @@ public class AlarmController {
         this.urlService = urlService;
     }
 
-    @GetMapping("/alarm/{id}/form")  // 쪽지 작성하는 곳
-    public String write(Model model, Principal principal, @PathVariable Long companyId,
-                        @PathVariable Long id ) {
+    @GetMapping("/messages/new")  // 쪽지 작성하는 곳
+    public String write(Model model, Principal principal ) {
+        Long companyId = Long.parseLong(urlService.findCompanyUrl(principal.getName()));
 
+        if (!urlService.isValidUser(principal.getName(), model)) {
 
-        if (!urlService.findUserInfo(principal.getName(), companyId, model)
-                || id != Long.parseLong(principal.getName())) {
-
-            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+            return "redirect:/manageus/companies/" +companyId ;
         }
 
         alarmService.getdepartment(companyId, model );  // 회사아이디로 부서 찾기
@@ -78,9 +76,9 @@ public class AlarmController {
 
     // 포스트 매핑 처리해야됨
 
-    @PostMapping("/alarm/{id}/formpro")
-    public String writepro(Principal principal, AlarmDTO alarmDTO, @PathVariable Long companyId,
-                           @PathVariable Long id, @RequestParam("readers[]") List<String> readers,
+    @PostMapping("/messages")
+    public String writepro(Principal principal, AlarmDTO alarmDTO,
+                           @RequestParam("readers[]") List<String> readers,
                            @RequestParam("subject") String subject) {
 
         Long userId = Long.parseLong(principal.getName());
@@ -96,7 +94,7 @@ public class AlarmController {
             alarmService.insert(alarmDTO);
         }
 
-        return "redirect:/companies/" + companyId + "/alarm/" + id + "/spend";
+        return "redirect:/manageus/alarm/messages/spend";
     }
 
 
@@ -106,16 +104,14 @@ public class AlarmController {
 
 
     // 아래는 내가 받은 쪽지 내역
-    @GetMapping("/alarm/{id}/receive")  // 받은 쪽지
-    public String receive(Model model, Principal principal, @PathVariable Long companyId,
-                          @PathVariable Long id) {
+    @GetMapping("/messages/receive")  // 받은 쪽지
+    public String receive(Model model, Principal principal) {
 
         Long userId = Long.parseLong(principal.getName()); // 세션 받아오기
 
-        if (!urlService.findUserInfo(principal.getName(), companyId, model)
-                || id != Long.parseLong(principal.getName())) {
+        if (!urlService.isValidUser(principal.getName(), model)) {
 
-            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+            return "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
         }
 
         alarmService.receive(userId, model);
@@ -125,20 +121,13 @@ public class AlarmController {
     }
 
 
-
-
-
-
     //받은내용 읽기
 
-    @GetMapping("/alarm/{id}/readreceive/{messageId}") //받은쪽지 읽기
-    public String readreceive(Model model, Principal principal, @PathVariable Long companyId,
-                              @PathVariable Long id, @PathVariable Long messageId){
+    @GetMapping("/messages/{messageId}/receive") //받은쪽지 읽기
+    public String readreceive(Model model, Principal principal, @PathVariable Long messageId){
 
-        if (!urlService.findUserInfo(principal.getName(), companyId, model)
-                || id != Long.parseLong(principal.getName())) {
-
-            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+        if (!urlService.isValidUser(principal.getName(), model)) {
+            return "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
         }
 
         alarmService.readcount(messageId);
@@ -148,17 +137,16 @@ public class AlarmController {
     }
 
 
+
     // 아래는 내가 보낸 쪽지 내역
-    @GetMapping("/alarm/{id}/spend") // 내가 보낸 쪽지 내역
-    public String spend(Model model, Principal principal, @PathVariable Long companyId,
-                        @PathVariable Long id) {
+    @GetMapping("/messages/spend") // 내가 보낸 쪽지 내역
+    public String spend(Model model, Principal principal) {
 
         Long userId = Long.parseLong(principal.getName()); // 세션 받아오기
 
-        if (!urlService.findUserInfo(principal.getName(), companyId, model)
-                || id != Long.parseLong(principal.getName())) {
+        if (!urlService.isValidUser(principal.getName(), model)) {
 
-            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+            return "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
         }
 
         alarmService.spendalarm(userId, model); // 보낸 내역 전체 가져오기
@@ -166,16 +154,11 @@ public class AlarmController {
         return "/company/alarm/spend";
     }
 
-    @GetMapping("/alarm/{id}/readspend/{messageId}")  // 보낸내역 상세 보기
-    public String readspend(Model model, Principal principal, @PathVariable Long companyId,
-                            @PathVariable Long id, @PathVariable Long messageId){
-        
-        Long userId = Long.parseLong(principal.getName());
+    @GetMapping("/messages/{messageId}/spend")  // 보낸내역 상세 보기
+    public String readspend(Model model, Principal principal, @PathVariable Long messageId){
 
-        if (!urlService.findUserInfo(principal.getName(), companyId, model)
-                || id != Long.parseLong(principal.getName())) {
-
-            return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
+        if (!urlService.isValidUser(principal.getName(), model)) {
+            return "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
         }
 
         alarmService.readspend(messageId, model);

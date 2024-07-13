@@ -49,7 +49,7 @@
 
                 // AJAX 요청 보내기
                 $.ajax({
-                    url: '/companies/' + companyId + '/alarmnumber/number',
+                    url: '/manageus/alarm/alarmnumber/number',
                     type: "POST",
                     contentType: 'application/json',
                     data: JSON.stringify({ companyId: companyId, id: id }),
