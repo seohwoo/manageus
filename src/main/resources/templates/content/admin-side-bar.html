@@ -28,6 +28,24 @@
         </div>
 
         <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item" th:if="${auth==1}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+               aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>SUPER</span>
+            </a>
+            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">문의하기:</h6>
+                    <a class="collapse-item" th:href="@{/super/board?type=1}">전체</a>
+                    <a class="collapse-item" th:href="@{/super/board?type=2}">미답변</a>
+                    <a class="collapse-item" th:href="@{/super/board?type=3}">답변</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
@@ -40,7 +58,6 @@
                     <a class="collapse-item" th:href="@{/admin/users(statusId=1002, companyId=${companyId})}">사원</a>
                     <a class="collapse-item" th:href="@{/admin/users(statusId=1001, companyId=${companyId})}">승인대기</a>
                     <a class="collapse-item" th:href="@{/admin/users(statusId=1003, companyId=${companyId})}">탈퇴</a>
-
                 </div>
             </div>
         </li>

@@ -63,6 +63,7 @@ public class UrlServiceImpl implements UrlService{
                 model.addAttribute("companyId", companyId);
                 model.addAttribute("company", optionalCompany.get().getName());
                 model.addAttribute("ceo", optionalCompany.get().getCeo());
+                model.addAttribute("auth", optionalCompany.get().getAuthId());
             }
             result = true;
         }
@@ -105,6 +106,7 @@ public class UrlServiceImpl implements UrlService{
             model.addAttribute("companyId", companyId);
             model.addAttribute("company", optionalCompany.get().getName());
             model.addAttribute("ceo", optionalCompany.get().getCeo());
+            model.addAttribute("auth", optionalCompany.get().getAuthId());
             result = true;
         }
         return result;
