@@ -181,9 +181,7 @@ public class ChatServiceImpl implements ChatService {
         if(room.isPresent()){
             ChatRoomDTO dto = room.get().toChatRoomDTO();
 
-            System.out.println("==============="+dto);
             dto.setName(newRoomName);
-            System.out.println("==============="+dto);
             chatRoomJPA.save(dto.toChatRoomEntity());
 
         }
@@ -194,13 +192,9 @@ public class ChatServiceImpl implements ChatService {
         ChatIDEntity chatID = new ChatIDEntity();
         chatID.setUserId(dto.getUserId());
         chatID.setChatRoomId(dto.getChatRoomId());
-        System.out.println("==============================");
         Optional<ChatEntity> oce =chatJPA.findById(chatID);
-        System.out.println("=============================="+oce.get());
         if(oce.isPresent()){
-            System.out.println("==============================");
             chatJPA.save(dto.toChatEntity());
-            System.out.println("==============================");
         }
 
     }
@@ -211,9 +205,7 @@ public class ChatServiceImpl implements ChatService {
         List<ChatCheckDTO> checkList = new ArrayList<>();
        List<ChatEntity> chatlist=chatJPA.findByUserId(id);
        for(ChatEntity ce:chatlist){
-           System.out.println("============================chatAlarm"+ce.getLastTime());
            List<ChatMessageEntity> messagelist = chatMessageJPA.findByChatRoomIdAndRegGreaterThan(ce.getChatRoomId(),ce.getLastTime());
-           System.out.println("============================chatAlarm"+messagelist);
           if(messagelist.size()>0){
               ChatCheckDTO dto = new ChatCheckDTO();
               dto.setCount(messagelist.size());
@@ -221,7 +213,6 @@ public class ChatServiceImpl implements ChatService {
               dto.setChatRoomId(messagelist.get(0).getChatRoomId());
               dto.setId(id);
               checkList.add(dto);
-              System.out.println("============================chatAlarm"+dto);
               totalCount=totalCount+messagelist.size();
           }
 

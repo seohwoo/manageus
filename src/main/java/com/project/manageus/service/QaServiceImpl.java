@@ -103,7 +103,6 @@ public class QaServiceImpl implements QaService{
                list.add(qe.toQaDTO());
             }
 
-            System.out.println("count : "+count+"list : " +list);
         }
 
         model.addAttribute("list",list);
@@ -126,7 +125,6 @@ public class QaServiceImpl implements QaService{
                     mdto.setTitle("문의글 답변입니다.");
                     mdto.setText(content);
                     sendMail(mdto);
-                    System.out.println("========================"+mdto);
                 }
                 content = "<온라인 답변> "+ content;
             }
