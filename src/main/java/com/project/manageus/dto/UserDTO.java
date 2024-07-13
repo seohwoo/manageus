@@ -20,6 +20,14 @@ public class UserDTO {
     private Long departmentId;
     private Date regDate;
 
+    //Join
+    private String name;
+    private String positionName;
+    private String departmentName;
+    private Date startDate;
+    private Date endDate;
+    private String note;
+
     @Builder
     public UserDTO(Long id, String password, Long positionId, Long companyId, Long statusId, Long authId, Long departmentId, Date regDate) {
         super();

@@ -6,10 +6,12 @@ import com.project.manageus.dto.UserDTO;
 import com.project.manageus.entity.*;
 import com.project.manageus.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -22,6 +24,9 @@ public class AdminServiceImpl implements AdminService{
     private final PositionRepository positionRepository;
     private final DepartmentRepository departmentRepository;
     private final ApprovalJPARepository approvalJPARepository;
+    private final AttendanceRepository attendanceRepository;
+    private final AttendanceCRUDRepository attendanceCRUDRepository;
+
 
     @Override
     public void findAllEmployee(Long companyId,Long statusId, Model model) {
@@ -165,6 +170,38 @@ public class AdminServiceImpl implements AdminService{
     public void findAllApproval(Long companyId, Model model) {
         List<ApprovalEntity> approvalEntities = approvalJPARepository.findByCompanyIdOrderBySignOnDesc(companyId);
         model.addAttribute("approvalEntities", approvalEntities);
+    }
+
+    public void findAllAttendance(Long companyId, Model model) {
+        Optional<CompanyEntity> optionalCompany = companyRepository.findById(companyId);
+        if (optionalCompany.isPresent()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date currentDate = new Date();
+            String startTime = sdf.format(currentDate);
+
+            model.addAttribute("currentDate", currentDate);
+            model.addAttribute("allCnt", companyRepository.count());
+            model.addAttribute("startCnt", attendanceCRUDRepository.countByStartTimeStartingWith(startTime));
+
+            List<UserEntity> userEntityList = userRepository.findAllByCompanyId(companyId);
+            List<UserDTO> userDTOList = new ArrayList<>();
+            for (UserEntity userEntity : userEntityList) {
+                UserDTO userDTO = userEntity.toUserDTO();
+                userDTO.setName(userEntity.getUserInfo().getName());
+                userDTO.setPositionName(userEntity.getPosition()==null ? "직급미정" : userEntity.getPosition().getName());
+                userDTO.setDepartmentName(userEntity.getDepartment()==null ? "부서미정" : userEntity.getDepartment().getName());
+                if(attendanceCRUDRepository.countByUserIdAndStartTimeStartingWith(userDTO.getId(), startTime) == 1) {
+                    Optional<AttendanceEntity> optionalAttendance = attendanceCRUDRepository.findByUserIdAndStartTimeStartingWith(userDTO.getId(), startTime);
+                    if(optionalAttendance.isPresent()) {
+                        userDTO.setStartDate(optionalAttendance.get().getStartTime());
+                        userDTO.setEndDate(optionalAttendance.get().getEndTime());
+                        userDTO.setNote(optionalAttendance.get().getNote());
+                    }
+                }
+                userDTOList.add(userDTO);
+            }
+            model.addAttribute("userDTOList", userDTOList);
+        }
     }
 
 }

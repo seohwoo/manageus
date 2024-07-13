@@ -51,10 +51,10 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>1</td>
-                                    <td>인사팀</td>
-                                    <td>5</td>
-                                    <td></td>
+                                    <td th:text="${#dates.format(currentDate, 'yyyy/MM/dd')}"></td>
+                                    <td th:text="${allCnt}"></td>
+                                    <td th:text="${startCnt}"></td>
+                                    <td th:text="${allCnt - startCnt}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -65,24 +65,24 @@
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th>번호</th>
-                                    <th>부서명</th>
-                                    <th>총인원</th>
+                                    <th>사원번호</th>
+                                    <th>이름</th>
+                                    <th>부서</th>
+                                    <th>직급</th>
+                                    <th>출근시간</th>
+                                    <th>퇴근시간</th>
                                     <th>비고</th>
-                                    <th></th>
-                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>인사팀</td>
-                                    <td>5</td>
-                                    <td></td>
-                                    <td>
-                                    </td>
-                                    <td>
-                                    </td>
+                                <tr th:each="user : ${userDTOList}">
+                                    <td th:text="${user.id}"></td>
+                                    <td th:text="${user.name}"></td>
+                                    <td th:text="${user.departmentName}">부서없음</td>
+                                    <td th:text="${user.positionName}">직급없음</td>
+                                    <td th:text="${#dates.format(user.startDate, 'HH시mm분SS초')}"></td>
+                                    <td th:text="${#dates.format(user.endDate, 'HH시mm분SS초')}"></td>
+                                    <td th:text="${user.note}"></td>
                                 </tr>
                                 </tbody>
                             </table>

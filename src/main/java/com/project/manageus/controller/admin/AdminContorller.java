@@ -220,7 +220,12 @@ public class AdminContorller {
     public String findAllAttendace(Principal principal,
                                    Model model) {
         String url = "admin/attendance/attendance.html";
-
+        Long companyId = Long.parseLong(principal.getName());
+        if(!urlService.isValidCompany(principal.getName(), model)) {
+            url = "redirect:/admin/companies/" + principal.getName();
+            return url;
+        }
+        adminService.findAllAttendance(companyId, model);
         return url;
     }
 
