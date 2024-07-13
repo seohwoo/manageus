@@ -20,13 +20,6 @@
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
 
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <a class="nav-link" th:href="@{/manageus/companies/{companyId}(companyId=${companyId})}">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a>
-        </li>
-
         <!-- Divider -->
         <hr class="sidebar-divider">
 
@@ -35,21 +28,6 @@
             Interface
         </div>
 
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#chatarea"
-               aria-expanded="true" aria-controls="chatarea">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>채팅</span>
-            </a>
-            <div id="chatarea" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Custom Components:</h6>
-                    <a class="collapse-item" th:href="@{/manageus/chat}">채팅방목록</a>
-                    <a class="collapse-item" href="../sample/cards.html"></a>
-                </div>
-            </div>
-        </li>
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
@@ -59,63 +37,12 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Custom Components:</h6>
-                    <a class="collapse-item" th:href="@{/companies/{companyId}/alarm/{id}/form(companyId=${companyId}, id=${id})}">쪽지 보내기</a>
-                    <a class="collapse-item" th:href="@{/companies/{companyId}/alarm/{id}/receive(companyId=${companyId}, id=${id})}">보낸 쪽지함</a>
-                    <a class="collapse-item" th:href="@{/companies/{companyId}/alarm/{id}/spend(companyId=${companyId}, id=${id})}">받은 쪽지함</a>
+                    <a class="collapse-item" th:href="@{/manageus/alarm/messages/new}">쪽지 보내기</a>
+                    <a class="collapse-item" th:href="@{/manageus/alarm/messages/spend}">보낸 쪽지함</a>
+                    <a class="collapse-item" th:href="@{/manageus/alarm/messages/receive}">받은 쪽지함</a>
                 </div>
             </div>
         </li>
-
-        <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-               aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-wrench"></i>
-                <span>Utilities</span>
-            </a>
-            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                 data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Custom Utilities:</h6>
-                    <a class="collapse-item" href="../sample/utilities-color.html">Colors</a>
-                    <a class="collapse-item" href="../sample/utilities-border.html">Borders</a>
-                    <a class="collapse-item" href="../sample/utilities-animation.html">Animations</a>
-                    <a class="collapse-item" href="../sample/utilities-other.html">Other</a>
-                </div>
-            </div>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Addons
-        </div>
-
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-               aria-expanded="true" aria-controls="collapsePages">
-                <i class="fas fa-fw fa-folder"></i>
-                <span>Pages</span>
-            </a>
-            <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Login Screens:</h6>
-                    <a class="collapse-item" href="../sample/login.html">Login</a>
-                    <a class="collapse-item" href="../sample/register.html">Register</a>
-                    <a class="collapse-item" href="../sample/forgot-password.html">Forgot Password</a>
-                    <div class="collapse-divider"></div>
-                    <h6 class="collapse-header">Other Pages:</h6>
-                    <a class="collapse-item" href="../sample/404.html">404 Page</a>
-                    <a class="collapse-item" href="../sample/blank.html">Blank Page</a>
-                </div>
-            </div>
-        </li>
-
-
-
         <!-- 여기부터 url 적어주면돼 -->
         <!-- Nav Item - Charts -->
         <li class="nav-item">
@@ -125,42 +52,44 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/manageus/approval/posts}">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>쪽지</span></a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/manageus/approval/posts}">
+            <a class="nav-link" th:href="@{/manageus/chat}">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>채팅</span></a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/manageus/approval/posts}">
+            <a class="nav-link" th:href="@{/manageus/attendance/users/{id}(id=${id})}">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>근태</span></a>
         </li>
 
+        <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/manageus/approval/posts}">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>캘린더</span></a>
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+               aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>캘린더</span>
+            </a>
+            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">달력:</h6>
+                    <a class="collapse-item" th:href="@{/manageus/calendar/companies/{companyId}(companyId=${companyId})}">회사</a>
+                    <a class="collapse-item" th:href="@{/manageus/calendar/department/{departmentId}(departmentId=${departmentId})}">부서</a>
+                    <a class="collapse-item" th:href="@{/manageus/calendar/users/{id}(id=${id})}">개인</a>
+                </div>
+            </div>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/manageus/approval/posts}">
+            <a class="nav-link" th:href="@{/manageus/project/users/{id}(id=${id})}">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>프로젝트</span></a>
         </li>
         <!-- 여기까지다 -->
 
-        <!-- Nav Item - Tables -->
-        <li class="nav-item">
-            <a class="nav-link" href="../sample/tables.html">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Tables</span></a>
-        </li>
+        <!-- Divider -->
+        <hr class="sidebar-divider">
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
@@ -168,13 +97,6 @@
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
-        </div>
-
-        <!-- Sidebar Message -->
-        <div class="sidebar-card d-none d-lg-flex">
-            <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
-            <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-            <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
         </div>
 
     </ul>
