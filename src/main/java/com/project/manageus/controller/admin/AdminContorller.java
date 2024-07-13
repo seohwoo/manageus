@@ -219,7 +219,7 @@ public class AdminContorller {
     @GetMapping("commute/users")
     public String findAllAttendace(Principal principal,
                                    Model model) {
-        String url = "";
+        String url = "admin/attendance/attendance.html";
 
         return url;
     }
