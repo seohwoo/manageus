@@ -202,7 +202,6 @@ public class AdminContorller {
         model.addAttribute("sessionIds", sessionIds);
         model.addAttribute("sessionId", sessionId);
 
-        // 글번호에 맞는 정보 가져오기
         approvalService.selectApprovalDetail(approvalId, sessionId, model);
         return url;
     }
@@ -212,6 +211,17 @@ public class AdminContorller {
                                  @RequestParam("status") Long status) {
         approvalService.approvalReject(approvalId, status);
         return "redirect:/admin/approvals/"+approvalId;
+    }
+
+    //approval end
+
+    //attendance start
+    @GetMapping("commute/users")
+    public String findAllAttendace(Principal principal,
+                                   Model model) {
+        String url = "";
+
+        return url;
     }
 
 }
