@@ -2,9 +2,7 @@ package com.project.manageus.service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.project.manageus.dto.ApprovalDTO;
-import com.project.manageus.dto.ApprovalDetailDTO;
-import com.project.manageus.dto.DepartmentDTO;
+import com.project.manageus.dto.*;
 import com.project.manageus.entity.*;
 import com.project.manageus.repository.*;
 import org.slf4j.Logger;
@@ -31,18 +29,25 @@ public class ApprovalServiceImpl implements ApprovalService {
     private final UserRepository userRepository;
     private final DepartmentRepository departmentRepository;
 
+    private final CalendarJPARepository calendarJPARepository;
+    private final CalendarDetailRepository calendarDetailRepository;
+
     @Autowired
     public ApprovalServiceImpl(ApprovalJPARepository approvalJPA,
                                ApprovalTypeJPARepository approvalTypeJPA,
                                ApprovalDetailJPARepository approvalDetailJPA,
                                UserRepository userRepository,
-                               DepartmentRepository departmentRepository) {
+                               DepartmentRepository departmentRepository,
+                               CalendarJPARepository calendarJPARepository,
+                               CalendarDetailRepository calendarDetailRepository) {
 
         this.approvalJPA = approvalJPA;
         this.approvalTypeJPA = approvalTypeJPA;
         this.approvalDetailJPA = approvalDetailJPA;
         this.userRepository = userRepository;
         this.departmentRepository = departmentRepository;
+        this.calendarJPARepository = calendarJPARepository;
+        this.calendarDetailRepository = calendarDetailRepository;
     }
 
     private static final Logger logger = LoggerFactory.getLogger(ApprovalServiceImpl.class);
@@ -265,6 +270,62 @@ public class ApprovalServiceImpl implements ApprovalService {
             result = optionalApproval.get().getUserId();
         }
         return result;
+    }
+
+    @Override
+    public void updateForCalendar(Long approvalId) {
+
+        Optional<ApprovalEntity> approvalEntity = approvalJPA.findById(approvalId);
+        Long id = approvalJPA.findById(approvalId).get().getUserId();
+        Long companyId = userRepository.findById(id).get().getCompanyId();
+        Long departmentId = userRepository.findById(id).get().getDepartmentId();
+        Long departmentCalendarType = 1L;
+        Long myCalendarType = 2L;
+        String userName = userRepository.findById(id).get().getUserInfo().getName();
+        int departmentCalendarCount = calendarJPARepository.countByDepartmentIdAndCalendarType(departmentId,departmentCalendarType);
+        int myCalendarCount = calendarJPARepository.countByUserIdAndCalendarType(id,myCalendarType);
+
+        if(departmentCalendarCount == 0){
+            CalendarDTO calendarDTO = new CalendarDTO();
+            calendarDTO.setCompanyId(companyId);
+            calendarDTO.setDepartmentId(departmentId);
+            calendarDTO.setCalendarType(departmentCalendarType);
+            calendarJPARepository.save(calendarDTO.toCalendarEntity());
+        }
+
+        if(myCalendarCount == 0){
+            CalendarDTO calendarDTO = new CalendarDTO();
+            calendarDTO.setCompanyId(companyId);
+            calendarDTO.setDepartmentId(departmentId);
+            calendarDTO.setUserId(id);
+            calendarDTO.setCalendarType(myCalendarType);
+            calendarJPARepository.save(calendarDTO.toCalendarEntity());
+        }
+
+
+        Long myCalendarId = calendarJPARepository.findByUserId(id).getId();
+
+        Long departmentCalendarId = calendarJPARepository.findByDepartmentIdAndCalendarType(departmentId,departmentCalendarType).getId();
+
+        if(myCalendarId != null){
+            CalendarDetailDTO calendarDetailDTO = new CalendarDetailDTO();
+            calendarDetailDTO.setCalendarId(myCalendarId);
+            calendarDetailDTO.setStartDate(approvalEntity.get().getStartDate());
+            calendarDetailDTO.setEndDate(approvalEntity.get().getEndDate());
+            calendarDetailDTO.setContent(userName+" 휴가");
+            calendarDetailRepository.save(calendarDetailDTO.toCalendarDetailEntity());
+        }
+
+        if(departmentCalendarId != null){
+            CalendarDetailDTO calendarDetailDTO = new CalendarDetailDTO();
+            calendarDetailDTO.setCalendarId(departmentCalendarId);
+            calendarDetailDTO.setStartDate(approvalEntity.get().getStartDate());
+            calendarDetailDTO.setEndDate(approvalEntity.get().getEndDate());
+            calendarDetailDTO.setContent(userName+" 휴가");
+            calendarDetailRepository.save(calendarDetailDTO.toCalendarDetailEntity());
+
+        }
+
     }
 }
 /*

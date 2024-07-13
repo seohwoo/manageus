@@ -26,13 +26,7 @@ public class CalendarServiceImpl implements CalendarService {
     private final UserRepository userRepository;
 
 
-    @Override
-    public void calendarlist(Model model, Long id) {
 
-        List<CalendarEntity> cal = calendarJPARepository.findByUserId(id);
-
-        model.addAttribute("cal",cal);
-    }
 
     /*달력 내용 에이젝스 (팀달력)*/
     @Override

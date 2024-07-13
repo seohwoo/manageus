@@ -3,6 +3,7 @@ package com.project.manageus.controller.company;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.project.manageus.dto.ApprovalDTO;
+import com.project.manageus.dto.CalendarDetailDTO;
 import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.entity.ApprovalTypeEntity;
 import com.project.manageus.entity.UserEntity;
@@ -28,7 +29,7 @@ import java.util.Map;
 // http://localhost:8080/manageus/approval/posts
 @Controller
 @RequestMapping("/manageus/approval/*")
-public class ApprovalController {
+public class                                                                                                                                                     ApprovalController {
 
     private final ApprovalService approvalService;
     private final UrlService urlService;
@@ -130,7 +131,11 @@ public class ApprovalController {
     @PutMapping("/posts/{approvalId}")
     public String approvalUpdate(@PathVariable Long approvalId, Principal principal) {
         Long id = Long.parseLong(principal.getName());
+
         approvalService.approvalUpdate(approvalId, id);
+        approvalService.updateForCalendar(approvalId);
+
+
         return "redirect:/manageus/approval/posts/"+approvalId;
     }
 

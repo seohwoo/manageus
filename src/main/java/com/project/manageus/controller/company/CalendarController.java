@@ -37,7 +37,6 @@ public class CalendarController {
         }
         Long calendarType = 2L;
         int myCalendarCount = calendarService.myCalendarCount(id,calendarType);
-        System.out.println("달력카운트=============="+myCalendarCount);
         if(myCalendarCount == 0){
             CalendarDTO calendarDTO = new CalendarDTO();
             calendarDTO.setCompanyId(companyId);
@@ -45,24 +44,12 @@ public class CalendarController {
             calendarDTO.setUserId(id);
             calendarDTO.setCalendarType(calendarType);
             calendarService.addMyCalendar(calendarDTO);
-            System.out.println("마이캘린더 등록 완료");
         }
 
         model.addAttribute("companyId",companyId);
         return "/company/calendars/mycalendar";
     }
 
-    /*ajax 사용 팀원 달력 내용불러오기*/
-    @GetMapping("/calendar/{id}/events")
-    @ResponseBody
-    public List<CalendarEntity> getEvents(@PathVariable Long id, @PathVariable Long companyId) {
-
-        System.out.println("======="+ "정상작동"+id);
-        System.out.println("======="+ "정상작동"+companyId);
-
-
-        return calendarService.getEventsByUserId(id);
-    }
 
     @GetMapping("/department/{departmentId}") /* 부서달력 */
     public String teamCalendar(Model model, Principal principal,

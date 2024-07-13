@@ -181,7 +181,6 @@ public class ProjectController {
         String url = "/company/project/updateProjectDetailPro.html";
         projectDetailDTO.setId(projectDetailId);
         projectDetailDTO.setUserId(detailUserId);
-        System.out.println("프로젝트디테일아이디======="+projectDetailDTO.getId());
         if(!urlService.isValidUser(principal.getName(),model)) {
             url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;

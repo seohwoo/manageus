@@ -55,15 +55,11 @@ public class ProjectAjaxController {
 
     @GetMapping("/getCompanyMember")
     public ResponseEntity<Map<String, Object>> getCompanyMember(Long companyId, Long myId){
-        System.out.println("companyId ========"+companyId);
-        System.out.println("myId ==============="+myId);
         Map<String, Object> response = new HashMap<>();
         List<HashMap<Long,String>> companyMemberList = new ArrayList<>();
         List<UserEntity> userEntityList = projectService.getCompanyUser(companyId);
 
         for(UserEntity s : userEntityList){
-            System.out.println("반복문안아이디 ==============="+s.getId());
-            System.out.println("myId ==============="+myId);
             if(!s.getId().equals(myId)) {
                 UserInfoEntity userInfo = projectService.getUserInfo(s.getId());
                 if (userInfo != null) {

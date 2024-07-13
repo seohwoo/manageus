@@ -55,7 +55,6 @@ public class AttendanceAjaxController {
         int sameResult = 0;
         for(AttendanceEntity s : attendanceList){
             attendanceDateString = dateFormat.format(s.getDate());
-            System.out.println("디비속 날짜 ========"+attendanceDateString);
             if(attendanceDateString.equals(currentDateString)){
                 sameResult = 1;
             }
@@ -78,7 +77,6 @@ public class AttendanceAjaxController {
     public ResponseEntity<Map<String, Object>> outCompany(@RequestBody Map<String, Object> requestData){
         Long userId = Long.valueOf(requestData.get("userId").toString());
         Map<String, Object> response = new HashMap<>();
-        System.out.println("userId=========="+userId);
         Date endTime = new Date();
         List<AttendanceEntity> attendanceList = attendanceService.getAttendanceList(userId);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -96,7 +94,6 @@ public class AttendanceAjaxController {
                 break;
             }
         }
-        System.out.println("id값========"+id);
         int outResult = 0;
         if(id.equals(-1L)){
             outResult = -1;

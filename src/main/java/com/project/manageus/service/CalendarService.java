@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 public interface CalendarService {
 
 
-    public void calendarlist(Model model, Long id);
+
 
     List<CalendarEntity> getEventsByUserId(Long id);
     public CalendarEntity getMyCalendarId(Long userId, Long calendarType);

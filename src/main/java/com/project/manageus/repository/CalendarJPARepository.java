@@ -10,7 +10,7 @@ import java.util.List;
 public interface CalendarJPARepository extends JpaRepository <CalendarEntity, Long> {
 
 
-   public List<CalendarEntity> findByUserId(Long id);
+   public CalendarEntity findByUserId(Long id);
 
 
    @Query("SELECT c FROM CalendarEntity c JOIN CalendarDetailEntity cd ON c.id = cd.id WHERE c.userId = :id")
