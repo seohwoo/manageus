@@ -120,7 +120,6 @@ public class ChatController {
     @PostMapping("/invitations/names")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getInvitationsNames(@RequestBody ChatRoomDTO dto) {
-        System.out.println("===========================dto"+dto);
         JsonObject names = service.getNamesfromDepartment(dto);
         // JsonObject를 Map으로 변환
         Map<String, Object> result = new Gson().fromJson(names, Map.class);

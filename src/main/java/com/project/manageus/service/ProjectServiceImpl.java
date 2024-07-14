@@ -44,7 +44,6 @@ public class ProjectServiceImpl implements ProjectService{
         List<ProjectEntity> myProjectEntityList = new ArrayList<>();
         for(ProjectMemberEntity s : myProjectIdList){
             Long pId = s.getProjectId();
-            System.out.println(pId);
             ProjectEntity pe = projectRepository.findAllById(pId);
             myProjectEntityList.add(pe);
         }

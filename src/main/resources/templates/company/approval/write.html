@@ -219,8 +219,6 @@ function removeApprover(div) {
             var departmentId = event.target.value;
             var companyId = document.getElementById("companyId").value;
             var currentUserId = document.getElementById("currentUserId").value;
-
-            console.log(departmentId);
             $.ajax({
                 url: '/manageus/approval/posts/write?userId=' + currentUserId,
                 type: 'POST',
@@ -237,10 +235,8 @@ function removeApprover(div) {
                         // value, text 추가
                         personSelect.add(option);
                     });
-                    console.log('성공');
                 },
                 error: function(error) {
-                    console.log('오류', error);
                 }
             });
         }

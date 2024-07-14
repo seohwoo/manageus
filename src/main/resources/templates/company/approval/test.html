@@ -20,8 +20,6 @@
     function getPersons() {
         var companyId = $("#companyId").val();
         var departmentId = document.getElementById("departmentSelect").value;
-        console.log(companyId);
-        console.log(departmentId);
         $.ajax({
             url: '/companies/invitations/names',
             type: 'POST',
@@ -37,10 +35,8 @@
                     option.text = person.fullName;
                     personSelect.add(option);
                 });
-                console.log('성공');
             },
             error: function(error) {
-                console.log('오류', error);
             }
         });
     }

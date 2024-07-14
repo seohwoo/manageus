@@ -41,7 +41,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Blank</title>
+    <title>ManageUs 근태</title>
 
     <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -83,7 +83,6 @@
 
         const userId = $('#userId').val(); // 사용자 ID
         const companyId = $('#companyId').val();
-        console.log('companyId:'+companyId);
 
 
 
@@ -104,7 +103,6 @@
 
             // 퇴근 버튼 클릭 시 처리
             $('#check-out').click(function() {
-                console.log('userId :'+userId);
                 // 예시로 데이터를 업데이트하는 함수 호출
                 outCompany(userId);
             });
@@ -126,7 +124,6 @@
                         note: note
                     }),
                     success: function(response) {
-                        console.log("Attendance updated successfully:", response);
 
                         // 시간 데이터를 화면에 업데이트
                         if(response.sameResult == 0){
@@ -140,7 +137,6 @@
 
                     },
                     error: function(xhr, status, error) {
-                        console.error('Failed to update attendance', error);
                         alert('출근 또는 퇴근 시간을 업데이트하는 도중 오류가 발생했습니다.');
                     }
                 });
@@ -156,7 +152,6 @@
                         userId: userId
                     }),
                     success: function(response) {
-                        console.log("Attendance updated successfully:", response);
 
                         if(response.outResult == 0){
                             alert("이미 퇴근처리되었습니다.");
@@ -170,7 +165,6 @@
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error('Failed to update attendance', error);
                         alert('출근 또는 퇴근 시간을 업데이트하는 도중 오류가 발생했습니다.');
                     }
                 });
@@ -194,7 +188,6 @@
             contentType: "application/json; charset=utf-8",
             data: { userId: userId },
             success: function(response) {
-                console.log("Received data:", response);
 
                 const data = response.attendanceList;
 
@@ -212,11 +205,9 @@
                         $(`#note-${localDate}`).text(note);
                     });
                 } else {
-                    console.error("Data is not an array:", data);
                 }
             },
             error: function(xhr, status, error) {
-                console.error('Failed to fetch data', error);
             }
         });
     });

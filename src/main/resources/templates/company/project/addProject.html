@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Blank</title>
+    <title>ManageUs 프로젝트</title>
 
     <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -24,14 +24,12 @@
         $(document).ready(function() {
             var companyId = $('#companyId').val();
             var myId = $('#myId').val();
-            console.log("myId:",myId);
             $.ajax({
                 type: "GET",
                 url: '/ajax/project/getCompanyMember',
                 contentType: "application/json; charset=utf-8",
                 data: { companyId: companyId , myId : myId},
                 success: function(data) {
-                    console.log("Received data:", data);
 
                     var plusMemberSelect = $('#plusMember');
                     data.companyMemberList.forEach(function(member) {
@@ -44,7 +42,6 @@
                     });
                 },
                 error: function(error) {
-                    console.error("Error occurred:", error);
                 }
             });
 
@@ -56,8 +53,6 @@
             var selectedOption = $("#plusMember").find(":selected");
             userId = selectedOption.val();
             userName = selectedOption.text(); // 입력값
-            console.log("Selected user ID:", userId);
-            console.log("Selected user name:", userName);
             var isDuplicate = selectedUsers.some(function(user) {
             return user.userId === userId;
         });
@@ -68,7 +63,6 @@
         }
 
             selectedUsers.push({ userId: userId, userName: userName });
-            console.log("selectedUsers=====",selectedUsers);
             updateSelectedUsersList();
             });
 

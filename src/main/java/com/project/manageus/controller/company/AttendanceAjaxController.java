@@ -61,9 +61,6 @@ public class AttendanceAjaxController {
         }
 
 
-
-
-        System.out.println("결과 ========"+sameResult);
         if(sameResult == 0) {
             AttendanceEntity attendanceEntity = attendanceService.inCompany(attendanceDTO);
         }

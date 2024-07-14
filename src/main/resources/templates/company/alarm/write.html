@@ -111,8 +111,6 @@
     function getPersons() {
         var companyId = $("#companyId").val();
         var readers = document.getElementById("recipient").value;
-        console.log(companyId);
-        console.log(readers);
         var additionalOptions = document.getElementById("additional-options");
         if (readers) {
             additionalOptions.style.display = 'block';
@@ -154,11 +152,8 @@
                         checkbox.checked = true;
                     }
                 });
-
-                console.log('성공');
             },
             error: function(error) {
-                console.log('오류', error);
             }
         });
     }

@@ -96,9 +96,6 @@
             <div class="container-fluid">
                 <input type="hidden" id="userId" th:value="${id}">
                 <input type="hidden" id="calendarId">
-
-                여기는 개인 달력
-
                 <br>
                 <div id='calendar'></div>
 
@@ -157,7 +154,6 @@
     $(document).ready(function() {
         var calendarType = 2;
         var userId = $('#userId').val(); // userId 값을 가져옴
-        console.log('userId:' + userId);
         var calendarId;
 
         // AJAX 요청으로 캘린더 데이터를 가져옴
@@ -170,7 +166,6 @@
                 userId: userId
             },
             success: function(data) {
-                console.log("Received data:", data);
                 calendarId = data.calendarId;
                 $('#calendarId').val(calendarId);
 
@@ -242,10 +237,8 @@
                                 color: color
                             }),
                             success: function(data) {
-                                console.log("Received data:", data);
                             },
                             error: function(error) {
-                                console.error("Error occurred:", error);
                             }
                         });
 
@@ -266,7 +259,6 @@
                 });
             },
             error: function(error) {
-                console.error("Error occurred:", error);
             }
         });
     });

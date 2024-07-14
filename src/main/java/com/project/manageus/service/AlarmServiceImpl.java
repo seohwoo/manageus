@@ -91,7 +91,6 @@ public class AlarmServiceImpl implements AlarmService{
             UserInfoEntity userInfo = optionalUserInfo.get();  // 해당 회원번호에 맞는 회원 이름 가져오기위해 작업
             model.addAttribute("userName", userInfo.getName());  //번호에 맞는 이름 가져오기
         } else {
-            System.out.println("No alarm found with ID: " + messageId);
             model.addAttribute("error", "Message not found");
         }
     }
@@ -118,7 +117,6 @@ public class AlarmServiceImpl implements AlarmService{
 
 
         } else {
-            System.out.println("No alarm found with ID: " + messageId);
             model.addAttribute("error", "Message not found");
         }
     }
@@ -178,8 +176,6 @@ public class AlarmServiceImpl implements AlarmService{
 
         int alarmcount = alarmJPARepository.countByReadTypeAndReader(read, id);
         jsonObject.addProperty("alarmcount", alarmcount);
-
-        System.out.println("=======fullName"+alarmcount);
 
         return jsonObject;
     }
