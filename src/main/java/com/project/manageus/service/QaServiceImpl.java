@@ -2,8 +2,10 @@ package com.project.manageus.service;
 
 import com.project.manageus.dto.MailDTO;
 import com.project.manageus.dto.QaDTO;
+import com.project.manageus.entity.CompanyEntity;
 import com.project.manageus.entity.QaEntity;
 import com.project.manageus.entity.UserEntity;
+import com.project.manageus.repository.CompanyRepository;
 import com.project.manageus.repository.QaJPARepository;
 import com.project.manageus.repository.UserRepository;
 import jakarta.mail.internet.MimeMessage;
@@ -29,7 +31,7 @@ public class QaServiceImpl implements QaService{
     private final UserRepository userJPA;
     private final QaJPARepository qaJPA;
     private final JavaMailSender emailSender;
-
+    private final CompanyRepository companyJPA;
 
     public int count(){
         return (int)qaJPA.count();
@@ -118,9 +120,9 @@ public class QaServiceImpl implements QaService{
             }else if(type==2){
                 MailDTO mdto = new MailDTO();
                 Optional<QaEntity> question =qaJPA.findById(ref);
-                Optional<UserEntity> user = userJPA.findById(writer);
+                Optional<CompanyEntity> user = companyJPA.findById(writer);
                 if(question.isPresent()) {
-                    mdto.setUser(user.get().getUserInfo().getEmail());
+                    mdto.setUser(user.get().getEmail());
                     mdto.setWriter(question.get().getEmail());
                     mdto.setTitle("문의글 답변입니다.");
                     mdto.setText(content);
@@ -128,13 +130,12 @@ public class QaServiceImpl implements QaService{
                 }
                 content = "<온라인 답변> "+ content;
             }
-        Optional<UserEntity> user = userJPA.findById(writer);
+        Optional<CompanyEntity> user = companyJPA.findById(writer);
             if(user.isPresent()){
 
-                dto.setWriter(user.get().getUserInfo().getName());
+                dto.setWriter(user.get().getName());
                 dto.setRef(ref);
-                dto.setContact(user.get().getUserInfo().getPhone());
-                dto.setEmail(user.get().getUserInfo().getEmail());
+                dto.setEmail(user.get().getEmail());
                 dto.setContent(content);
                 qaJPA.save(dto.toQaEntity());
 
