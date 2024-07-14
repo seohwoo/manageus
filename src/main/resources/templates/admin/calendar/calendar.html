@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>개인달력</title>
+    <title>회사달력</title>
     <!-- Favicon-->
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
 
@@ -24,49 +24,49 @@
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
 
     <style>
-       #calendar {
+        #calendar {
          max-width: 1100px;
          margin: 0 auto;
-       }
+        }
 
-       /* The Modal (background) */
-       .modal {
-         display: none; /* Hidden by default */
-         position: fixed; /* Stay in place */
-         z-index: 1; /* Sit on top */
-         left: 0;
-         top: 0;
-         width: 100%; /* Full width */
-         height: 100%; /* Full height */
-         overflow: auto; /* Enable scroll if needed */
-         background-color: rgb(0,0,0); /* Fallback color */
-         background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-         padding-top: 60px;
-       }
+        /* The Modal (background) */
+        .modal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgb(0,0,0); /* Fallback color */
+          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+          padding-top: 60px;
+        }
 
-       /* Modal Content/Box */
-       .modal-content {
-         background-color: #fefefe;
-         margin: 5% auto; /* 15% from the top and centered */
-         padding: 20px;
-         border: 1px solid #888;
-         width: 80%; /* Could be more or less, depending on screen size */
-       }
+        /* Modal Content/Box */
+        .modal-content {
+          background-color: #fefefe;
+          margin: 5% auto; /* 15% from the top and centered */
+          padding: 20px;
+          border: 1px solid #888;
+          width: 80%; /* Could be more or less, depending on screen size */
+        }
 
-       /* The Close Button */
-       .close {
-         color: #aaa;
-         float: right;
-         font-size: 28px;
-         font-weight: bold;
-       }
+        /* The Close Button */
+        .close {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+        }
 
-       .close:hover,
-       .close:focus {
-         color: black;
-         text-decoration: none;
-         cursor: pointer;
-       }
+        .close:hover,
+        .close:focus {
+          color: black;
+          text-decoration: none;
+          cursor: pointer;
+        }
     </style>
 
 
@@ -77,7 +77,7 @@
 <!-- Page Wrapper -->
 <div id="wrapper">
 
-    <div th:include="~{content/side-bar :: side}"></div>
+    <div th:include="~{content/admin-side-bar :: adminside}"></div>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -85,15 +85,16 @@
         <!-- Main Content -->
         <div id="content">
 
-            <div th:include="~{content/top-bar :: top}"></div>
+            <div th:include="~{content/admin-top-bar :: admintop}"></div>
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">개인캘린더</h1>
+                    <h1 class="h3 mb-0 text-gray-800">회사캘린더</h1>
                 </div>
-                <input type="hidden" id="userId" th:value="${id}">
+
+                <input type="hidden" id="companyId" th:value="${companyId}">
                 <input type="hidden" id="calendarId">
                 <br>
                 <div id='calendar'></div>
@@ -117,14 +118,14 @@
                     </div>
                 </div>
             </div>
-        <!-- End of Main Content -->
+            <!-- End of Main Content -->
 
-        <div th:include="~{content/footer :: footer}"></div>
+            <div th:include="~{content/footer :: footer}"></div>
+
+        </div>
+        <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Content Wrapper -->
-
-</div>
 </div>
 <!-- End of Page Wrapper -->
 
@@ -146,23 +147,23 @@
 
 
 
-    <!--달력라이브러리-->
+<!--달력라이브러리-->
 
 
 <script th:inline="javascript">
     $(document).ready(function() {
-        var calendarType = 2;
-        var userId = $('#userId').val(); // userId 값을 가져옴
+        var calendarType = 0;
+        var companyId = $('#companyId').val(); // userId 값을 가져옴
         var calendarId;
 
         // AJAX 요청으로 캘린더 데이터를 가져옴
         $.ajax({
             type: "GET",
-            url: '/ajax/calendar/getMyCalendarList',
+            url: '/ajax/calendar/getCompanyCalendarList',
             contentType: "application/json; charset=utf-8",
             data: {
                 calendarType: calendarType,
-                userId: userId
+                companyId: companyId
             },
             success: function(data) {
                 calendarId = data.calendarId;

@@ -1,10 +1,12 @@
 package com.project.manageus.controller.admin;
 
+import com.project.manageus.dto.CalendarDTO;
 import com.project.manageus.dto.CompanyDTO;
 import com.project.manageus.dto.DepartmentDTO;
 import com.project.manageus.dto.UserDTO;
 import com.project.manageus.service.AdminService;
 import com.project.manageus.service.ApprovalService;
+import com.project.manageus.service.CalendarService;
 import com.project.manageus.service.UrlService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,8 +22,8 @@ public class AdminContorller {
 
     private final AdminService adminService;
     private final ApprovalService approvalService;
+    private final CalendarService calendarService;
     private final UrlService urlService;
-
 
     //main
     @GetMapping("companies/{companyId}")
@@ -230,5 +232,27 @@ public class AdminContorller {
     }
 
     //attendance end
+
+    //calendar start
+    @GetMapping("calendar")
+    public String findCalendar(Principal principal,
+                               Model model) {
+        String url = "admin/calendar/calendar.html";
+        Long companyId = Long.parseLong(principal.getName());
+        if(!urlService.isValidCompany(principal.getName(), model)) {
+            url = "redirect:/admin/companies/" + principal.getName();
+            return url;
+        }
+        Long calendarType = 0L;
+        int CompanyCalendarCount = calendarService.companyCalendarCount(companyId,calendarType);
+        if(CompanyCalendarCount == 0){
+            CalendarDTO calendarDTO = new CalendarDTO();
+            calendarDTO.setCompanyId(companyId);
+            calendarDTO.setCalendarType(calendarType);
+            calendarService.addMyCalendar(calendarDTO);
+        }
+        return url;
+    }
+    //calendar end
 
 }
