@@ -31,12 +31,12 @@
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-cog"></i>
+                <i class="fas fa-fw fa-envelope"></i>
                 <span>쪽지</span>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Custom Components:</h6>
+                    <h6 class="collapse-header">쪽지:</h6>
                     <a class="collapse-item" th:href="@{/manageus/alarm/messages/new}">쪽지 보내기</a>
                     <a class="collapse-item" th:href="@{/manageus/alarm/messages/spend}">보낸 쪽지함</a>
                     <a class="collapse-item" th:href="@{/manageus/alarm/messages/receive}">받은 쪽지함</a>
@@ -47,19 +47,19 @@
         <!-- Nav Item - Charts -->
         <li class="nav-item">
             <a class="nav-link" th:href="@{/manageus/approval/posts}">
-                <i class="fas fa-fw fa-chart-area"></i>
+                <i class="fas fa-fw fa-file-signature"></i>
                 <span>결재</span></a>
         </li>
 
         <li class="nav-item">
             <a class="nav-link" th:href="@{/manageus/chat}">
-                <i class="fas fa-fw fa-chart-area"></i>
+                <i class="fas fa-fw fa-comment"></i>
                 <span>채팅</span></a>
         </li>
 
         <li class="nav-item">
             <a class="nav-link" th:href="@{/manageus/attendance/users/{id}(id=${id})}">
-                <i class="fas fa-fw fa-chart-area"></i>
+                <i class="fas fa-fw fa-clock"></i>
                 <span>근태</span></a>
         </li>
 
@@ -67,7 +67,7 @@
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-wrench"></i>
+                <i class="fas fa-fw fa-calendar"></i>
                 <span>캘린더</span>
             </a>
             <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
@@ -83,7 +83,7 @@
 
         <li class="nav-item">
             <a class="nav-link" th:href="@{/manageus/project/users/{id}(id=${id})}">
-                <i class="fas fa-fw fa-chart-area"></i>
+                <i class="fas fa-fw fa-file-contract"></i>
                 <span>프로젝트</span></a>
         </li>
         <!-- 여기까지다 -->

@@ -10,6 +10,8 @@
     <meta name="author" content="">
 
     <title>개인달력</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
 
     <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -94,14 +96,18 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">개인캘린더</h1>
+                </div>
                 <input type="hidden" id="userId" th:value="${id}">
                 <input type="hidden" id="calendarId">
                 <br>
                 <div id='calendar'></div>
 
-                &lt;!&ndash; The Modal &ndash;&gt;
+                <!-- The Modal -->
                 <div id="eventModal" class="modal">
-                    &lt;!&ndash; Modal content &ndash;&gt;
+                    <!-- Modal content -->
                     <div class="modal-content">
                         <span class="close" id="closeModal">&times;</span>
                         <h2>새 일정 추가</h2>
