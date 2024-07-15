@@ -32,13 +32,11 @@ public class SecurityConfig {
                 .requestMatchers("/", "/login", "/forgot",
                         "/users", "/users/new", "/companies", "/companies/new",
                         "/css/**", "/js/**", "/img/**", "/scss/**", "/vendor/**","/static/**").permitAll()
-                .requestMatchers("/super/**").hasRole("SUPER")
-                .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/search-address").permitAll()
                 .requestMatchers("/board").permitAll()
-                // Swagger 관련 리소스 접근 허용
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
+                .requestMatchers("/super/**").hasRole("SUPER")
+                .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
                 .anyRequest().authenticated()
         );
         http.formLogin((auth) -> auth.loginPage("/login")

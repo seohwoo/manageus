@@ -6,8 +6,6 @@ import com.project.manageus.dto.UserDTO;
 import com.project.manageus.entity.*;
 import com.project.manageus.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 

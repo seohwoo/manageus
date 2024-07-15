@@ -3,9 +3,6 @@ package com.project.manageus.repository;
 import com.project.manageus.entity.CompanyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-
 public interface CompanyRepository extends JpaRepository<CompanyEntity, Long> {
 
     public CompanyEntity findByInviteCode(String inviteCode);

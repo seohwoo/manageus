@@ -70,7 +70,7 @@ public class AdminContorller {
     }
     //users end
 
-    //departemnt start
+    //department start
     @GetMapping("departments")
     public String showDepartment(Principal principal,
                                  Model model) {
@@ -214,7 +214,6 @@ public class AdminContorller {
         approvalService.approvalReject(approvalId, status);
         return "redirect:/admin/approvals/"+approvalId;
     }
-
     //approval end
 
     //attendance start
@@ -230,7 +229,6 @@ public class AdminContorller {
         adminService.findAllAttendance(companyId, model);
         return url;
     }
-
     //attendance end
 
     //calendar start
