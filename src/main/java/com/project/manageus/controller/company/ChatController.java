@@ -48,7 +48,7 @@ public class ChatController {
         service.chatInvitations(model,companyId);
         model.addAttribute("companyId",companyId);
         model.addAttribute("id",id);
-        return "/company/chat/chatRoomList";
+        return "company/chat/chatRoomList";
     }
 
     //채팅방들어가기
@@ -62,7 +62,7 @@ public class ChatController {
         }
         service.enterChatRoom(model,id,roomId);
         model.addAttribute("id",id);
-        return "/company/chat/chater";
+        return "company/chat/chater";
     }
     //채팅 방만들기
     @PostMapping("/chat/room/new")

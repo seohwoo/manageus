@@ -42,7 +42,7 @@ public class AlarmController {
         model.addAttribute("companyId",companyId);
         model.addAttribute("id",principal.getName());
 
-        return "/company/alarm/write";
+        return "company/alarm/write";
     }
 
 
@@ -117,7 +117,7 @@ public class AlarmController {
         alarmService.receive(userId, model);
 
 
-        return "/company/alarm/receive";
+        return "company/alarm/receive";
     }
 
 
@@ -133,7 +133,7 @@ public class AlarmController {
         alarmService.readcount(messageId);
         alarmService.readreceive(messageId, model);
 
-        return "/company/alarm/readreceive";
+        return "company/alarm/readreceive";
     }
 
 
@@ -151,7 +151,7 @@ public class AlarmController {
 
         alarmService.spendalarm(userId, model); // 보낸 내역 전체 가져오기
 
-        return "/company/alarm/spend";
+        return "company/alarm/spend";
     }
 
     @GetMapping("/messages/{messageId}/spend")  // 보낸내역 상세 보기
@@ -163,6 +163,6 @@ public class AlarmController {
 
         alarmService.readspend(messageId, model);
 
-        return "/company/alarm/readspend";
+        return "company/alarm/readspend";
     }
 }

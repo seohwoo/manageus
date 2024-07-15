@@ -53,7 +53,7 @@ public class                                                                    
         // 결재 리스트 가져오기
         approvalService.selectApprovalList(model, companyId);
 
-        return "/company/approval/list";
+        return "company/approval/list";
     }
 
     // 휴가 신청 페이지
@@ -74,7 +74,7 @@ public class                                                                    
         // 결재 종류 가져오기
         approvalService.selectApprovalType(model);
 
-        return "/company/approval/write";
+        return "company/approval/write";
     }
 
     //휴가 신청하기 pro
@@ -125,7 +125,7 @@ public class                                                                    
 
         // 글번호에 맞는 정보 가져오기
         approvalService.selectApprovalDetail(approvalId, sessionId, model);
-        return "/company/approval/info";
+        return "company/approval/info";
     }
 
     @PutMapping("/posts/{approvalId}")

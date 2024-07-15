@@ -42,7 +42,7 @@ public class MessageController {
             return "redirect:/companies/" + urlService.findCompanyUrl(principal.getName());
         }
 
-        return "/company/message/messages.html";
+        return "company/message/messages.html";
     }
 
     @PostMapping("/messages/{id}") //쪽지 쓰는곳
@@ -66,14 +66,14 @@ public class MessageController {
         model.addAttribute("reader", reader);
         model.addAttribute("subject", subject);
 
-        return "/company/message/massagetest";
+        return "company/message/massagetest";
 
     }
 
     @GetMapping("/massagetest")  // 쪽지 테스트용
     public String massagetest(Model model) {
 
-        return "/company/message/massagetest.html";
+        return "company/message/massagetest.html";
     }
 
 
@@ -88,7 +88,7 @@ public class MessageController {
 
         service.getmessage (userId, model);
 
-        return "/company/message/getMassage";
+        return "company/message/getMassage";
     }
 
 

@@ -29,7 +29,7 @@ public class AttendanceController {
     @GetMapping("/users/{userId}")
     public String attendanceMain(@PathVariable Long userId, Principal principal, Model model) {
         Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
-        String url = "/company/attendance/attendanceMain.html";
+        String url = "company/attendance/attendanceMain.html";
         if(!urlService.isValidUser(principal.getName(),model)) {
             url = "redirect:/manageus/company/" + urlService.findCompanyUrl(principal.getName());
             return url;

@@ -47,7 +47,7 @@ public class CalendarController {
         }
 
         model.addAttribute("companyId",companyId);
-        return "/company/calendars/mycalendar";
+        return "company/calendars/mycalendar";
     }
 
 
@@ -72,7 +72,7 @@ public class CalendarController {
         }
         model.addAttribute("companyId",companyId);
 
-        return "/company/calendars/teamcalendar";
+        return "company/calendars/teamcalendar";
     }
 
     @GetMapping("/companies/{companyId}") /* 회사달력 */
@@ -94,7 +94,7 @@ public class CalendarController {
         }
 
 
-        return "/company/calendars/companycalendar";
+        return "company/calendars/companycalendar";
     }
 
     @GetMapping("/{id}/{departmentId}/{companyId}")
@@ -109,7 +109,7 @@ public class CalendarController {
 
 
 
-        return "/company/calendars/calendar";
+        return "company/calendars/calendar";
     }
 
 

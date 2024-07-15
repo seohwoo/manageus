@@ -34,7 +34,7 @@ public class ProjectController {
 
     @GetMapping("/users/{userId}")
     public String projectMain( @PathVariable Long userId,Principal principal, Model model) {
-        String url = "/company/project/projectMain.html";
+        String url = "company/project/projectMain.html";
         if(!urlService.isValidUser(principal.getName(), model)) {
             url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
@@ -51,7 +51,7 @@ public class ProjectController {
     @GetMapping("/users/{userId}/projects/{projectId}")
     public String projectContent(@PathVariable Long userId, @PathVariable Long projectId, Principal principal, Model model) {
 
-        String url = "/company/project/projectContent.html";
+        String url = "company/project/projectContent.html";
         if(!urlService.isValidUser(principal.getName(), model)) {
             url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
@@ -78,7 +78,7 @@ public class ProjectController {
 
     @GetMapping("/users/{userId}/projects/{projectId}/details/new")
     public String addContent(@PathVariable Long userId, @PathVariable Long projectId, Principal principal, Model model){
-        String url = "/company/project/addContent.html";
+        String url = "company/project/addContent.html";
         if(!urlService.isValidUser(principal.getName(), model)) {
             url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
@@ -89,7 +89,7 @@ public class ProjectController {
 
     @PostMapping("/users/{userId}/projects/{projectId}/details")
     public String addContentPro(ProjectDetailDTO projectDetailDTO, @PathVariable Long userId, @PathVariable Long projectId, Principal principal, Model model){
-        String url = "/company/project/addContentPro.html";
+        String url = "company/project/addContentPro.html";
         if(!urlService.isValidUser(principal.getName(),model)) {
             url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
@@ -105,7 +105,7 @@ public class ProjectController {
 
     @GetMapping("/users/{userId}/projects/new")
     public String addProject(@PathVariable Long userId, Principal principal, Model model){
-        String url = "/company/project/addProject.html";
+        String url = "company/project/addProject.html";
         Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
         if(!urlService.isValidUser(principal.getName(),model)) {
             url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
@@ -117,7 +117,7 @@ public class ProjectController {
 
     @PostMapping("/users/{userId}/projects")
     public String addProjectPro(ProjectDTO projectDTO, @RequestParam(required = false)Long[]plusUserId, @PathVariable Long userId, Principal principal, Model model){
-        String url = "/company/project/addProjectPro.html";
+        String url = "company/project/addProjectPro.html";
         Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
         projectDTO.setUserId(userId);
         projectDTO.setCompanyId(companyId);
@@ -148,7 +148,7 @@ public class ProjectController {
     @GetMapping("/users/{userId}/projects/{projectId}/details/{projectDetailId}")
     public String projectDetail(@PathVariable Long userId, @PathVariable Long projectId, @PathVariable Long projectDetailId,Principal principal, Model model) {
         Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
-        String url = "/company/project/projectDetail.html";
+        String url = "company/project/projectDetail.html";
         if(!urlService.isValidUser(principal.getName(),model)) {
             url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
@@ -163,7 +163,7 @@ public class ProjectController {
     @GetMapping("/users/{userId}/projects/{projectId}/details/{projectDetailId}/edit")
     public String updateProjectDetail(@PathVariable Long userId, @PathVariable Long projectId, @PathVariable Long projectDetailId,Principal principal, Model model) {
         Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
-        String url = "/company/project/updateProjectDetail.html";
+        String url = "company/project/updateProjectDetail.html";
         if(!urlService.isValidUser(principal.getName(),model)) {
             url = "redirect:/manageus/companies/" + urlService.findCompanyUrl(principal.getName());
             return url;
@@ -178,7 +178,7 @@ public class ProjectController {
     @PostMapping("/users/{userId}/projects/{projectId}/details/{projectDetailId}")
     public String updateProjectDetailPro(Long detailUserId,ProjectDetailDTO projectDetailDTO,@PathVariable Long userId, @PathVariable Long projectId, @PathVariable Long projectDetailId, Principal principal, Model model){
         Long companyId = Long.valueOf(urlService.findCompanyUrl(principal.getName()));
-        String url = "/company/project/updateProjectDetailPro.html";
+        String url = "company/project/updateProjectDetailPro.html";
         projectDetailDTO.setId(projectDetailId);
         projectDetailDTO.setUserId(detailUserId);
         if(!urlService.isValidUser(principal.getName(),model)) {

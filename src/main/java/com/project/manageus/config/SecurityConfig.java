@@ -37,6 +37,7 @@ public class SecurityConfig {
                 .requestMatchers("/board").permitAll()
                 .requestMatchers("/super/**").hasRole("SUPER")
                 .requestMatchers("/admin/**").hasAnyRole("SUPER", "ADMIN")
+                .requestMatchers("/manageus/**").hasAnyRole("SUPER", "ADMIN", "USER")
                 .anyRequest().authenticated()
         );
         http.formLogin((auth) -> auth.loginPage("/login")
