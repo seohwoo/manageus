@@ -29,30 +29,6 @@
          margin: 0 auto;
         }
 
-        /* The Modal (background) */
-        .modal {
-          display: none; /* Hidden by default */
-          position: fixed; /* Stay in place */
-          z-index: 1; /* Sit on top */
-          left: 0;
-          top: 0;
-          width: 100%; /* Full width */
-          height: 100%; /* Full height */
-          overflow: auto; /* Enable scroll if needed */
-          background-color: rgb(0,0,0); /* Fallback color */
-          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-          padding-top: 60px;
-        }
-
-        /* Modal Content/Box */
-        .modal-content {
-          background-color: #fefefe;
-          margin: 5% auto; /* 15% from the top and centered */
-          padding: 20px;
-          border: 1px solid #888;
-          width: 80%; /* Could be more or less, depending on screen size */
-        }
-
         /* The Close Button */
         .close {
           color: #aaa;
@@ -185,59 +161,6 @@
 
                 calendar.render(); // 달력 렌더링
 
-                // 모달 창에서 일정 추가 버튼 클릭 이벤트 핸들러
-                document.getElementById('addEvent').addEventListener('click', function() {
-                    var title = document.getElementById('eventTitle').value;
-                    var startDateStr = document.getElementById('startDate').value;
-                    var endDateStr = document.getElementById('endDate').value;
-                    var color = document.getElementById('eventColor').value;
-                    var startDate = new Date(startDateStr + 'T00:00:00');
-                    var endDate = new Date(endDateStr + 'T23:59:59');
-
-                    var calendarId = $('#calendarId').val();
-
-                    // 유효성 검사 후 일정 추가
-                    if (title && !isNaN(startDate.valueOf()) && !isNaN(endDate.valueOf()) && startDate <= endDate) {
-                        calendar.addEvent({
-                            title: title,
-                            start: startDate,
-                            end: endDate,
-                            color: color,
-                        });
-
-                        // AJAX 요청으로 새로운 일정 데이터를 서버에 전송
-                        $.ajax({
-                            type: "POST",
-                            url: '/ajax/calendar/addCalendarDetail',
-                            contentType: "application/json; charset=utf-8",
-                            data: JSON.stringify({
-                                calendarId: calendarId,
-                                startDate: startDate,
-                                endDate: endDate,
-                                content: title,
-                                color: color
-                            }),
-                            success: function(data) {
-                            },
-                            error: function(error) {
-                            }
-                        });
-
-                        alert('일정이 추가되었습니다: ' + title);
-                        document.getElementById('eventModal').style.display = 'none';
-                        document.getElementById('eventTitle').value = '';
-                        document.getElementById('startDate').value = '';
-                        document.getElementById('endDate').value = '';
-                        document.getElementById('eventColor').value = '#3788d8';
-                    } else {
-                        alert('유효하지 않은 날짜입니다.');
-                    }
-                });
-
-                // 모달 창 닫기 버튼 클릭 이벤트 핸들러
-                document.getElementById('closeModal').addEventListener('click', function() {
-                    document.getElementById('eventModal').style.display = 'none';
-                });
             },
             error: function(error) {
             }
