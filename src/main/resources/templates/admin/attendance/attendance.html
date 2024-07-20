@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>ManageUs 근태관리</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+
+    <!-- Custom fonts for this template -->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <div th:include="~{content/admin-side-bar :: adminside}"></div>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <div th:include="~{content/admin-top-bar :: admintop}"></div>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <h1 class="h3 mb-2 text-gray-800">Attendace</h1>
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="card-header py-3 d-flex align-items-center">
+                            <h6 class="m-0 font-weight-bold text-primary">근태관리</h6>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>오늘날짜</th>
+                                    <th>전체사원수</th>
+                                    <th>출근사원수</th>
+                                    <th>결근사원수</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td th:text="${#dates.format(currentDate, 'yyyy/MM/dd')}"></td>
+                                    <td th:text="${allCnt}"></td>
+                                    <td th:text="${startCnt}"></td>
+                                    <td th:text="${allCnt - startCnt}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>사원번호</th>
+                                    <th>이름</th>
+                                    <th>부서</th>
+                                    <th>직급</th>
+                                    <th>출근시간</th>
+                                    <th>퇴근시간</th>
+                                    <th>비고</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="user : ${userDTOList}">
+                                    <td th:text="${user.id}"></td>
+                                    <td th:text="${user.name}"></td>
+                                    <td th:text="${user.departmentName}">부서없음</td>
+                                    <td th:text="${user.positionName}">직급없음</td>
+                                    <td th:text="${#dates.format(user.startDate, 'HH시mm분SS초')}"></td>
+                                    <td th:text="${#dates.format(user.endDate, 'HH시mm분SS초')}"></td>
+                                    <td th:text="${user.note}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+        <div th:include="~{content/footer :: footer}"></div>
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Delete Modal-->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Delete?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span id="modalDepartmentName"></span> 부서를 삭제하시겠습니까?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post">
+                    <input type="hidden" name="_method" value="delete" />
+                    <input type="hidden" name="departmentId" id="modalDepartmentId">
+                    <button class="btn btn-primary" id="confirmDeleteBtn" type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="/js/demo/datatables-demo.js"></script>
+
+<!-- Custom script to handle modal actions -->
+<script>
+    $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // 모달을 호출한 버튼
+        var departmentId = button.data('department-id'); // data-* 속성에서 부서 ID를 가져옴
+        var departmentName = button.data('department-name'); // data-* 속성에서 부서 이름을 가져옴
+        var modal = $(this);
+        modal.find('#modalDepartmentId').val(departmentId); // 숨겨진 입력 필드에 부서 ID를 설정
+        modal.find('#modalDepartmentName').text(departmentName); // 모달 내의 메시지에 부서 이름을 설정
+        var deleteForm = modal.find('#deleteForm');
+        var deleteUrl = "/admin/departments/" + departmentId; // 삭제 URL 생성
+        deleteForm.attr('action', deleteUrl); // form action 설정
+    });
+</script>
+
+</body>
+</html>

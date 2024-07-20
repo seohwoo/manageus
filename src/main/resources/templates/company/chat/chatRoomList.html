@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>채팅 목록</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+
+    <!-- Custom fonts for this template-->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <style>
+        .header-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .delete-button {
+            background-color: red;
+            color: white;
+        }
+
+        .delete-button:hover {
+            background-color: darkred;
+            color: white;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h6 {
+            flex-grow: 1;
+        }
+
+        .card-header form {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body id="page-top">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <div th:replace="~{content/side-bar :: side}"></div>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <div th:replace="~{content/top-bar :: top}"></div>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="container-fluid mt-4 mb-4">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div th:each="dto : ${list}" class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <a th:href="@{/manageus/chat/room/{roomId}(roomId=${dto.id})}">
+                                    <h6 class="m-0 font-weight-bold text-primary">
+                                        <span th:text="${dto.name}"></span>
+                                    </h6>
+                                        </a>
+                                    <div class="header-buttons">
+                                        <a class="btn btn-info" href="#" data-toggle="modal" data-target="#renameRoomModal">방이름변경</a>
+                                        <a class="btn btn-info" href="#" data-toggle="modal" data-target="#inviteModal">+</a>
+                                        <form th:method="delete" th:action="@{/manageus/chat}" >
+                                            <input type="hidden" name="userId" th:value="${id}">
+                                            <input type="hidden" name="chatRoomId" th:value="${dto.id}">
+                                            <button class="btn delete-button" type="submit">x</button>
+                                        </form>
+                                    </div>
+                                        <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="inviteModalLabel">초대하기</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="#" th:action="@{/manageus/chat/room/{roomId}/invitations(roomId=${dto.id})}" method="post">
+                                                            <input type="hidden" id="companyId" th:value="${companyId}"/>
+                                                            <div class="form-group">
+                                                                <label for="departmentSelect">팀을 선택해주세요</label>
+                                                                <select id="departmentSelect" name="departmentId" class="form-control" onchange="getPersons()">
+                                                                    <option>팀을 선택해주세요</option>
+                                                                    <option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.name}">Department</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="personSelect">사람을 선택해주세요</label>
+                                                                <select id="personSelect" name="personId" class="form-control"></select>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">초대 하기</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 방 이름 변경 모달 -->
+                                        <div class="modal fade" id="renameRoomModal" tabindex="-1" role="dialog" aria-labelledby="renameRoomModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="renameRoomModalLabel">방 이름 변경</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form id="renameRoomForm" th:action="@{/manageus/chat/room/{roomId}/edit(roomId=${dto.id})}" th:method="post">
+                                                            <div class="form-group">
+                                                                <label for="newRoomName">새 방 이름</label>
+                                                                <input type="text" class="form-control" id="newRoomName" name="newRoomName" required>
+                                                            </div>
+                                                            <input type="hidden" id="roomId" th:value="${dto.id}">
+                                                            <button type="submit" class="btn btn-primary">변경</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script th:inline="javascript">
+                                            function getPersons() {
+                                                var companyId = $("#companyId").val();
+                                                var roomId = $("#roomId").val();
+                                                var departmentId = document.getElementById("departmentSelect").value;
+
+                                                $.ajax({
+                                                    url: '/manageus/invitations/names',
+                                                    type: 'POST',
+                                                    contentType: 'application/json',
+                                                    data: JSON.stringify({ departmentId: departmentId, id: roomId }),
+                                                    dataType: "json",
+                                                    success: function(response) {
+                                                        var personSelect = document.getElementById("personSelect");
+                                                        personSelect.innerHTML = "";
+                                                        response.DepartmentMember.forEach(function(person) {
+                                                            var option = document.createElement("option");
+                                                            option.value = person.userId;
+                                                            option.text = person.fullName;
+                                                            personSelect.add(option);
+                                                        });
+                                                    },
+                                                    error: function(error) {
+                                                    }
+                                                });
+                                            }
+
+                                            $(document).ready(function() {
+                                                $('#renameRoomForm').on('submit', function(e) {
+                                                    e.preventDefault();  // 기본 폼 제출 방지
+                                                    var form = $(this);
+
+                                                    $.ajax({
+                                                        type: form.attr('method'),
+                                                        url: form.attr('action'),
+                                                        data: form.serialize(),
+                                                        success: function() {
+                                                            $('#renameRoomModal').modal('hide');  // 모달 닫기
+                                                            // 폼 제출 후 필요한 추가 작업 (예: 페이지 새로 고침)
+                                                             location.reload();
+                                                        },
+                                                        error: function() {
+                                                            alert('방 이름 변경에 실패했습니다.');
+                                                        }
+                                                    });
+                                                });
+                                            });
+                                        </script>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <form method="post" th:action="@{/manageus/chat/room/new}">
+                                <button type="submit" class="btn btn-primary">
+                                    채팅방 생성
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:include="~{content/footer :: footer}"></div>
+        </div>
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="/vendor/chart.js/Chart.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="/js/demo/chart-area-demo.js"></script>
+<script src="/js/demo/chart-pie-demo.js"></script>
+</body>
+
+</html>

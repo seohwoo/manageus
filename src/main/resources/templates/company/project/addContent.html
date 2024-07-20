@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>ManageUs 프로젝트</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+
+    <!-- Custom fonts for this template-->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var projectId = $('#projectId').val();
+            $.ajax({
+                type: "GET",
+                url: '/ajax/project/getProjectMember',
+                contentType: "application/json; charset=utf-8",
+                data: { projectId: projectId },
+                success: function(data) {
+
+                    var assigneeSelect = $('#assignee');
+                    data.projectMemberList.forEach(function(member) {
+                        var userId = Object.keys(member)[0];
+                        var userName = member[userId];
+                        var option = $('<option></option>')
+                            .attr('value', userId)
+                            .text(userName);
+                        assigneeSelect.append(option);
+                    });
+                },
+                error: function(error) {
+                }
+            });
+        });
+
+    </script>
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <div th:insert="~{content/side-bar :: side}"></div>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <div th:insert="~{content/top-bar :: top}"></div>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">업무 생성</h6>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/manageus/project/users/{userId}/projects/{projectId}/details(userId=${userId}, projectId=${projectId})}" method="post">
+                            <input type="hidden" id="projectId" name="projectId" th:value="${projectId}">
+                            <input type="hidden" name="statusId" value="3000">
+                            <div class="form-group">
+                                <label for="title">제목</label>
+                                <input type="text" class="form-control" id="title" name="title">
+                            </div>
+                            <div class="form-group">
+                                <label for="content">내용</label>
+                                <textarea class="form-control" name="content" rows="4"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="assignee">담당자</label>
+                                <select class="form-control" id="assignee" name="userId"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="startTime">업무 시작일</label>
+                                <input type="date" class="form-control" id="startTime" name="startTime" th:value="${#dates.format(startTime, 'yyyy-MM-dd')}">
+                            </div>
+                            <div class="form-group">
+                                <label for="endTime">업무 마감일</label>
+                                <input type="date" class="form-control" id="endTime" name="endTime" th:value="${#dates.format(endTime, 'yyyy-MM-dd')}">
+                            </div>
+                            <button type="submit" class="btn btn-success btn-icon-split">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                <span class="text">등록</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <div th:include="~{content/footer :: footer}"></div>
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/js/sb-admin-2.min.js"></script>
+
+</body>
+
+</html>

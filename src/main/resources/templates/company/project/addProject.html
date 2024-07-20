@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>ManageUs 프로젝트</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+
+    <!-- Custom fonts for this template-->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var companyId = $('#companyId').val();
+            var myId = $('#myId').val();
+            $.ajax({
+                type: "GET",
+                url: '/ajax/project/getCompanyMember',
+                contentType: "application/json; charset=utf-8",
+                data: { companyId: companyId , myId : myId},
+                success: function(data) {
+
+                    var plusMemberSelect = $('#plusMember');
+                    data.companyMemberList.forEach(function(member) {
+                        var userId = Object.keys(member)[0];
+                        var userName = member[userId];
+                        var option = $('<option></option>')
+                            .attr('value', userId)
+                            .text(userName);
+                        plusMemberSelect.append(option);
+                    });
+                },
+                error: function(error) {
+                }
+            });
+
+
+        var userId ;
+        var userName ;
+        var selectedUsers = [];
+        $("#plusMemberButton").on("click", function () {
+            var selectedOption = $("#plusMember").find(":selected");
+            userId = selectedOption.val();
+            userName = selectedOption.text(); // 입력값
+            var isDuplicate = selectedUsers.some(function(user) {
+            return user.userId === userId;
+        });
+
+        if (isDuplicate) {
+            alert("이미 추가된 사용자입니다.");
+            return; // 중복일 경우 추가하지 않음
+        }
+
+            selectedUsers.push({ userId: userId, userName: userName });
+            updateSelectedUsersList();
+            });
+
+        function updateSelectedUsersList() {
+        var userListContainer = $('#selectedUsersContainer');
+        userListContainer.empty(); // 기존 목록 초기화
+
+        // 사용자 목록 갱신
+        selectedUsers.forEach(function(user, index) {
+            var userDiv = $('<div class="user-item"></div>');
+
+            var userInput = $('<input>')
+                .attr('type', 'text')
+                .attr('readonly', true)
+                .val(user.userId + ',' + user.userName);
+
+            var userIdInput = $('<input>')
+                .attr('type', 'hidden')
+                .attr('name', 'plusUserId')
+                .val(user.userId);
+
+            var deleteButton = $('<button class="btn btn-danger btn-sm ml-2">X</button>');
+            deleteButton.on('click', function() {
+                // 삭제 버튼 클릭 시 해당 사용자 삭제
+                selectedUsers.splice(index, 1);
+                updateSelectedUsersList(); // 목록 갱신
+            });
+
+            userDiv.append(userInput, userIdInput, deleteButton);
+            userListContainer.append(userDiv);
+        });
+    }
+
+        });
+    </script>
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <div th:insert="~{content/side-bar :: side}"></div>
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <div th:insert="~{content/top-bar :: top}"></div>
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">프로젝트 생성</h6>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/manageus/project/users/{userId}/projects(userId=${userId})}" method="post">
+                            <input type="hidden" id="companyId" name="companyId" th:value="${companyId}">
+                            <input type="hidden" id="myId" th:value="${userId}">
+                            <div class="form-group">
+                                <label for="projectName">프로젝트명</label>
+                                <input type="text" class="form-control" id="projectName" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="startDate">프로젝트 시작일</label>
+                                <input type="date" class="form-control" id="startDate" name="startDate" th:value="${#dates.format(startDate, 'yyyy-MM-dd')}">
+                            </div>
+                            <div class="form-group">
+                                <label for="endDate">프로젝트 마감일</label>
+                                <input type="date" class="form-control" id="endDate" name="endDate" th:value="${#dates.format(endDate, 'yyyy-MM-dd')}">
+                            </div>
+                            <div class="form-group">
+                                <label for="plusMember">인원 추가</label>
+                                <div class="input-group mb-3">
+                                    <select class="custom-select" id="plusMember" name="userId"></select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button" id="plusMemberButton">추가</button>
+                                    </div>
+                                </div>
+                                <div id="selectedUsersContainer"></div>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-icon-split">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                <span class="text">등록</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <div th:include="~{content/footer :: footer}"></div>
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/js/sb-admin-2.min.js"></script>
+
+</body>
+
+</html>

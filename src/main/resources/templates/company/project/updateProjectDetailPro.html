@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ManageUs 프로젝트</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+</head>
+<body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var userId = /*[[${userId}]]*/;
+    var projectId = /*[[${projectId}]]*/;
+    var projectDetailId = /*[[${projectDetailId}]]*/;
+
+        alert("업무가 수정되었습니다.");
+        window.location.href = `/manageus/project/users/${userId}/projects/${projectId}/details/${projectDetailId}`;
+
+    /*]]>*/
+</script>
+</body>
+</html>

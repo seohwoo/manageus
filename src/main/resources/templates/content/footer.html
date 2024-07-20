@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="footer">
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span th:text="'Manageus &copy; ' + ${company} + ' 2024'"></span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">로그아웃 하시겠습니까?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="companyId" th:value="${companyId}" />
+    <input type="hidden" id="id" th:value="${id}" />
+
+    <script th:inline="javascript">
+        $(document).ready(function(){
+
+            function fetchAlarmCount() {
+
+                var companyId = $("#companyId").val();  // hidden input 태그에서 companyId 값을 가져옴
+                var id = $("#id").val();  // hidden input 태그에서 id 값을 가져옴
+
+
+                // AJAX 요청 보내기
+                $.ajax({
+                    url: '/manageus/alarm/alarmnumber/number',
+                    type: "POST",
+                    contentType: 'application/json',
+                    data: JSON.stringify({ companyId: companyId, id: id }),
+                    dataType: "json",
+                    success: function(data) {
+                        $("#alertCounter").text(data.alarmcount); // 서버에서 받은 데이터로 알림 카운터 업데이트
+                    },
+                    error: function(xhr, status, error) {
+                    }
+                });
+            }
+
+            // 페이지 로드 후 1분마다 fetchAlarmCount 함수 실행
+            fetchAlarmCount(); // 초기 실행
+         setInterval(fetchAlarmCount, 60000); // 1분(60000밀리초)마다 실행
+
+
+
+
+
+       // 페이지가 로드되면 실행
+       updateChatList();
+
+       // 30초마다 채팅목록을 업데이트하는 함수 정의
+       function updateChatList() {
+           var companyId = $("#companyId").val();
+           // AJAX를 사용하여 서버로부터 데이터 가져오기
+           $.ajax({
+               url: '/manageus/chatAlarm',
+               type: 'POST',
+               success: function(response) {
+                   // 서버에서 받은 데이터로 채팅 목록 업데이트
+                   $('#chatList').empty(); // 기존 채팅 목록 비우기
+                   response.forEach(function(chat) {
+                       var chatItem = `<a class="dropdown-item d-flex align-items-center" href="/manageus/chat/room/${chat.chatRoomId}">` +
+                           '<div class="dropdown-list-image mr-3">' +
+                           '<div class="status-indicator bg-success"></div>' +
+                           '</div>' +
+                           '<div class="font-weight-bold">' +
+                           '<div class="text-truncate">' + chat.name + '</div>' +
+                           '<div class="small text-gray-500">' + chat.count + '</div>' +
+                           '</div>' +
+                           '</a>';
+                       $('#chatList').append(chatItem);
+                   });
+
+                   // 메시지 카운터 업데이트 (채팅 개수에 따라 수정)
+                   var chatCount = response.length;
+                   $('#messageCounter').text(chatCount);
+               },
+               error: function(xhr, status, error) {
+               }
+           });
+
+           // 30초마다 재귀적으로 함수 호출
+           setTimeout(updateChatList, 30000);
+       }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        });
+
+
+    </script>
+
+
+</div>
+</body>
+</html>
